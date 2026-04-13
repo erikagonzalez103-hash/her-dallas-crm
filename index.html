@@ -187,7 +187,8 @@ input[type=text]#csearch{padding:7px 12px;font-size:12px}
 <header class="topbar">
   <div class="topbar-brand">HER Dallas</div>
   <div class="topbar-pipe">|</div>
-  <div class="topbar-title">SPONSOR OUTREACH CRM &nbsp;·&nbsp; June 10/11 Breakfast</div>
+  <div class="topbar-title">SPONSOR OUTREACH CRM</div>
+  <button onclick="resetAll()" style="margin-left:12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:var(--gr1);font-family:'DM Sans',sans-serif;font-size:10px;padding:3px 10px;border-radius:4px;cursor:pointer;letter-spacing:.04em">↺ Reset</button>
   <div class="topbar-stats">
     <div class="tstat">Prospects <b id="ts1">0</b></div>
     <div class="tstat">Active <b id="ts2">0</b></div>
@@ -215,7 +216,7 @@ input[type=text]#csearch{padding:7px 12px;font-size:12px}
 
     <!-- DASHBOARD -->
     <div id="pg-dash" class="pg show">
-      <div class="ph"><h1>Dashboard</h1><p>HER Dallas Sponsorship & Partnership Outreach — June 10/11 Breakfast Invites</p></div>
+      <div class="ph"><h1>Dashboard</h1><p>HER Dallas Sponsorship & Partnership Outreach</p></div>
       <div class="dash-grid">
         <div class="stat-card"><div class="stat-n" id="d1">0</div><div class="stat-l">Total prospects</div></div>
         <div class="stat-card t"><div class="stat-n" id="d2">0</div><div class="stat-l">Active outreach</div></div>
@@ -228,7 +229,7 @@ input[type=text]#csearch{padding:7px 12px;font-size:12px}
           <div id="d-queue"></div>
         </div>
         <div class="card">
-          <div class="card-hdr">📅 Invite timeline</div>
+          <div class="card-hdr">📅 June 2026 Breakfast — invite timeline</div>
           <div class="tl">
             <div class="tl-step"><div class="tl-day">Day 0</div><div class="tl-lbl">LinkedIn warm-up</div></div>
             <div class="tl-step"><div class="tl-day">Day 4</div><div class="tl-lbl">Intro email/DM</div></div>
@@ -338,7 +339,7 @@ input[type=text]#csearch{padding:7px 12px;font-size:12px}
 
     <!-- SEQUENCES -->
     <div id="pg-sequences" class="pg">
-      <div class="ph"><h1>Sequence Tracks</h1><p>6-touch outreach sequences by category — built on the HER Dallas Sponsor Playbook</p></div>
+      <div class="ph"><h1>Sequence Tracks</h1><p>6-touch outreach sequences by category — June 2026 Breakfast campaign</p></div>
       <div id="seq-list"></div>
     </div>
 
@@ -434,30 +435,34 @@ input[type=text]#csearch{padding:7px 12px;font-size:12px}
 
 <script>
 // ═══════════════════════════════════════════════
-// STORAGE (shared via window.storage API)
+// STORAGE — localStorage (works in any browser)
+// For shared team access: host on GitHub Pages and
+// point to a shared backend (Cloudflare KV).
 // ═══════════════════════════════════════════════
 const CKEY='hd_contacts', AKEY='hd_activity', IKEY='hd_init';
 
 async function loadC(){
-  try{const r=await window.storage.get(CKEY);return r?JSON.parse(r.value):null}
-  catch(e){return null}
+  try{const r=localStorage.getItem(CKEY);return r?JSON.parse(r):null}catch(e){return null}
 }
 async function saveC(d){
-  try{await window.storage.set(CKEY,JSON.stringify(d))}catch(e){}
+  try{localStorage.setItem(CKEY,JSON.stringify(d))}catch(e){}
 }
 async function loadA(){
-  try{const r=await window.storage.get(AKEY);return r?JSON.parse(r.value):[]}
-  catch(e){return[]}
+  try{const r=localStorage.getItem(AKEY);return r?JSON.parse(r):[]}catch(e){return[]}
 }
 async function saveA(d){
-  try{await window.storage.set(AKEY,JSON.stringify(d))}catch(e){}
+  try{localStorage.setItem(AKEY,JSON.stringify(d))}catch(e){}
 }
 async function checkInit(){
-  try{const r=await window.storage.get(IKEY);return !!r}
-  catch(e){return false}
+  try{return !!localStorage.getItem(IKEY)}catch(e){return false}
 }
 async function markInit(){
-  try{await window.storage.set(IKEY,'1')}catch(e){}
+  try{localStorage.setItem(IKEY,'1')}catch(e){}
+}
+function resetAll(){
+  if(!confirm('Reset ALL data and reload seed contacts? This cannot be undone.'))return;
+  localStorage.removeItem(CKEY);localStorage.removeItem(AKEY);localStorage.removeItem(IKEY);
+  location.reload();
 }
 
 let contacts=[], activity=[], currentFilter='all';
@@ -527,161 +532,869 @@ const SEED=[
 // SEQUENCES — 6 touches × 11 categories
 // ═══════════════════════════════════════════════
 const SEQ={
-  bank:{label:'Banking & Financial Services',note:'Lead with CRA/community reinvestment obligations, BankHER direct investment, women\'s business lending pipeline. The decision maker is Market President, VP Community Development — NOT the Sponsorship title.',
-    touches:[
-      {day:'Day 0',name:'LinkedIn Connect',ch:'li',subj:'',
-       copy:`Hi [First Name] — I lead sponsorship for HER Dallas, the Dallas chapter of HER Texas (first statewide network for female founders in Texas). Your work on [Company]'s women's business initiatives is exactly aligned with what we're building. Would love to connect.\n\n— [Your Name] | HER Dallas Advisory Board`,
-       note:'Keep it short. No pitch in the connect request.'},
-      {day:'Day 4',name:'Intro Email',ch:'em',subj:'[Company] + HER Dallas — June 10 Breakfast for Dallas Women Founders',
-       copy:`Hi [First Name] —\n\nI lead sponsorship for HER Dallas, the Dallas chapter of HER Texas — the first statewide network for female founders in Texas.\n\nOn June 10, we're hosting an intimate "first date" breakfast for 25–30 Dallas women entrepreneurs, investors, and community leaders — building a sponsor community that reflects who actually invests in Dallas women.\n\n[Company]'s community reinvestment work and women's business programs are exactly what this room is built around. I'd love to explore what a partnership could look like.\n\nWorth a 20-minute call this week?\n\n— [Your Name] | HER Dallas Advisory Board | hertexas.co`,
-       note:'Subject alternatives: "[Company] + HER Dallas — a 20-minute conversation" or "25 Dallas women founders. June 10. Is [Company] interested?"'},
-      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',subj:'Re: [Company] + HER Dallas — one quick data point',
-       copy:`Hi [First Name] — quick follow-up on my note from earlier this week.\n\nTexas women-owned businesses now generate over $150B in annual revenue and employ more than 800,000 people statewide — yet access to capital remains the #1 barrier. That's exactly the gap HER Dallas's BankHER program addresses.\n\nStill happy to share more about the June 10 breakfast and what a partnership could look like for [Company]. 20 minutes anytime.\n\n— [Your Name]`,
-       note:'The value-add stat is relevant to any bank\'s CRA calculus. Swap in TWF research data for extra credibility.'},
-      {day:'Day 14',name:'Breakfast Pitch',ch:'li-dm',subj:'',
-       copy:`Hi [First Name] — following up on my email about the HER Dallas June 10 breakfast.\n\nQuick version: 25–30 Dallas women founders, investors, and community leaders. Intimate setting. Real conversations. The kind of room [Company] should be in.\n\nPartnership starts at [$X tier] — happy to walk you through it in 20 minutes. Worth a call?\n\n— [Your Name]`,
-       note:'By Day 14, have a specific dollar tier ready. If not finalized, use "a few thousand dollars" rather than leaving it open.'},
-      {day:'Day 21',name:'Formal Invite',ch:'em',subj:'Formal invitation: HER Dallas June 10 Breakfast — [Company] reserved seat',
-       copy:`Hi [First Name] —\n\nI'd like to formally invite [Company] to join us as a partner at the HER Dallas June 10 Breakfast.\n\n📅 June 10, 8–10 AM | [Venue], Dallas\n👥 25–30 women entrepreneurs, investors, and community leaders\n🤝 Intimate format — real conversations, real connections\n\nI've reserved [Company]'s category through May 9. After that, we'll open to other banks in the market.\n\nCan we confirm this week?\n\n— [Your Name] | hello@hertexas.co`,
-       note:'The exclusivity deadline is your most powerful tool at this stage. Make it real.'},
-      {day:'Day 30',name:'Breakup / Long-Cycle Nurture',ch:'em',subj:'Closing the loop — HER Dallas',
-       copy:`Hi [First Name] —\n\nI don't want to keep filling your inbox. If the June 10 timing doesn't work for [Company], I completely understand — just let me know and I'll follow up when we're closer to our July FIFA World Cup activation.\n\nEither way, I'd love to stay connected. HER Dallas is growing fast and [Company] belongs in that conversation.\n\n— [Your Name] | hertexas.co`,
-       note:'The breakup email often gets the fastest response. Keep it warm. Note the July FIFA activation as a future hook.'},
-    ]},
-  ins:{label:'Insurance',note:'Lead with women\'s financial security mission and CSR alignment. For State Farm, reach individual high-performing agents as well as regional marketing. For USAA, note the member demographic angle.',
-    touches:[
-      {day:'Day 0',name:'LinkedIn Connect',ch:'li',subj:'',
-       copy:`Hi [First Name] — I'm on the advisory board of HER Dallas, the Dallas chapter of HER Texas. We focus on women's economic independence across Texas. Your work at [Company] around [financial security / community impact] aligns closely with our mission. Would love to connect.\n\n— [Your Name]`,note:''},
-      {day:'Day 4',name:'Intro Email',ch:'em',subj:'[Company] + HER Dallas — women\'s financial security + June 10 Breakfast',
-       copy:`Hi [First Name] —\n\nI lead sponsorship for HER Dallas — the Dallas chapter of HER Texas, Texas's first statewide network for female founders.\n\nWe're hosting a breakfast for 25–30 Dallas women entrepreneurs on June 10. These are women building businesses, managing risk, and making purchasing decisions — exactly [Company]'s core audience.\n\n[Company]'s mission around financial security and community investment aligns directly with who we serve. I think there's a real partnership conversation here.\n\nWorth 20 minutes this week?\n\n— [Your Name] | HER Dallas | hertexas.co`,note:''},
-      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',subj:'Re: [Company] + HER Dallas — relevant data',
-       copy:`Hi [First Name] — one quick follow-up.\n\nWomen business owners are the fastest-growing demographic in US small business — yet are significantly underinsured compared to male counterparts. The HER Dallas community is exactly the room where that conversation belongs.\n\nStill interested in exploring what a June 10 partnership looks like for [Company]. 20 minutes anytime.\n\n— [Your Name]`,note:''},
-      {day:'Day 14',name:'Breakfast Pitch',ch:'li-dm',subj:'',
-       copy:`Hi [First Name] — following up on HER Dallas June 10.\n\nShort version: 25–30 women entrepreneurs who buy insurance, refer clients, and influence brand loyalty in their networks. Partnership tier starts at [$X].\n\nWorth a 20-minute call?`,note:''},
-      {day:'Day 21',name:'Formal Invite',ch:'em',subj:'HER Dallas June 10 Breakfast — formal invitation for [Company]',
-       copy:`Hi [First Name] —\n\nFormal invitation: join HER Dallas as a community partner at our June 10 Breakfast for Dallas women founders.\n\nDetails: June 10, 8–10 AM, [Venue]. 25–30 women entrepreneurs, investors, and community leaders.\n\nI've held [Company]'s category open through May 9. Would love to confirm your participation this week.\n\n— [Your Name] | hello@hertexas.co`,note:''},
-      {day:'Day 30',name:'Breakup / Nurture',ch:'em',subj:'Closing the loop — HER Dallas',
-       copy:`Hi [First Name] — not going to keep following up. If the June timing doesn't work, I completely understand.\n\nWe're also building toward a larger FIFA World Cup activation on July 12 in Dallas — that may be a better fit for [Company]. Happy to circle back when that's closer.\n\n— [Your Name]`,note:''},
-    ]},
-  corp:{label:'Corporate (AT&T, Toyota, Southwest, McKesson, CBRE)',note:'Local/regional decision maker moves faster than national. For AT&T: Dallas HQ hometown angle. Toyota: Plano HQ community angle. Southwest: Love Field Dallas connection. CBRE: internal women\'s network (GROW).',
-    touches:[
-      {day:'Day 0',name:'LinkedIn Connect',ch:'li',subj:'',copy:`Hi [First Name] — I lead sponsorship for HER Dallas, the Dallas chapter of HER Texas. [Company]'s work in the Dallas community and your [specific initiative] really resonates with what we're building. Would love to connect.\n\n— [Your Name] | HER Dallas Advisory Board`,note:'Personalize the bracketed reference for each company before sending.'},
-      {day:'Day 4',name:'Intro Email',ch:'em',subj:'[Company] + HER Dallas — June 10 women founders breakfast in Dallas',
-       copy:`Hi [First Name] —\n\nI'm on the advisory board of HER Dallas — the Dallas chapter of HER Texas, the first statewide network for female founders in Texas.\n\nOn June 10, we're hosting an intimate breakfast for 25–30 Dallas women entrepreneurs and investors. We're building a sponsor community that reflects who shows up for Dallas women — and [Company]'s commitment to [specific initiative] makes you a natural fit.\n\nThis is a direct relationship-building opportunity with high-income, high-influence women who make purchasing and vendor decisions every day.\n\nWorth a 20-minute conversation this week?\n\n— [Your Name] | HER Dallas | hertexas.co`,note:'Fill in [specific initiative] with real research: AT&T WOMEN program, Toyota D&I programs, Southwest Heart of the Community, etc.'},
-      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',subj:'Re: [Company] + HER Dallas — women\'s economic impact in Texas',
-       copy:`Hi [First Name] — brief follow-up on my email from earlier this week.\n\nTexas is home to 3.4 million women-owned businesses generating over $150B annually. These are your customers, your neighbors, and increasingly — your vendors and partners. The HER Dallas breakfast on June 10 puts [Company] in the room with 25–30 of the most active among them.\n\n20 minutes works anytime.\n\n— [Your Name]`,note:''},
-      {day:'Day 14',name:'Breakfast Pitch',ch:'li-dm',subj:'',copy:`Hi [First Name] — following up on HER Dallas June 10.\n\nWe're down to the last few partnership slots. [Company] is at the top of our list for [category] — but I want to make sure the timing works before we finalize the roster.\n\n20 minutes this week?\n\n— [Your Name]`,note:''},
-      {day:'Day 21',name:'Formal Invite',ch:'em',subj:'Formal invitation — HER Dallas June 10 + [Company] partnership',
-       copy:`Hi [First Name] —\n\nI'd like to formally extend an invitation for [Company] to join us as a partner at the HER Dallas June 10 Breakfast.\n\n📅 June 10, 8–10 AM | [Venue], Dallas\n👥 25–30 women entrepreneurs, investors, and leaders\n🤝 Intimate format — real connections\n\nPartnership investment starts at [$X tier]. [Company]'s category is held through May 9.\n\nCan we confirm this week?\n\n— [Your Name] | hello@hertexas.co | hertexas.co`,note:''},
-      {day:'Day 30',name:'Breakup / Nurture',ch:'em',subj:'Last note from HER Dallas',
-       copy:`Hi [First Name] — last one from me for now.\n\nIf the June timing doesn't work for [Company], I understand completely. I'd love to stay connected and circle back for our July FIFA World Cup activation — that may be the better moment.\n\nThank you for your time.\n\n— [Your Name]`,note:''},
-    ]},
-  health:{label:'Healthcare Systems',note:'Lead with community benefit mission and women\'s health + economic wellness intersection. These orgs have community benefit obligations. Position HER Dallas as a community investment, not just an event.',
-    touches:[
-      {day:'Day 0',name:'LinkedIn Connect',ch:'li',subj:'',copy:`Hi [First Name] — I'm on the advisory board of HER Dallas, the Dallas chapter of HER Texas. We focus on women's economic independence and business development across Texas. Your work at [Company] on community benefit and health equity really aligns with what we're doing. Would love to connect.\n\n— [Your Name]`,note:''},
-      {day:'Day 4',name:'Intro Email',ch:'em',subj:'[Company] + HER Dallas — community benefit + June 10 Breakfast',
-       copy:`Hi [First Name] —\n\nI lead sponsorship for HER Dallas — the Dallas chapter of HER Texas, the first statewide network for female founders in Texas.\n\nOn June 10, we're hosting a breakfast for 25–30 Dallas women entrepreneurs and community leaders. For [Company], this is a direct community benefit investment — women's economic health and physical health are deeply interconnected, and this room reflects the women your community programs are designed to serve.\n\nWorth a 20-minute conversation this week?\n\n— [Your Name] | HER Dallas | hertexas.co`,note:''},
-      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',subj:'Re: [Company] + HER Dallas — health + economic security',
-       copy:`Hi [First Name] — brief follow-up.\n\nWomen business owners report that financial stress is among their top health challenges. Economic security and health security aren't separate — they're the same conversation. HER Dallas is where both happen.\n\nStill happy to discuss what a June 10 partnership looks like for [Company].\n\n— [Your Name]`,note:''},
-      {day:'Day 14',name:'Breakfast Pitch',ch:'li-dm',subj:'',copy:`Hi [First Name] — following up on HER Dallas June 10.\n\n25–30 Dallas women founders and community leaders. [Company] belongs in this room. Partnership investment starts at [$X].\n\n20 minutes this week?\n\n— [Your Name]`,note:''},
-      {day:'Day 21',name:'Formal Invite',ch:'em',subj:'HER Dallas June 10 — formal invitation for [Company]',
-       copy:`Hi [First Name] —\n\nFormal invitation: join HER Dallas as a community partner at our June 10 Breakfast.\n\n📅 June 10, 8–10 AM | [Venue], Dallas\n👥 25–30 women entrepreneurs, investors, and community leaders\n\nPartnership investment from [$X]. Category held through May 9.\n\n— [Your Name] | hello@hertexas.co`,note:''},
-      {day:'Day 30',name:'Breakup / Nurture',ch:'em',subj:'Closing the loop — HER Dallas',
-       copy:`Hi [First Name] — closing the loop.\n\nIf June timing doesn't work, completely understood. I'd love to circle back for our July World Cup activation or our 2027 planning cycle.\n\nThank you for your time.\n\n— [Your Name]`,note:''},
-    ]},
-  civic:{label:'Civic & Government',note:'Lead with economic development and FIFA World Cup economic impact. City officials respond to community benefit language. The ask is often a partnership or endorsement, not necessarily a cash sponsorship.',
-    touches:[
-      {day:'Day 0',name:'LinkedIn Connect',ch:'li',subj:'',copy:`Hi [First Name] — I'm on the advisory board of HER Dallas, the Dallas chapter of HER Texas. We focus on women's economic development across the Dallas area. Your work at [Organization] on economic development aligns closely with our mission. Would love to connect.\n\n— [Your Name]`,note:''},
-      {day:'Day 4',name:'Intro Email',ch:'em',subj:'[Organization] + HER Dallas — women\'s economic development + June 10',
-       copy:`Hi [First Name] —\n\nI'm on the advisory board of HER Dallas — the Dallas chapter of HER Texas, the first statewide network for female founders in Texas.\n\nWith the FIFA World Cup bringing 1.5M+ visitors to DFW and $500M+ in projected economic impact, we're hosting a June 10 breakfast to activate that economic energy specifically for women entrepreneurs and business leaders.\n\nI'd love to discuss how [Organization] could be a partner in — or simply represented at — this gathering. The conversation connects directly to your women's business development priorities.\n\nWorth 20 minutes?\n\n— [Your Name] | HER Dallas | hertexas.co`,note:'For City contacts, the ask may be an endorsement or official support letter, not a cash partnership.'},
-      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',subj:'Re: HER Dallas June 10 — FIFA economic impact data',
-       copy:`Hi [First Name] — brief follow-up.\n\nFIFA's Dallas economic impact is projected at $500M+. Our June 10 breakfast is designed to ensure women-owned businesses capture a meaningful share of that opportunity — not just watch it pass by.\n\nStill happy to discuss how [Organization] could be involved.\n\n— [Your Name]`,note:''},
-      {day:'Day 14',name:'Partnership / Endorsement Ask',ch:'li-dm',subj:'',copy:`Hi [First Name] — following up on HER Dallas June 10.\n\nWould love to have [Organization]'s participation or endorsement for our women founders breakfast. Even a letter of support or official representation at the event signals that [City/Organization] is invested in women's economic leadership.\n\n20 minutes this week?\n\n— [Your Name]`,note:''},
-      {day:'Day 21',name:'Formal Invite',ch:'em',subj:'Formal invitation — HER Dallas June 10 Breakfast',
-       copy:`Hi [First Name] —\n\nFormal invitation to join us — or send a representative — at the HER Dallas June 10 Breakfast.\n\n📅 June 10, 8–10 AM | [Venue], Dallas\n👥 25–30 women entrepreneurs, investors, and community leaders from across Texas\n\nYour presence signals [Organization]'s commitment to women's economic leadership in our community.\n\n— [Your Name] | hello@hertexas.co`,note:''},
-      {day:'Day 30',name:'Breakup / Nurture',ch:'em',subj:'Closing the loop — HER Dallas',
-       copy:`Hi [First Name] — closing the loop.\n\nIf June 10 doesn't work, I completely understand. I'd love to stay connected for our July World Cup activation and for HER Dallas's ongoing programming.\n\nThank you for your time and your work for Dallas.\n\n— [Your Name]`,note:''},
-    ]},
-  chamber:{label:'Chambers & Economic Development',note:'Lead with membership value, regional visibility, and co-activation. These orgs have networks that multiply your reach. Approach as strategic partners, not just sponsors.',
-    touches:[
-      {day:'Day 0',name:'LinkedIn Connect',ch:'li',subj:'',copy:`Hi [First Name] — I'm on the advisory board of HER Dallas, the Dallas chapter of HER Texas. We're building the premier network for women founders in Texas and I'm eager to connect with [Organization] on our shared mission. Would love to be connected.\n\n— [Your Name]`,note:''},
-      {day:'Day 4',name:'Intro Email',ch:'em',subj:'HER Dallas + [Organization] — June 10 partnership conversation',
-       copy:`Hi [First Name] —\n\nI lead sponsorship for HER Dallas — the Dallas chapter of HER Texas, the first statewide network for female founders in Texas.\n\nWith FIFA World Cup in Dallas this summer, we're hosting a June 10 breakfast for 25–30 women entrepreneurs, investors, and business leaders. We're building our sponsor and partner roster now.\n\nGiven [Organization]'s membership and regional reach, I'd love to explore what a partnership could look like — whether that's a sponsor package, a co-marketing arrangement, or simply a seat at the table for your leadership.\n\nWorth 20 minutes?\n\n— [Your Name] | hertexas.co`,note:''},
-      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',subj:'Re: HER Dallas + [Organization] — mutual membership value',
-       copy:`Hi [First Name] — brief follow-up.\n\nHER Texas's statewide network reaches women founders across Dallas, Austin, Houston, and San Antonio — the same geographic footprint most [Organization] members serve. Our events tend to drive referrals, introductions, and new business for everyone in the room.\n\nHappy to discuss how this could work for [Organization].\n\n— [Your Name]`,note:''},
-      {day:'Day 14',name:'Partnership Pitch',ch:'li-dm',subj:'',copy:`Hi [First Name] — following up on HER Dallas June 10.\n\nA co-marketing or sponsor package for [Organization] starts at [$X]. It puts your brand in front of 25–30 women business leaders and includes [specific deliverable].\n\n20 minutes this week?\n\n— [Your Name]`,note:''},
-      {day:'Day 21',name:'Formal Invite',ch:'em',subj:'Formal invitation — HER Dallas June 10',
-       copy:`Hi [First Name] —\n\nFormal invitation for [Organization] to partner with us at the HER Dallas June 10 Breakfast.\n\n📅 June 10, 8–10 AM | [Venue], Dallas\n👥 25–30 women entrepreneurs, investors, and business leaders\n\nPartnership from [$X]. Category held through May 9.\n\n— [Your Name] | hello@hertexas.co`,note:''},
-      {day:'Day 30',name:'Breakup / Nurture',ch:'em',subj:'Closing the loop — HER Dallas',
-       copy:`Hi [First Name] — closing the loop.\n\nIf June timing doesn't work, I'd love to stay connected for our ongoing HER Dallas programming. We're building something real for women founders in Dallas and I'd love [Organization] to be part of it.\n\n— [Your Name]`,note:''},
-    ]},
-  edu:{label:'Higher Education',note:'Lead with student-to-founder pipeline and women\'s leadership programming. Research university angle = credibility for HER Texas. Ask for their women\'s program partnership, not a generic sponsorship.',
-    touches:[
-      {day:'Day 0',name:'LinkedIn Connect',ch:'li',subj:'',copy:`Hi [First Name] — I'm on the advisory board of HER Dallas, the Dallas chapter of HER Texas. We focus on women's entrepreneurship and economic leadership in Texas. I'd love to explore how [University]'s women's programs and our work connect. Would love to be in touch.\n\n— [Your Name]`,note:''},
-      {day:'Day 4',name:'Intro Email',ch:'em',subj:'[University] + HER Dallas — women\'s entrepreneurship pipeline',
-       copy:`Hi [First Name] —\n\nI lead sponsorship for HER Dallas, the Dallas chapter of HER Texas — the first statewide network for female founders in Texas.\n\nWe're hosting a June 10 breakfast for 25–30 Dallas women entrepreneurs and investors. For [University], this is both a sponsor opportunity and a pipeline connection — your women students and alumnae ARE our members and future members.\n\nI'd love to explore what a partnership could look like. Whether it's sponsorship, co-programming, or simply sending your women's leadership faculty and students, there's a real opportunity here.\n\nWorth 20 minutes?\n\n— [Your Name] | hertexas.co`,note:''},
-      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',subj:'Re: [University] + HER Dallas — women founder data',
-       copy:`Hi [First Name] — brief follow-up.\n\nWomen start businesses at 2x the national average rate but access significantly less capital and fewer networks. HER Dallas is specifically designed to close that gap — and [University]'s women graduates are exactly who we serve.\n\nHappy to discuss the June 10 breakfast and what a partnership could mean for your women's programs.\n\n— [Your Name]`,note:''},
-      {day:'Day 14',name:'Breakfast Pitch',ch:'li-dm',subj:'',copy:`Hi [First Name] — following up on HER Dallas June 10.\n\n25–30 Dallas women founders and investors. [University] belongs in this room — both as a partner and as a talent pipeline.\n\n20 minutes this week?\n\n— [Your Name]`,note:''},
-      {day:'Day 21',name:'Formal Invite',ch:'em',subj:'HER Dallas June 10 — formal invitation for [University]',
-       copy:`Hi [First Name] —\n\nFormal invitation to partner with HER Dallas at our June 10 Breakfast.\n\n📅 June 10, 8–10 AM | [Venue], Dallas | 25–30 women founders and investors\n\nPartnership from [$X], or we can discuss co-programming arrangements. Category held through May 9.\n\n— [Your Name] | hello@hertexas.co`,note:''},
-      {day:'Day 30',name:'Breakup / Nurture',ch:'em',subj:'Closing the loop — HER Dallas',
-       copy:`Hi [First Name] — last note for now.\n\nIf June timing doesn't work, I'd love to reconnect during fall semester planning. HER Dallas and [University]'s women's programs have a natural partnership — I'd like to find the right moment for it.\n\nThank you.\n\n— [Your Name]`,note:''},
-    ]},
-  media:{label:'Media & Publishing',note:'Approach as EDITORIAL PARTNERSHIP first, not a cash sponsorship. Coverage in exchange for visibility is often worth more than a sponsor fee. Lead with audience alignment, not media buy language.',
-    touches:[
-      {day:'Day 0',name:'LinkedIn Connect',ch:'li',subj:'',copy:`Hi [First Name] — I'm on the advisory board of HER Dallas, the Dallas chapter of HER Texas. We're building the story of women's economic leadership in Dallas and I think [Publication] and our work are very aligned. Would love to connect.\n\n— [Your Name]`,note:''},
-      {day:'Day 4',name:'Intro Email',ch:'em',subj:'HER Dallas + [Publication] — editorial partnership for June 10',
-       copy:`Hi [First Name] —\n\nI lead sponsorship and partnerships for HER Dallas, the Dallas chapter of HER Texas — the first statewide network for female founders in Texas.\n\nWe're hosting a June 10 breakfast for 25–30 Dallas women entrepreneurs and investors, timed to the FIFA World Cup's arrival in Dallas. The story writes itself: the most powerful room of women in Dallas, on the week the world comes to town.\n\nI'd love to explore an editorial partnership — whether that's coverage, co-branding, or simply having [Publication] represented at the table. This is the kind of story your readers come to [Publication] for.\n\nWorth 20 minutes?\n\n— [Your Name] | hertexas.co`,note:'Lead with the editorial angle. The cash sponsorship conversation comes later if at all.'},
-      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',subj:'Re: HER Dallas + [Publication] — the story angle',
-       copy:`Hi [First Name] — brief follow-up.\n\nHER Dallas sits at the intersection of three big Dallas stories right now: FIFA World Cup economic impact, women's entrepreneurship growth in Texas, and the changing face of business leadership in DFW.\n\nI think [Publication] readers would love this story. Happy to discuss what an editorial partnership could look like.\n\n— [Your Name]`,note:''},
-      {day:'Day 14',name:'Partnership Ask',ch:'li-dm',subj:'',copy:`Hi [First Name] — following up on HER Dallas June 10.\n\nAre there editorial opportunities we should discuss? We're also open to a formal media sponsorship if that's a better fit. Either way, [Publication] belongs in the room.\n\n20 minutes this week?\n\n— [Your Name]`,note:''},
-      {day:'Day 21',name:'Formal Invite',ch:'em',subj:'Formal invitation — HER Dallas June 10 + [Publication]',
-       copy:`Hi [First Name] —\n\nFormal invitation: join us at the HER Dallas June 10 Breakfast as a media partner.\n\n📅 June 10, 8–10 AM | [Venue], Dallas | 25–30 women founders and investors\n\nWe'd love to have a [Publication] journalist or editor in the room — and we're open to both editorial and sponsorship arrangements. The category is held through May 9.\n\n— [Your Name] | hello@hertexas.co`,note:''},
-      {day:'Day 30',name:'Breakup / Nurture',ch:'em',subj:'Closing the loop — HER Dallas',
-       copy:`Hi [First Name] — last note for now.\n\nIf June timing doesn't work, I'd love to stay in touch. HER Dallas is a growing story in Dallas and I think [Publication] and we have a lot to offer each other.\n\nThank you for your time.\n\n— [Your Name]`,note:''},
-    ]},
-  women:{label:"Women's Organizations",note:"These are PEER PARTNERSHIPS, not sponsorship asks. Approach as co-activation and mutual amplification. The ask is for their participation, endorsement, and shared promotion — not their checkbook.",
-    touches:[
-      {day:'Day 0',name:'LinkedIn Connect',ch:'li',subj:'',copy:`Hi [First Name] — I'm on the advisory board of HER Dallas, the Dallas chapter of HER Texas. I've long admired [Organization]'s work and think we're serving many of the same women in Dallas. Would love to connect and explore how we might amplify each other's work.\n\n— [Your Name]`,note:'Lead with genuine admiration for their work. This is a peer relationship.'},
-      {day:'Day 4',name:'Intro / Peer Partnership',ch:'em',subj:'HER Dallas + [Organization] — co-activation for June 10',
-       copy:`Hi [First Name] —\n\nI'm on the advisory board of HER Dallas, the Dallas chapter of HER Texas — the first statewide network for female founders in Texas.\n\nWe're hosting a June 10 breakfast for 25–30 Dallas women entrepreneurs and investors. I'd love to invite [Organization]'s leadership to join us — not as a sponsor, but as a peer. Our communities overlap almost entirely.\n\nI'm also curious about a co-promotion arrangement: we promote your work to our members, you share the breakfast with yours. Both organizations get in front of new women who should know about them.\n\nWorth a conversation?\n\n— [Your Name] | hertexas.co`,note:'The ask is participation and co-promotion, not money. Money can come later if the relationship develops.'},
-      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',subj:'Re: HER Dallas + [Organization] — shared mission',
-       copy:`Hi [First Name] — brief follow-up.\n\nI've been thinking about the overlap between our communities and I genuinely believe a partnership between HER Dallas and [Organization] would benefit both of our members significantly. The women you serve are the women we serve.\n\nI'd love to explore what that could look like — starting with June 10.\n\n— [Your Name]`,note:''},
-      {day:'Day 14',name:'Partnership Details',ch:'li-dm',subj:'',copy:`Hi [First Name] — following up on HER Dallas June 10.\n\nFor peer organizations like [Organization], we'd love your leadership's participation and your community's awareness. If a formal sponsorship package makes sense, we can discuss that too — but the relationship matters more to us than the transaction.\n\n20 minutes?\n\n— [Your Name]`,note:''},
-      {day:'Day 21',name:'Formal Invite',ch:'em',subj:'Formal invitation — HER Dallas June 10 + [Organization]',
-       copy:`Hi [First Name] —\n\nFormal invitation for [Organization]'s leadership to join us at the HER Dallas June 10 Breakfast.\n\n📅 June 10, 8–10 AM | [Venue], Dallas | 25–30 women founders and investors from across Texas\n\nWe'd love [Organization] represented at the table — and we'd love to explore what ongoing collaboration could look like beyond June.\n\n— [Your Name] | hello@hertexas.co`,note:''},
-      {day:'Day 30',name:'Breakup / Nurture',ch:'em',subj:'Closing the loop — HER Dallas',
-       copy:`Hi [First Name] — closing the loop.\n\nIf June doesn't work, I'd genuinely love to stay connected. [Organization] and HER Dallas belong in conversation — I'll find a better moment.\n\nThank you for your time.\n\n— [Your Name]`,note:''},
-    ]},
-  supdiv:{label:'Supplier Diversity & MWBE',note:'CRITICAL: WBCS/WBENC is the warmest intro on the entire list — Erika is in certification process. These organizations are partners AND multipliers. Their corporate member access is your warm intro network to half this list.',
-    touches:[
-      {day:'Day 0',name:'LinkedIn Connect',ch:'li',subj:'',copy:`Hi [First Name] — I'm on the advisory board of HER Dallas, the Dallas chapter of HER Texas. We're building the premier network for women founders in Texas. Your work at [Organization] supporting [women/minority]-owned businesses is deeply aligned with ours. Would love to connect.\n\n— [Your Name]`,note:'For WBCS: mention the certification process — it creates immediate context and credibility.'},
-      {day:'Day 4',name:'Intro / Partnership',ch:'em',subj:'HER Dallas + [Organization] — partnership for June 10',
-       copy:`Hi [First Name] —\n\nI'm on the advisory board of HER Dallas, the Dallas chapter of HER Texas.\n\n[For WBCS: I'm currently going through the WBCS certification process, which is how I came to understand the breadth of your network and corporate relationships. I'd love to discuss how HER Dallas and WBCS could amplify each other's work — starting with our June 10 breakfast.]\n\nWe're hosting a breakfast for 25–30 Dallas women entrepreneurs and investors on June 10. For [Organization], this is both a partnership opportunity and a community showcase.\n\nWorth 20 minutes?\n\n— [Your Name] | hertexas.co`,note:'For WBCS specifically: lead with the certification connection. For NMSDC and DFWMSDC: lead with corporate member access as the mutual value proposition.'},
-      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',subj:'Re: HER Dallas + [Organization] — the corporate access angle',
-       copy:`Hi [First Name] — brief follow-up.\n\n[Organization]'s corporate member relationships are exactly what HER Dallas women founders need — and HER Dallas's community is exactly what your corporate members are looking for when they need supplier diversity introductions.\n\nI think there's a genuine win-win here. Let's talk.\n\n— [Your Name]`,note:''},
-      {day:'Day 14',name:'Partnership Pitch',ch:'li-dm',subj:'',copy:`Hi [First Name] — following up on HER Dallas June 10.\n\nA co-promotion or partner package for [Organization] would put your brand in front of 25–30 women founders who are exactly your target audience. And we'd love access to your corporate member network.\n\n20 minutes?\n\n— [Your Name]`,note:''},
-      {day:'Day 21',name:'Formal Invite',ch:'em',subj:'HER Dallas June 10 — formal invitation for [Organization]',
-       copy:`Hi [First Name] —\n\nFormal invitation: join HER Dallas as a community partner at our June 10 Breakfast.\n\n📅 June 10, 8–10 AM | [Venue] | 25–30 women entrepreneurs, investors, and community leaders\n\nCo-marketing and partnership arrangements available. Category held through May 9.\n\n— [Your Name] | hello@hertexas.co`,note:''},
-      {day:'Day 30',name:'Breakup / Nurture',ch:'em',subj:'Closing the loop — HER Dallas',
-       copy:`Hi [First Name] — closing the loop for now.\n\nI'd love to stay connected for our ongoing HER Dallas programming. The relationship between HER Dallas and [Organization] is too natural not to build — I'll find the right moment.\n\n— [Your Name]`,note:''},
-    ]},
-  np:{label:'Nonprofit & Community Impact',note:'Approach as PEER PARTNERSHIPS. The ask is participation, co-promotion, and shared community activation — not a cash sponsorship. Lead with mission alignment, not ROI language.',
-    touches:[
-      {day:'Day 0',name:'LinkedIn Connect',ch:'li',subj:'',copy:`Hi [First Name] — I'm on the advisory board of HER Dallas, the Dallas chapter of HER Texas. Our missions feel very closely aligned and I'd love to connect and explore how we might support each other's work.\n\n— [Your Name]`,note:''},
-      {day:'Day 4',name:'Intro / Peer Partnership',ch:'em',subj:'HER Dallas + [Organization] — June 10 community partnership',
-       copy:`Hi [First Name] —\n\nI'm on the advisory board of HER Dallas, the Dallas chapter of HER Texas — the first statewide network for female founders in Texas.\n\nWe're hosting a June 10 breakfast for 25–30 Dallas women entrepreneurs and investors. I'd love to have [Organization] represented — either as a community partner, a featured organization, or simply as a peer at the table.\n\nOur communities overlap. The women you serve are the women we serve. I think showing up together makes both of us stronger.\n\nWorth a conversation?\n\n— [Your Name] | hertexas.co`,note:''},
-      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',subj:'Re: HER Dallas + [Organization] — community amplification',
-       copy:`Hi [First Name] — brief follow-up.\n\nHER Dallas is actively trying to build the room that represents the full breadth of Dallas women — and [Organization]'s community and mission belong in that room.\n\nI'd love to discuss what showing up together could look like.\n\n— [Your Name]`,note:''},
-      {day:'Day 14',name:'Partnership Details',ch:'li-dm',subj:'',copy:`Hi [First Name] — following up on HER Dallas June 10.\n\nFor peer organizations, we're looking for co-promotion, shared community presence, and a seat at the table. If a formal partnership package makes sense, we can discuss — but the relationship comes first.\n\n20 minutes?\n\n— [Your Name]`,note:''},
-      {day:'Day 21',name:'Formal Invite',ch:'em',subj:'HER Dallas June 10 — formal invitation for [Organization]',
-       copy:`Hi [First Name] —\n\nFormal invitation for [Organization]'s leadership to join us at the HER Dallas June 10 Breakfast.\n\n📅 June 10, 8–10 AM | [Venue], Dallas | 25–30 women founders and investors from across Texas\n\nWe'd love [Organization] in the room — as a partner, as a peer, or simply as a community presence that signals what HER Dallas stands for.\n\n— [Your Name] | hello@hertexas.co`,note:''},
-      {day:'Day 30',name:'Breakup / Nurture',ch:'em',subj:'Closing the loop — HER Dallas',
-       copy:`Hi [First Name] — closing the loop for now.\n\nIf June timing doesn't work, I genuinely hope we stay connected. [Organization] and HER Dallas belong in the same conversation — I'll find a better moment.\n\nThank you.\n\n— [Your Name]`,note:''},
-    ]},
-};
 
+  bank:{label:'Banking & Financial Services',
+    note:'Lead with BankHER and CRA obligations — direct investment in women founders is their sweet spot. Decision maker: Market President, VP Community Development, Director Corporate Sponsorships. Never pitch to anyone with "Sponsorship" in their title — that\'s the intake desk, not the budget.',
+    touches:[
+      {day:'Day 0',name:'LinkedIn Warm-Up Connect',ch:'li',subj:'',
+       copy:`Hi [First Name] —
+
+I'm Jasmin Brand, founder of HER Texas — the first statewide network for female founders in Texas.
+
+I've been following [Company]'s community investment and women's business work. Really aligns with what we're building. Would love to connect.
+
+— Jasmin | HER Texas · hertexas.org`,
+       note:'No pitch. One sentence on who you are, one on why you\'re connecting. That\'s it.'},
+
+      {day:'Day 4',name:'Intro Email',ch:'em',
+       subj:'HER Texas + [Company] — worth a conversation?',
+       copy:`Hi [First Name] —
+
+I'm Jasmin Brand, founder of HER Texas — the first statewide network for female founders in Texas.
+
+This June we're creating a room. 25–30 Dallas women entrepreneurs, investors, and community leaders gathered at 223 Kessler Woods Court for our June 2026 Breakfast. Intimate. Intentional. Built for real conversations and actual business — not badge collecting.
+
+We're building the sponsor table now, and [Company] is at the top of my list. Your community reinvestment work and women's business programs are exactly the kind of investment this room is built around.
+
+Worth a 20-minute call this week?
+
+— Jasmin Brand
+Founder, HER Texas | hertexas.org`,
+       note:'Subject alternatives: "[Company] + HER Texas — creating a room together" or "25 Dallas women founders. June 2026. Is [Company] in?"'},
+
+      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',
+       subj:'Re: HER Texas + [Company] — one quick data point',
+       copy:`Hi [First Name] — quick follow-up.
+
+Nothing bad happens when women make more money. The data backs that up — Texas women-owned businesses now generate over $150B annually, but access to capital is still the #1 barrier.
+
+That's exactly what HER Texas's BankHER program is built to solve. And the June 2026 Breakfast is where we bring the community and the investment into the same room.
+
+[Company] belongs in that room. 20 minutes anytime this week.
+
+— Jasmin`,
+       note:'BankHER is HER Texas\'s direct capital program — no-pitch grants to women founders through community funding circles. Banks respond because it maps directly to CRA obligations.'},
+
+      {day:'Day 14',name:'Breakfast Pitch',ch:'li-dm',subj:'',
+       copy:`Hi [First Name] — following up on HER Texas June 2026 Breakfast.
+
+Short version: we're creating a room where 25–30 Dallas women founders, investors, and community leaders connect, collaborate, and actually do business with each other.
+
+[Company] is at the top of our sponsor list. Partnership starts at [$X]. Happy to walk through what that looks like in 20 minutes.
+
+Worth a call?
+
+— Jasmin Brand | HER Texas`,
+       note:'Have a specific dollar tier ready by Day 14. If not finalized, say "a few thousand dollars" — never leave the number open.'},
+
+      {day:'Day 21',name:'Formal Invite',ch:'em',
+       subj:'Formal invitation — HER Texas June 2026 Breakfast + [Company]',
+       copy:`Hi [First Name] —
+
+I'd like to formally invite [Company] to join us as a partner at the HER Texas June 2026 Breakfast.
+
+📅 June 2026 | 223 Kessler Woods Court, Dallas
+👥 25–30 women entrepreneurs, investors, and community leaders
+🤝 Intimate. Intentional. Built for real business.
+
+We Make Money Together — and we want [Company] at the table when we do.
+
+I've held [Company]'s category through May 9. After that I'll open it to other banks in the market.
+
+Can we confirm this week?
+
+— Jasmin Brand
+Founder, HER Texas | jasmin@hertexas.org`,
+       note:'Category exclusivity is your most powerful closing tool at this stage. Make the deadline real — don\'t bluff it.'},
+
+      {day:'Day 30',name:'Breakup / Long-Cycle Nurture',ch:'em',
+       subj:'Closing the loop — HER Texas',
+       copy:`Hi [First Name] —
+
+I don't want to keep filling your inbox. If June timing doesn't work for [Company] right now, I completely understand.
+
+We're also building toward a FIFA World Cup activation in Dallas this July — that might be a better window for us to connect.
+
+Either way, [Company] belongs in the HER Texas conversation. Let's find the right moment.
+
+— Jasmin Brand | hertexas.org`,
+       note:'Breakup emails often get the fastest response. Keep it warm. The July FIFA hook is real — use it.'},
+    ]},
+
+  ins:{label:'Insurance',
+    note:'Lead with women\'s financial security mission and CSR alignment. For State Farm, reach individual high-performing Dallas agents AND the regional marketing team — agents have local budgets and move faster. For USAA, lean into the member demographic overlap.',
+    touches:[
+      {day:'Day 0',name:'LinkedIn Warm-Up Connect',ch:'li',subj:'',
+       copy:`Hi [First Name] —
+
+I'm Jasmin Brand, founder of HER Texas — the first statewide network for female founders in Texas. Your work at [Company] around financial security and community impact really resonates. Would love to connect.
+
+— Jasmin | HER Texas`,
+       note:''},
+
+      {day:'Day 4',name:'Intro Email',ch:'em',
+       subj:'HER Texas + [Company] — June 2026 Breakfast in Dallas',
+       copy:`Hi [First Name] —
+
+I'm Jasmin Brand, founder of HER Texas — the first statewide network for female founders in Texas.
+
+This June we're hosting a breakfast in Dallas for 25–30 women entrepreneurs, investors, and community leaders at 223 Kessler Woods Court. Real conversations, actual connections, built around the theme We Make Money Together.
+
+These are women building businesses, managing risk, and making purchasing decisions every single day. Exactly [Company]'s core audience.
+
+[Company]'s mission around financial security aligns directly with who we serve. There's a real partnership conversation here.
+
+Worth 20 minutes this week?
+
+— Jasmin Brand
+Founder, HER Texas | hertexas.org`,
+       note:''},
+
+      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',
+       subj:'Re: HER Texas + [Company] — relevant data',
+       copy:`Hi [First Name] — one quick follow-up.
+
+Women business owners are the fastest-growing demographic in US small business — but still significantly underinsured compared to male counterparts.
+
+HER Texas is the room where that conversation belongs. And our June 2026 Breakfast is where [Company] can show up for it.
+
+20 minutes anytime.
+
+— Jasmin`,
+       note:''},
+
+      {day:'Day 14',name:'Breakfast Pitch',ch:'li-dm',subj:'',
+       copy:`Hi [First Name] — following up on HER Texas June 2026.
+
+25–30 women entrepreneurs who buy insurance, refer clients, and influence brand loyalty in their networks.
+
+Partnership starts at [$X]. Worth a 20-minute call?
+
+— Jasmin | HER Texas`,
+       note:''},
+
+      {day:'Day 21',name:'Formal Invite',ch:'em',
+       subj:'Formal invitation — HER Texas June 2026 Breakfast + [Company]',
+       copy:`Hi [First Name] —
+
+Formal invitation: join HER Texas as a community partner at our June 2026 Breakfast.
+
+📅 June 2026 | 223 Kessler Woods Court, Dallas
+👥 25–30 women entrepreneurs, investors, and community leaders
+
+We Make Money Together — and we want [Company] in the room.
+
+Category held through May 9. Would love to confirm this week.
+
+— Jasmin Brand
+Founder, HER Texas | jasmin@hertexas.org`,
+       note:''},
+
+      {day:'Day 30',name:'Breakup / Nurture',ch:'em',
+       subj:'Closing the loop — HER Texas',
+       copy:`Hi [First Name] — closing the loop.
+
+If June timing doesn't work right now, completely understood. We're also building a FIFA World Cup activation in Dallas this July — might be a better window.
+
+Would love to stay connected either way.
+
+— Jasmin Brand | hertexas.org`,
+       note:''},
+    ]},
+
+  corp:{label:'Corporate (AT&T, Toyota, Southwest, McKesson, CBRE)',
+    note:'Local/regional decision maker moves faster than national. AT&T: Dallas HQ hometown angle. Toyota: Plano HQ, community partnership. Southwest: Love Field Dallas connection. CBRE: internal women\'s network GROW. Always research their specific women\'s initiative and name it in Touch 1.',
+    touches:[
+      {day:'Day 0',name:'LinkedIn Warm-Up Connect',ch:'li',subj:'',
+       copy:`Hi [First Name] —
+
+I'm Jasmin Brand, founder of HER Texas — the first statewide network for female founders in Texas. I've been following [Company]'s [specific initiative] and it really aligns with what we're building. Would love to connect.
+
+— Jasmin | HER Texas`,
+       note:'Swap [specific initiative] before sending: AT&T WOMEN, Toyota Diversity & Inclusion, Southwest Heart of the Community, CBRE GROW women\'s network, McKesson women\'s ERG.'},
+
+      {day:'Day 4',name:'Intro Email',ch:'em',
+       subj:'HER Texas + [Company] — June 2026 Breakfast in Dallas',
+       copy:`Hi [First Name] —
+
+I'm Jasmin Brand, founder of HER Texas — the first statewide network for female founders in Texas.
+
+This June we're creating a room. 25–30 Dallas women entrepreneurs, investors, and business leaders at 223 Kessler Woods Court for our June 2026 Breakfast. Conversations turn into opportunities and opportunities turn into real impact — that's what we build.
+
+We're building the sponsor table now and [Company] is exactly who this room is built for. Your commitment to [specific initiative] is the kind of investment that belongs here.
+
+Worth a 20-minute conversation this week?
+
+— Jasmin Brand
+Founder, HER Texas | hertexas.org`,
+       note:'Fill [specific initiative] with real research: AT&T WOMEN program, Toyota D&I programs, Southwest Heart of the Community, etc. Generic = ignored.'},
+
+      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',
+       subj:'Re: HER Texas + [Company] — Texas women\'s economic data',
+       copy:`Hi [First Name] — brief follow-up.
+
+Texas is home to 3.4 million women-owned businesses generating over $150B annually. These are your customers, your neighbors, and increasingly — your vendors and partners.
+
+The HER Texas June 2026 Breakfast puts [Company] in the room with 25–30 of the most active among them.
+
+20 minutes works anytime.
+
+— Jasmin`,
+       note:''},
+
+      {day:'Day 14',name:'Breakfast Pitch',ch:'li-dm',subj:'',
+       copy:`Hi [First Name] — following up on HER Texas June 2026.
+
+We're down to the last few partnership slots. [Company] is at the top of my list for [category] — but I want to make sure the timing works on your end before we close the roster.
+
+20 minutes this week?
+
+— Jasmin | HER Texas`,
+       note:''},
+
+      {day:'Day 21',name:'Formal Invite',ch:'em',
+       subj:'Formal invitation — HER Texas June 2026 + [Company]',
+       copy:`Hi [First Name] —
+
+Formal invitation for [Company] to partner with us at the HER Texas June 2026 Breakfast.
+
+📅 June 2026 | 223 Kessler Woods Court, Dallas
+👥 25–30 women entrepreneurs, investors, and leaders
+🤝 Intimate. Intentional. Real business.
+
+We Make Money Together — and [Company] belongs in this room.
+
+Partnership starts at [$X]. Category held through May 9.
+
+Can we confirm this week?
+
+— Jasmin Brand
+Founder, HER Texas | jasmin@hertexas.org`,
+       note:''},
+
+      {day:'Day 30',name:'Breakup / Nurture',ch:'em',
+       subj:'Last note from HER Texas',
+       copy:`Hi [First Name] — last note for now.
+
+If June timing doesn't work for [Company] right now, completely understood. I'd love to circle back for our July FIFA World Cup activation — that may be the better moment.
+
+These are the spaces where women-owned businesses thrive, and I think [Company] knows that.
+
+— Jasmin Brand | hertexas.org`,
+       note:''},
+    ]},
+
+  health:{label:'Healthcare Systems',
+    note:'Lead with community benefit mission — these orgs have community benefit obligations and women\'s health + economic wellness is a natural pairing. Position the breakfast as a community investment, not just an event sponsorship.',
+    touches:[
+      {day:'Day 0',name:'LinkedIn Warm-Up Connect',ch:'li',subj:'',
+       copy:`Hi [First Name] —
+
+I'm Jasmin Brand, founder of HER Texas — the first statewide network for female founders in Texas. [Company]'s community benefit work and health equity mission really resonates with what we're building. Would love to connect.
+
+— Jasmin | HER Texas`,
+       note:''},
+
+      {day:'Day 4',name:'Intro Email',ch:'em',
+       subj:'HER Texas + [Company] — June 2026 Breakfast in Dallas',
+       copy:`Hi [First Name] —
+
+I'm Jasmin Brand, founder of HER Texas — the first statewide network for female founders in Texas.
+
+This June we're hosting a breakfast for 25–30 Dallas women entrepreneurs and community leaders at 223 Kessler Woods Court. For [Company], this is a direct community benefit investment — women's economic health and physical health aren't separate conversations. They're the same one. And this room is full of the women your programs are designed to serve.
+
+Worth a 20-minute conversation this week?
+
+— Jasmin Brand
+Founder, HER Texas | hertexas.org`,
+       note:''},
+
+      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',
+       subj:'Re: HER Texas + [Company] — health + economic security',
+       copy:`Hi [First Name] — brief follow-up.
+
+Women business owners consistently cite financial stress as a top health challenge. Economic security and health security aren't separate — they're the same conversation.
+
+HER Texas is where both happen. And our June 2026 Breakfast is where [Company] can show up for it.
+
+Still happy to discuss what a partnership looks like. 20 minutes anytime.
+
+— Jasmin`,
+       note:''},
+
+      {day:'Day 14',name:'Breakfast Pitch',ch:'li-dm',subj:'',
+       copy:`Hi [First Name] — following up on HER Texas June 2026.
+
+25–30 Dallas women founders and community leaders. [Company] belongs in this room.
+
+Partnership starts at [$X]. Worth a 20-minute call?
+
+— Jasmin | HER Texas`,
+       note:''},
+
+      {day:'Day 21',name:'Formal Invite',ch:'em',
+       subj:'Formal invitation — HER Texas June 2026 Breakfast + [Company]',
+       copy:`Hi [First Name] —
+
+Formal invitation: join HER Texas as a community partner at our June 2026 Breakfast.
+
+📅 June 2026 | 223 Kessler Woods Court, Dallas
+👥 25–30 women entrepreneurs, investors, and community leaders
+
+These are the spaces where women-owned businesses thrive — and where community health investment becomes visible.
+
+Partnership from [$X]. Category held through May 9.
+
+— Jasmin Brand
+Founder, HER Texas | jasmin@hertexas.org`,
+       note:''},
+
+      {day:'Day 30',name:'Breakup / Nurture',ch:'em',
+       subj:'Closing the loop — HER Texas',
+       copy:`Hi [First Name] — closing the loop.
+
+If June timing doesn't work right now, completely understood. I'd love to circle back for a future window — the conversation between [Company] and HER Texas is one that should happen.
+
+Thank you for your time.
+
+— Jasmin Brand | hertexas.org`,
+       note:''},
+    ]},
+
+  civic:{label:'Civic & Government',
+    note:'Lead with economic development and the FIFA World Cup economic impact story. For city officials the ask may be an endorsement, official support letter, or representation at the event — not always a cash sponsorship. Frame it as community investment and regional visibility.',
+    touches:[
+      {day:'Day 0',name:'LinkedIn Warm-Up Connect',ch:'li',subj:'',
+       copy:`Hi [First Name] —
+
+I'm Jasmin Brand, founder of HER Texas — the first statewide network for female founders in Texas. Your work on economic development and women's business growth in [City] really aligns with our mission. Would love to connect.
+
+— Jasmin | HER Texas`,
+       note:''},
+
+      {day:'Day 4',name:'Intro Email',ch:'em',
+       subj:'HER Texas + [Organization] — June 2026 Breakfast in Dallas',
+       copy:`Hi [First Name] —
+
+I'm Jasmin Brand, founder of HER Texas — the first statewide network for female founders in Texas.
+
+With FIFA World Cup bringing 1.5M+ visitors to DFW and $500M+ in projected economic impact, we're hosting a June 2026 Breakfast in Dallas to make sure women entrepreneurs are in the room when that opportunity lands — not just watching it pass by.
+
+June 2026 | 223 Kessler Woods Court, Dallas | 25–30 women founders, investors, and community leaders.
+
+I'd love to discuss how [Organization] could be a partner in — or represented at — this gathering. The conversation connects directly to your economic development priorities.
+
+Worth 20 minutes?
+
+— Jasmin Brand
+Founder, HER Texas | hertexas.org`,
+       note:'For City contacts, the ask may be an endorsement or official support letter, not cash. Offering a seat at the table for city leadership is often more powerful than a sponsorship.'},
+
+      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',
+       subj:'Re: HER Texas June 2026 — FIFA economic impact',
+       copy:`Hi [First Name] — brief follow-up.
+
+FIFA's Dallas economic impact is projected at $500M+. Our June 2026 Breakfast is specifically designed to make sure women-owned businesses capture a real share of that — not just watch it flow past them.
+
+I'd love to discuss how [Organization] could be involved.
+
+— Jasmin`,
+       note:''},
+
+      {day:'Day 14',name:'Partnership / Endorsement Ask',ch:'li-dm',subj:'',
+       copy:`Hi [First Name] — following up on HER Texas June 2026.
+
+Would love to have [Organization]'s participation or endorsement for our women founders breakfast. Even a letter of support or official representation signals that [City/Organization] is invested in women's economic leadership.
+
+20 minutes this week?
+
+— Jasmin | HER Texas`,
+       note:''},
+
+      {day:'Day 21',name:'Formal Invite',ch:'em',
+       subj:'Formal invitation — HER Texas June 2026 Breakfast',
+       copy:`Hi [First Name] —
+
+Formal invitation to join us — or send a representative — at the HER Texas June 2026 Breakfast.
+
+📅 June 2026 | 223 Kessler Woods Court, Dallas
+👥 25–30 women entrepreneurs, investors, and community leaders from across Texas
+
+Your presence signals [Organization]'s commitment to women's economic leadership in Dallas. These are the spaces where women-owned businesses thrive.
+
+— Jasmin Brand
+Founder, HER Texas | jasmin@hertexas.org`,
+       note:''},
+
+      {day:'Day 30',name:'Breakup / Nurture',ch:'em',
+       subj:'Closing the loop — HER Texas',
+       copy:`Hi [First Name] — closing the loop.
+
+If June 2026 doesn't work, completely understood. I'd love to stay connected for our ongoing HER Texas programming — and for our July FIFA World Cup activation.
+
+Thank you for the work you do for Dallas.
+
+— Jasmin Brand | hertexas.org`,
+       note:''},
+    ]},
+
+  chamber:{label:'Chambers & Economic Development',
+    note:'Lead with membership value, regional visibility, and co-activation. These orgs have networks that multiply your reach. Approach as strategic partners — their corporate member access is a warm intro network for many others on your list.',
+    touches:[
+      {day:'Day 0',name:'LinkedIn Warm-Up Connect',ch:'li',subj:'',
+       copy:`Hi [First Name] —
+
+I'm Jasmin Brand, founder of HER Texas — the first statewide network for female founders in Texas. We're building a statewide movement of founders, funders, and bold builders — and [Organization]'s work on economic development is exactly the kind of partnership we should be in conversation about. Would love to connect.
+
+— Jasmin | HER Texas`,
+       note:''},
+
+      {day:'Day 4',name:'Intro Email',ch:'em',
+       subj:'HER Texas + [Organization] — June 2026 partnership',
+       copy:`Hi [First Name] —
+
+I'm Jasmin Brand, founder of HER Texas — the first statewide network for female founders in Texas.
+
+This June we're hosting a breakfast in Dallas for 25–30 women entrepreneurs, investors, and business leaders at 223 Kessler Woods Court — built around our 2026 theme: We Make Money Together.
+
+Given [Organization]'s membership and regional reach, I'd love to explore what a partnership could look like. Whether that's a sponsor package, a co-marketing arrangement, or simply a seat at the table for your leadership — there's a real opportunity here.
+
+Worth 20 minutes?
+
+— Jasmin Brand
+Founder, HER Texas | hertexas.org`,
+       note:''},
+
+      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',
+       subj:'Re: HER Texas + [Organization] — mutual member value',
+       copy:`Hi [First Name] — brief follow-up.
+
+HER Texas's statewide network reaches women founders across Dallas, Austin, Houston, and San Antonio — the same geographic footprint [Organization]'s members serve. Our events create referrals, introductions, and new business for everyone in the room.
+
+I think there's a genuine win-win here. Let's talk.
+
+— Jasmin`,
+       note:''},
+
+      {day:'Day 14',name:'Partnership Pitch',ch:'li-dm',subj:'',
+       copy:`Hi [First Name] — following up on HER Texas June 2026.
+
+A co-marketing or sponsor package for [Organization] starts at [$X] and puts your brand in front of 25–30 women business leaders — plus ongoing HER Texas member visibility across Texas.
+
+20 minutes this week?
+
+— Jasmin | HER Texas`,
+       note:''},
+
+      {day:'Day 21',name:'Formal Invite',ch:'em',
+       subj:'Formal invitation — HER Texas June 2026 Breakfast + [Organization]',
+       copy:`Hi [First Name] —
+
+Formal invitation for [Organization] to partner with us at the HER Texas June 2026 Breakfast.
+
+📅 June 2026 | 223 Kessler Woods Court, Dallas
+👥 25–30 women entrepreneurs, investors, and business leaders
+
+We Make Money Together — and [Organization] helps make that possible.
+
+Partnership from [$X]. Category held through May 9.
+
+— Jasmin Brand
+Founder, HER Texas | jasmin@hertexas.org`,
+       note:''},
+
+      {day:'Day 30',name:'Breakup / Nurture',ch:'em',
+       subj:'Closing the loop — HER Texas',
+       copy:`Hi [First Name] — closing the loop.
+
+If June timing doesn't work, I'd love to stay connected for our ongoing HER Texas programming. We're building something real for women founders in Dallas and [Organization] belongs in that conversation.
+
+— Jasmin Brand | hertexas.org`,
+       note:''},
+    ]},
+
+  edu:{label:'Higher Education',
+    note:'Lead with the student-to-founder pipeline and women\'s leadership programming. Research university angle = credibility for HER Texas brand. The ask is a women\'s program partnership first — cash sponsorship is secondary.',
+    touches:[
+      {day:'Day 0',name:'LinkedIn Warm-Up Connect',ch:'li',subj:'',
+       copy:`Hi [First Name] —
+
+I'm Jasmin Brand, founder of HER Texas — the first statewide network for female founders in Texas. [University]'s women's leadership and entrepreneurship programs really resonate with what we're building. Would love to connect.
+
+— Jasmin | HER Texas`,
+       note:''},
+
+      {day:'Day 4',name:'Intro Email',ch:'em',
+       subj:'HER Texas + [University] — women\'s entrepreneurship pipeline',
+       copy:`Hi [First Name] —
+
+I'm Jasmin Brand, founder of HER Texas — the first statewide network for female founders in Texas.
+
+This June we're hosting a breakfast for 25–30 Dallas women entrepreneurs and investors at 223 Kessler Woods Court. For [University], this is both a sponsor opportunity and a direct pipeline connection — your women students and alumnae are our members and future members.
+
+Conversations turn into opportunities and opportunities turn into real impact. That's exactly what this room is built for.
+
+Worth 20 minutes this week?
+
+— Jasmin Brand
+Founder, HER Texas | hertexas.org`,
+       note:''},
+
+      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',
+       subj:'Re: HER Texas + [University] — women founder data',
+       copy:`Hi [First Name] — brief follow-up.
+
+Women start businesses at 2x the national average rate but access significantly less capital and fewer networks to grow. HER Texas is specifically built to close that gap — and [University]'s women graduates are exactly who we serve.
+
+Happy to discuss what the June 2026 Breakfast and an ongoing partnership could mean for your women's programs.
+
+— Jasmin`,
+       note:''},
+
+      {day:'Day 14',name:'Breakfast Pitch',ch:'li-dm',subj:'',
+       copy:`Hi [First Name] — following up on HER Texas June 2026.
+
+25–30 Dallas women founders and investors in one room. [University] belongs here — both as a partner and as a pipeline.
+
+20 minutes this week?
+
+— Jasmin | HER Texas`,
+       note:''},
+
+      {day:'Day 21',name:'Formal Invite',ch:'em',
+       subj:'Formal invitation — HER Texas June 2026 Breakfast + [University]',
+       copy:`Hi [First Name] —
+
+Formal invitation to partner with HER Texas at our June 2026 Breakfast.
+
+📅 June 2026 | 223 Kessler Woods Court, Dallas
+👥 25–30 women founders and investors
+
+Partnership from [$X] — or let's discuss co-programming arrangements. Category held through May 9.
+
+— Jasmin Brand
+Founder, HER Texas | jasmin@hertexas.org`,
+       note:''},
+
+      {day:'Day 30',name:'Breakup / Nurture',ch:'em',
+       subj:'Closing the loop — HER Texas',
+       copy:`Hi [First Name] — last note for now.
+
+If June timing doesn't work, I'd love to reconnect during fall semester planning. HER Texas and [University]'s women's programs have a natural partnership — I'd like to find the right moment for it.
+
+Thank you.
+
+— Jasmin Brand | hertexas.org`,
+       note:''},
+    ]},
+
+  media:{label:'Media & Publishing',
+    note:'Approach as EDITORIAL PARTNERSHIP first — not a cash sponsorship ask. Coverage in exchange for event visibility is often worth more than a sponsor fee. Lead with audience alignment and the story angle, not media buy language.',
+    touches:[
+      {day:'Day 0',name:'LinkedIn Warm-Up Connect',ch:'li',subj:'',
+       copy:`Hi [First Name] —
+
+I'm Jasmin Brand, founder of HER Texas — the first statewide network for female founders in Texas. We're building the story of women's economic leadership in Texas and I think [Publication] and HER Texas are covering the same beat from different angles. Would love to connect.
+
+— Jasmin | HER Texas`,
+       note:''},
+
+      {day:'Day 4',name:'Intro Email',ch:'em',
+       subj:'HER Texas + [Publication] — editorial partnership for June 2026',
+       copy:`Hi [First Name] —
+
+I'm Jasmin Brand, founder of HER Texas — the first statewide network for female founders in Texas.
+
+This June we're hosting a breakfast in Dallas for 25–30 women entrepreneurs, investors, and community leaders at 223 Kessler Woods Court. FIFA World Cup is in Dallas the same week. The story writes itself: the most intentional room of women in Dallas, during the week the world comes to town.
+
+I'd love to explore an editorial partnership — coverage, co-branding, or simply having [Publication] represented at the table. This is the kind of story your readers come to [Publication] for.
+
+Worth 20 minutes?
+
+— Jasmin Brand
+Founder, HER Texas | hertexas.org`,
+       note:'Lead with the editorial angle. Cash sponsorship can come later. The story IS the pitch.'},
+
+      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',
+       subj:'Re: HER Texas + [Publication] — the story angle',
+       copy:`Hi [First Name] — brief follow-up.
+
+HER Texas sits at the intersection of three big Dallas stories right now: FIFA World Cup economic impact, women's entrepreneurship growth in Texas, and the changing face of business leadership in DFW.
+
+We don't just track economic impact — we create the rooms where high-caliber women gather. I think [Publication] readers would love this story.
+
+Happy to discuss what an editorial partnership could look like.
+
+— Jasmin`,
+       note:''},
+
+      {day:'Day 14',name:'Partnership Ask',ch:'li-dm',subj:'',
+       copy:`Hi [First Name] — following up on HER Texas June 2026.
+
+Are there editorial opportunities we should be talking about? We're also open to a formal media sponsorship if that's a better fit.
+
+Either way, [Publication] belongs in the room.
+
+20 minutes this week?
+
+— Jasmin | HER Texas`,
+       note:''},
+
+      {day:'Day 21',name:'Formal Invite',ch:'em',
+       subj:'Formal invitation — HER Texas June 2026 + [Publication]',
+       copy:`Hi [First Name] —
+
+Formal invitation: join us at the HER Texas June 2026 Breakfast as a media partner.
+
+📅 June 2026 | 223 Kessler Woods Court, Dallas
+👥 25–30 women founders and investors from across Texas
+
+We'd love a [Publication] journalist or editor in the room. Open to both editorial and sponsorship arrangements. Category held through May 9.
+
+— Jasmin Brand
+Founder, HER Texas | jasmin@hertexas.org`,
+       note:''},
+
+      {day:'Day 30',name:'Breakup / Nurture',ch:'em',
+       subj:'Closing the loop — HER Texas',
+       copy:`Hi [First Name] — closing the loop.
+
+If June timing doesn't work, I'd love to stay in touch. HER Texas is a growing story in Texas and I think [Publication] and we have a lot to offer each other.
+
+Thank you for your time.
+
+— Jasmin Brand | hertexas.org`,
+       note:''},
+    ]},
+
+  women:{label:"Women's Organizations",
+    note:'These are PEER PARTNERSHIPS — not sponsorship asks. The language shifts entirely. Lead with mutual amplification, shared mission, and co-activation. Never ask for their checkbook first. These conversations are about building together.',
+    touches:[
+      {day:'Day 0',name:'LinkedIn Warm-Up Connect',ch:'li',subj:'',
+       copy:`Hi [First Name] —
+
+I'm Jasmin Brand, founder of HER Texas — the first statewide network for female founders in Texas. I've long admired [Organization]'s work and I think we're serving many of the same women in Texas. Would love to connect and explore how we could amplify each other.
+
+— Jasmin | HER Texas`,
+       note:'Lead with genuine admiration. This is a peer relationship from the start.'},
+
+      {day:'Day 4',name:'Intro / Peer Partnership',ch:'em',
+       subj:'HER Texas + [Organization] — building together',
+       copy:`Hi [First Name] —
+
+I'm Jasmin Brand, founder of HER Texas — the first statewide network for female founders in Texas.
+
+This June we're hosting an intimate breakfast in Dallas for 25–30 women entrepreneurs, investors, and community leaders at 223 Kessler Woods Court. I'd love to have [Organization]'s leadership in the room — not as a sponsor, but as a peer.
+
+Our communities overlap almost entirely. I think showing up together makes both of us stronger.
+
+Would also love to explore co-promotion: we share the breakfast with your community, you share your work with ours. Both organizations get in front of new women who should know us.
+
+Worth a conversation?
+
+— Jasmin Brand
+Founder, HER Texas | hertexas.org`,
+       note:'The ask is participation and co-promotion first. Cash can come later if the relationship develops.'},
+
+      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',
+       subj:'Re: HER Texas + [Organization] — shared mission',
+       copy:`Hi [First Name] — brief follow-up.
+
+The women you serve are the women we serve. I genuinely believe a partnership between HER Texas and [Organization] would make both our communities stronger.
+
+Let's start with June 2026 and see where it goes.
+
+— Jasmin`,
+       note:''},
+
+      {day:'Day 14',name:'Partnership Details',ch:'li-dm',subj:'',
+       copy:`Hi [First Name] — following up on HER Texas June 2026.
+
+For peer organizations like [Organization], we're looking for co-promotion, shared community presence, and a seat at the table. If a formal sponsorship package makes sense on your end, we can explore that too — but the relationship matters more than the transaction.
+
+20 minutes?
+
+— Jasmin | HER Texas`,
+       note:''},
+
+      {day:'Day 21',name:'Formal Invite',ch:'em',
+       subj:'Formal invitation — HER Texas June 2026 Breakfast + [Organization]',
+       copy:`Hi [First Name] —
+
+Formal invitation for [Organization]'s leadership to join us at the HER Texas June 2026 Breakfast.
+
+📅 June 2026 | 223 Kessler Woods Court, Dallas
+👥 25–30 women founders and investors from across Texas
+
+We'd love [Organization] in the room — as a partner, as a peer, as a community presence that signals what we both stand for.
+
+— Jasmin Brand
+Founder, HER Texas | jasmin@hertexas.org`,
+       note:''},
+
+      {day:'Day 30',name:'Breakup / Nurture',ch:'em',
+       subj:'Closing the loop — HER Texas',
+       copy:`Hi [First Name] — closing the loop for now.
+
+If June timing doesn't work, I genuinely hope we stay connected. HER Texas and [Organization] belong in the same conversation — I'll find a better moment.
+
+Thank you.
+
+— Jasmin Brand | hertexas.org`,
+       note:''},
+    ]},
+
+  supdiv:{label:'Supplier Diversity & MWBE',
+    note:'CRITICAL: WBCS/WBENC is the warmest contact on the entire list — Erika is in certification process right now. These organizations are partners AND multipliers. Their corporate member access is a direct warm intro to supplier diversity officers at every major DFW corporation on this list. Work these three before going cold anywhere else.',
+    touches:[
+      {day:'Day 0',name:'LinkedIn Warm-Up Connect',ch:'li',subj:'',
+       copy:`Hi [First Name] —
+
+I'm Jasmin Brand, founder of HER Texas — the first statewide network for female founders in Texas. [Organization]'s work connecting women and minority-owned businesses to corporate opportunities is exactly what our community needs more of. Would love to connect.
+
+— Jasmin | HER Texas`,
+       note:'For WBCS specifically: mention you\'re in the certification process — it creates immediate context and credibility.'},
+
+      {day:'Day 4',name:'Intro / Partnership',ch:'em',
+       subj:'HER Texas + [Organization] — June 2026 partnership',
+       copy:`Hi [First Name] —
+
+I'm Jasmin Brand, founder of HER Texas — the first statewide network for female founders in Texas.
+
+[For WBCS: I'm currently going through the WBCS certification process, which is how I came to appreciate the depth of your network and corporate relationships. I'd love to discuss how HER Texas and WBCS could amplify each other's work — starting with our June 2026 Breakfast.]
+
+This June we're hosting a breakfast in Dallas for 25–30 women entrepreneurs, investors, and community leaders at 223 Kessler Woods Court. For [Organization], this is both a partnership opportunity and a community showcase.
+
+Worth 20 minutes?
+
+— Jasmin Brand
+Founder, HER Texas | hertexas.org`,
+       note:'For WBCS: lead with the certification connection. For NMSDC and DFWMSDC: lead with corporate member access as the mutual value proposition.'},
+
+      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',
+       subj:'Re: HER Texas + [Organization] — the corporate access angle',
+       copy:`Hi [First Name] — brief follow-up.
+
+[Organization]'s corporate member relationships are exactly what HER Texas women founders need to grow. And HER Texas's community is exactly what your corporate members are looking for when they need supplier diversity introductions.
+
+There's a genuine win-win here. Let's talk.
+
+— Jasmin`,
+       note:''},
+
+      {day:'Day 14',name:'Partnership Pitch',ch:'li-dm',subj:'',
+       copy:`Hi [First Name] — following up on HER Texas June 2026.
+
+A co-promotion or partner package for [Organization] puts your brand in front of 25–30 women founders who are exactly your target audience — and opens a direct referral relationship between our communities.
+
+20 minutes?
+
+— Jasmin | HER Texas`,
+       note:''},
+
+      {day:'Day 21',name:'Formal Invite',ch:'em',
+       subj:'Formal invitation — HER Texas June 2026 Breakfast + [Organization]',
+       copy:`Hi [First Name] —
+
+Formal invitation: join HER Texas as a community partner at our June 2026 Breakfast.
+
+📅 June 2026 | 223 Kessler Woods Court, Dallas
+👥 25–30 women entrepreneurs, investors, and community leaders
+
+Co-marketing and partnership arrangements available. Category held through May 9.
+
+— Jasmin Brand
+Founder, HER Texas | jasmin@hertexas.org`,
+       note:''},
+
+      {day:'Day 30',name:'Breakup / Nurture',ch:'em',
+       subj:'Closing the loop — HER Texas',
+       copy:`Hi [First Name] — closing the loop for now.
+
+I'd love to stay connected for our ongoing HER Texas programming. The relationship between HER Texas and [Organization] is too natural not to build — I'll find the right moment.
+
+— Jasmin Brand | hertexas.org`,
+       note:''},
+    ]},
+
+  np:{label:'Nonprofit & Community Impact',
+    note:'Peer partnerships — not sponsorship asks. The language here is about shared community, co-activation, and showing up together. Lead with mission alignment. New Friends New Life and ChildCareGroup especially should be invited as community peers, not solicited as donors.',
+    touches:[
+      {day:'Day 0',name:'LinkedIn Warm-Up Connect',ch:'li',subj:'',
+       copy:`Hi [First Name] —
+
+I'm Jasmin Brand, founder of HER Texas — the first statewide network for female founders in Texas. [Organization]'s mission really aligns with ours and I'd love to connect — I think we're serving many of the same women from different angles.
+
+— Jasmin | HER Texas`,
+       note:''},
+
+      {day:'Day 4',name:'Intro / Peer Partnership',ch:'em',
+       subj:'HER Texas + [Organization] — June 2026 community partnership',
+       copy:`Hi [First Name] —
+
+I'm Jasmin Brand, founder of HER Texas — the first statewide network for female founders in Texas.
+
+This June we're hosting a breakfast in Dallas for 25–30 women entrepreneurs, investors, and community leaders at 223 Kessler Woods Court. I'd love to have [Organization] in the room — as a community partner, a featured organization, or simply as a peer at the table.
+
+The women you serve are the women we serve. Showing up together makes both our communities stronger.
+
+Worth a conversation?
+
+— Jasmin Brand
+Founder, HER Texas | hertexas.org`,
+       note:''},
+
+      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',
+       subj:'Re: HER Texas + [Organization] — community amplification',
+       copy:`Hi [First Name] — brief follow-up.
+
+HER Texas is actively building the room that represents the full breadth of Texas women — and [Organization]'s community and mission belong in that room.
+
+I'd love to discuss what showing up together could look like.
+
+— Jasmin`,
+       note:''},
+
+      {day:'Day 14',name:'Partnership Details',ch:'li-dm',subj:'',
+       copy:`Hi [First Name] — following up on HER Texas June 2026.
+
+For peer organizations, we're looking for co-promotion, shared community presence, and a seat at the table. If a formal partnership package makes sense, we can talk — but the relationship comes first.
+
+20 minutes?
+
+— Jasmin | HER Texas`,
+       note:''},
+
+      {day:'Day 21',name:'Formal Invite',ch:'em',
+       subj:'Formal invitation — HER Texas June 2026 Breakfast + [Organization]',
+       copy:`Hi [First Name] —
+
+Formal invitation for [Organization]'s leadership to join us at the HER Texas June 2026 Breakfast.
+
+📅 June 2026 | 223 Kessler Woods Court, Dallas
+👥 25–30 women founders and investors from across Texas
+
+We'd love [Organization] in the room — as a partner, as a peer, as a presence that signals what this community stands for.
+
+— Jasmin Brand
+Founder, HER Texas | jasmin@hertexas.org`,
+       note:''},
+
+      {day:'Day 30',name:'Breakup / Nurture',ch:'em',
+       subj:'Closing the loop — HER Texas',
+       copy:`Hi [First Name] — closing the loop for now.
+
+If June timing doesn't work, I genuinely hope we stay connected. [Organization] and HER Texas belong in the same conversation — I'll find a better moment.
+
+Thank you.
+
+— Jasmin Brand | hertexas.org`,
+       note:''},
+    ]},
+
+};
+ENDOFSEQ
+echo "SEQ file written: $(wc -l < /home/claude/crm_seq_new.js) lines"
 const STATUS_LABELS={s0:'Not Started',s1:'Researching',s2:'Warm-Up',s3:'Outreach Sent',s4:'Response Received',s5:'Meeting Scheduled',s6:'Invited',s7:'Confirmed ✓',s8:'Declined',s9:'Future Cycle'};
 const CAT_LABELS={bank:'Banking & Financial',ins:'Insurance',corp:'Corporate',health:'Healthcare',civic:'Civic & Gov',chamber:'Chambers & Econ Dev',edu:'Higher Ed',media:'Media',women:"Women's Orgs",supdiv:'Supplier Diversity',np:'Nonprofit'};
 const CH_DAYS={1:0,2:4,3:7,4:14,5:21,6:30};
