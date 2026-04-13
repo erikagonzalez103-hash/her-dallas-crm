@@ -463,24 +463,39 @@ function exportData(){
 
 function importData(){
   const input=document.createElement('input');
-  input.type='file';input.accept='.json';
+  input.type='file';input.accept='.json,.csv';
   input.onchange=e=>{
     const file=e.target.files[0];if(!file)return;
     const reader=new FileReader();
     reader.onload=ev=>{
       try{
-        const data=JSON.parse(ev.target.result);
-        if(data.contacts){
-          contacts=data.contacts;
-          saveC(contacts);
-        }
-        if(data.activity){
-          activity=data.activity;
-          saveA(activity);
+        const text=ev.target.result;
+        if(file.name.endsWith('.json')){
+          const data=JSON.parse(text);
+          if(data.contacts){contacts=data.contacts;}
+          if(data.activity){activity=data.activity;}
+        } else {
+          // CSV import — parse rows
+          const lines=text.split('\n').filter(l=>l.trim());
+          const headers=lines[0].split(',').map(h=>h.replace(/"/g,'').trim());
+          const rows=lines.slice(1).map(line=>{
+            const vals=[];let cur='',inQ=false;
+            for(const ch of line){
+              if(ch==='"'){inQ=!inQ;}
+              else if(ch===','&&!inQ){vals.push(cur);cur='';}
+              else{cur+=ch;}
+            }
+            vals.push(cur);
+            const obj={touches:[],t1:null};
+            headers.forEach((h,i)=>{obj[h]=(vals[i]||'').replace(/"/g,'').trim();});
+            obj.id=parseInt(obj.id)||Date.now();
+            return obj;
+          }).filter(r=>r.org);
+          contacts=rows;
         }
         renderDash();renderContacts();renderActivity();
-        toast('Data imported — '+contacts.length+' prospects loaded!');
-      }catch(err){toast('Import failed — check file format');}
+        toast('Loaded '+contacts.length+' prospects!');
+      }catch(err){toast('Import failed — check file format.');}
     };
     reader.readAsText(file);
   };
@@ -1830,15 +1845,13 @@ function toast(msg){
 // INIT
 // ═══════════════════════════════════════════════
 function init(){
-  // Always seeds from SEED on page load (in-memory storage)
-  // Use Export to save work, Import to restore it next session
   contacts=[...SEED.map(c=>({...c,touches:[...(c.touches||[])]}))];
   activity=[];
-  renderDash();
-  renderSeq();
-  libCat('bank',document.querySelector('.lib-nav-btn'));
+  try{renderDash();}catch(e){console.error('renderDash:',e);}
+  try{renderSeq();}catch(e){console.error('renderSeq:',e);}
+  try{const b=document.querySelector('.lib-nav-btn');if(b)libCat('bank',b);}catch(e){}
 }
-document.addEventListener('DOMContentLoaded', init);
+init();
 </script>
 </body>
 </html>
