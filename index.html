@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HER Dallas — Sponsor Outreach CRM</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blk:#0D0D0D;--drk:#1A1A1A;--chr:#252525;--mid:#333;
+  --gld:#C9A84C;--gld2:#E8C97A;--gld3:#F5EDCE;--gld4:#7A5C00;
+  --tel:#00968A;--tel2:#006B62;--tel3:#D4EFED;--tel4:#003D36;
+  --wht:#FFFFFF;--off:#FAF8F4;--ln:#EDEDEA;
+  --gr1:#888;--gr2:#555;--gr3:#333;
+  --pur:#6B4FA0;--pur3:#EDE5F5;
+  --r:8px;--r2:12px;--r3:16px;
+  --sh:0 2px 16px rgba(0,0,0,.08);--shd:0 4px 24px rgba(0,0,0,.14);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--off);color:var(--blk);min-height:100vh;font-size:14px}
+/* TOPBAR */
+.topbar{background:var(--blk);height:56px;display:flex;align-items:center;padding:0 24px;gap:16px;position:sticky;top:0;z-index:100;border-bottom:2px solid var(--gld)}
+.topbar-brand{font-family:'Playfair Display',serif;font-size:17px;color:var(--gld);letter-spacing:.02em;white-space:nowrap}
+.topbar-pipe{color:#333;font-size:18px}
+.topbar-title{font-size:12px;color:var(--gr1);font-weight:300;letter-spacing:.04em}
+.topbar-stats{margin-left:auto;display:flex;gap:8px}
+.tstat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:3px 12px;font-size:11px;color:var(--gr1)}
+.tstat b{color:var(--gld);font-weight:600}
+/* LAYOUT */
+.app{display:grid;grid-template-columns:200px 1fr;min-height:calc(100vh - 56px)}
+/* SIDEBAR */
+.sidebar{background:var(--drk);padding:20px 0;border-right:1px solid #2a2a2a;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
+.nav-grp{font-size:9px;font-weight:600;color:#444;letter-spacing:.14em;text-transform:uppercase;padding:14px 20px 4px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 20px;border:none;background:none;color:var(--gr1);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;width:100%;text-align:left;border-left:2px solid transparent;transition:all .15s}
+.nav-item:hover{color:var(--wht);background:rgba(255,255,255,.04)}
+.nav-item.active{color:var(--gld);background:rgba(201,168,76,.08);border-left-color:var(--gld);font-weight:500}
+.nav-dot{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.6;flex-shrink:0}
+/* MAIN */
+.main{overflow-y:auto;padding:28px 32px;background:var(--off)}
+.pg{display:none}.pg.show{display:block}
+/* PAGE HEADER */
+.ph{margin-bottom:24px}
+.ph h1{font-family:'Playfair Display',serif;font-size:26px;color:var(--blk);margin-bottom:4px}
+.ph p{font-size:13px;color:var(--gr1);font-weight:300}
+/* CARDS */
+.card{background:var(--wht);border-radius:var(--r2);box-shadow:var(--sh);padding:20px 22px;border:1px solid var(--ln)}
+.card+.card,.card+.tbl-wrap,.tbl-wrap+.card{margin-top:14px}
+.card-hdr{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gr2);margin-bottom:12px}
+/* DASHBOARD */
+.dash-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat-card{background:var(--wht);border-radius:var(--r2);padding:16px 18px;box-shadow:var(--sh);border:1px solid var(--ln);border-left:3px solid var(--gld)}
+.stat-card.t{border-left-color:var(--tel)}
+.stat-card.p{border-left-color:var(--pur)}
+.stat-card.g{border-left-color:#2A7A2A}
+.stat-n{font-family:'Playfair Display',serif;font-size:34px;color:var(--gld);line-height:1}
+.stat-card.t .stat-n{color:var(--tel)}
+.stat-card.p .stat-n{color:var(--pur)}
+.stat-card.g .stat-n{color:#2A7A2A}
+.stat-l{font-size:11px;color:var(--gr1);margin-top:3px;font-weight:300}
+/* TIMELINE BAR */
+.tl{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:14px 0}
+.tl-step{background:var(--chr);border-radius:var(--r);padding:8px 10px;text-align:center}
+.tl-day{font-size:11px;font-weight:600;color:var(--gld);font-family:'DM Sans',sans-serif}
+.tl-lbl{font-size:10px;color:var(--gr1);margin-top:2px}
+/* TABLE */
+.tbl-wrap{background:var(--wht);border-radius:var(--r2);box-shadow:var(--sh);overflow:hidden;border:1px solid var(--ln)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead tr{background:var(--chr)}
+thead th{padding:10px 14px;text-align:left;font-family:'DM Sans',sans-serif;font-size:9px;letter-spacing:.1em;color:var(--gld);font-weight:600;text-transform:uppercase;white-space:nowrap}
+tbody tr{border-bottom:1px solid var(--ln);transition:background .1s}
+tbody tr:hover{background:#fdfcf9}
+td{padding:10px 14px;vertical-align:middle}
+.org{font-weight:600;font-size:13px;color:var(--blk)}
+.person{font-size:12px;color:var(--gr2);margin-top:1px}
+/* BADGES */
+.badge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:600;font-family:'DM Sans',sans-serif;letter-spacing:.02em;white-space:nowrap}
+.b-bank{background:#FFF8E1;color:#7A5C00}
+.b-ins{background:#FFF3E0;color:#E65100}
+.b-corp{background:#E8EAF6;color:#283593}
+.b-health{background:#E8F5E9;color:#1B5E20}
+.b-civic{background:var(--tel3);color:var(--tel2)}
+.b-chamber{background:#E0F7FA;color:#006064}
+.b-edu{background:#FCE4EC;color:#880E4F}
+.b-media{background:var(--pur3);color:var(--pur)}
+.b-women{background:#F3E5F5;color:#4A148C}
+.b-supdiv{background:#EDE7F6;color:#311B92}
+.b-np{background:#E8F5E9;color:#1B5E20}
+/* STATUS */
+.st{display:inline-block;padding:3px 10px;border-radius:10px;font-size:10px;font-weight:600;font-family:'DM Sans',sans-serif}
+.s0{background:#F0F0F0;color:#888}
+.s1{background:#FFF8E1;color:#7A5C00}
+.s2{background:var(--tel3);color:var(--tel2)}
+.s3{background:#E8EAF6;color:#283593}
+.s4{background:var(--pur3);color:var(--pur)}
+.s5{background:#E8F5E9;color:#1B5E20}
+.s6{background:#FFF3E0;color:#E65100}
+.s7{background:#E8F5E9;color:#1B5E20;font-weight:700;border:1px solid #1B5E20}
+.s8{background:#FFEBEE;color:#C62828}
+.s9{background:#F5F5F5;color:#555}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--r);border:none;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;letter-spacing:.02em;white-space:nowrap}
+.btn-gld{background:var(--gld);color:var(--blk)}
+.btn-gld:hover{background:var(--gld2)}
+.btn-tel{background:var(--tel);color:var(--wht)}
+.btn-tel:hover{background:var(--tel2)}
+.btn-out{background:transparent;border:1.5px solid var(--gld);color:var(--gld)}
+.btn-out:hover{background:var(--gld3)}
+.btn-ghost{background:transparent;border:none;color:var(--tel);padding:4px 8px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500}
+.btn-ghost:hover{text-decoration:underline}
+.btn-sm{padding:4px 10px;font-size:11px}
+/* FORMS */
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.ff{grid-column:1/-1}
+label{display:block;font-size:10px;font-weight:600;color:var(--gr2);margin-bottom:4px;letter-spacing:.06em;text-transform:uppercase}
+input,select,textarea{width:100%;padding:8px 10px;border:1.5px solid #DDD;border-radius:var(--r);font-size:13px;font-family:'DM Sans',sans-serif;color:var(--blk);background:var(--wht);outline:none;transition:border-color .15s}
+input:focus,select:focus,textarea:focus{border-color:var(--gld)}
+textarea{min-height:75px;resize:vertical}
+.fa{display:flex;gap:10px;margin-top:16px}
+/* FILTERS */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
+.fl{font-size:10px;font-weight:600;color:var(--gr1);text-transform:uppercase;letter-spacing:.06em}
+.fb{padding:4px 12px;border-radius:12px;border:1.5px solid #ddd;background:var(--wht);font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;color:var(--gr2);transition:all .15s}
+.fb.active{border-color:var(--gld);background:var(--gld3);color:var(--gld4);font-weight:600}
+/* SEQUENCES */
+.seq-card{background:var(--wht);border-radius:var(--r2);box-shadow:var(--sh);overflow:hidden;border:1px solid var(--ln);margin-bottom:14px}
+.seq-hdr{display:flex;align-items:center;gap:12px;padding:14px 18px;background:var(--chr);cursor:pointer;user-select:none}
+.seq-title{font-family:'Playfair Display',serif;font-size:15px;color:var(--gld)}
+.seq-sub{font-size:11px;color:var(--gr1);font-weight:300;flex:1}
+.seq-arr{color:var(--gr1);font-size:12px;transition:transform .2s;margin-left:auto}
+.seq-card.open .seq-arr{transform:rotate(180deg)}
+.seq-body{display:none;padding:16px 18px}
+.seq-card.open .seq-body{display:block}
+.tc{border:1px solid var(--ln);border-radius:var(--r);margin-top:12px;overflow:hidden}
+.tc-hdr{display:flex;align-items:center;gap:10px;padding:9px 13px;background:#fafafa;border-bottom:1px solid var(--ln)}
+.tc-day{font-size:10px;font-weight:700;color:var(--wht);background:var(--chr);padding:2px 8px;border-radius:10px}
+.tc-name{font-size:13px;font-weight:600;color:var(--blk)}
+.ch-badge{font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;letter-spacing:.04em;font-family:'DM Sans',sans-serif}
+.ch-li{background:#E8EAF6;color:#283593}
+.ch-ldm{background:#E3F2FD;color:#0D47A1}
+.ch-em{background:var(--gld3);color:var(--gld4)}
+.ch-ph{background:#E8F5E9;color:#1B5E20}
+.tc-body{padding:11px 13px}
+.tc-subj{font-size:10px;font-weight:700;color:var(--gr1);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+.copy-wrap{position:relative}
+.tc-copy{font-size:12.5px;color:var(--blk);line-height:1.65;white-space:pre-wrap;background:#fefef9;border:1px solid #f0ece4;border-radius:5px;padding:10px 40px 10px 12px}
+.copy-btn{position:absolute;top:7px;right:7px;background:var(--gld);border:none;border-radius:4px;padding:3px 8px;font-size:9px;font-family:'DM Sans',sans-serif;font-weight:700;cursor:pointer;color:var(--blk);transition:background .15s}
+.copy-btn:hover{background:var(--gld2)}
+.tc-note{font-size:11px;font-style:italic;color:var(--gr1);margin-top:6px;padding-left:2px}
+/* COPY LIBRARY */
+.lib-layout{display:grid;grid-template-columns:200px 1fr;gap:18px;align-items:start}
+.lib-nav{background:var(--wht);border-radius:var(--r2);box-shadow:var(--sh);overflow:hidden;border:1px solid var(--ln);position:sticky;top:72px}
+.lib-nav-hdr{padding:11px 16px;background:var(--chr);font-size:10px;font-weight:700;color:var(--gld);letter-spacing:.08em;text-transform:uppercase}
+.lib-nav-btn{display:block;width:100%;padding:8px 16px;border:none;background:none;text-align:left;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;color:var(--gr2);border-left:2px solid transparent;transition:all .15s}
+.lib-nav-btn:hover{background:var(--off);color:var(--blk)}
+.lib-nav-btn.active{background:rgba(201,168,76,.07);color:var(--gld4);border-left-color:var(--gld);font-weight:600}
+/* ACTIVITY */
+.act-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--ln);align-items:flex-start}
+.act-dot{width:8px;height:8px;border-radius:50%;background:var(--tel);margin-top:4px;flex-shrink:0}
+.act-text{font-size:12px;color:var(--blk);line-height:1.5;flex:1}
+.act-time{font-size:11px;color:var(--gr1);font-style:italic;margin-top:1px}
+/* MODAL */
+.moverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:1000;align-items:center;justify-content:center}
+.moverlay.open{display:flex}
+.modal{background:var(--wht);border-radius:var(--r3);padding:28px;max-width:660px;width:90%;max-height:88vh;overflow-y:auto;position:relative;box-shadow:var(--shd)}
+.modal-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:18px;cursor:pointer;color:var(--gr1);line-height:1}
+.modal h2{font-family:'Playfair Display',serif;font-size:20px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--ln)}
+/* VIEW MODAL */
+.vm-section{margin-top:16px;padding-top:16px;border-top:1px solid var(--ln)}
+.vm-row{display:grid;grid-template-columns:140px 1fr;gap:8px;padding:5px 0;font-size:13px}
+.vm-lbl{color:var(--gr1);font-weight:500}
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--chr);color:var(--gld);padding:10px 18px;border-radius:var(--r);font-size:12px;font-weight:600;z-index:2000;animation:fadeup .25s ease;border:1px solid var(--gld);font-family:'DM Sans',sans-serif}
+@keyframes fadeup{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+/* UTIL */
+.flex{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.sp{flex:1}
+.mt{margin-top:16px}
+.empty{text-align:center;padding:40px 20px;color:var(--gr1)}
+.empty-ico{font-size:32px;margin-bottom:10px}
+.empty p{font-size:13px;font-style:italic}
+input[type=text]#csearch{padding:7px 12px;font-size:12px}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-brand">HER Dallas</div>
+  <div class="topbar-pipe">|</div>
+  <div class="topbar-title">SPONSOR OUTREACH CRM &nbsp;·&nbsp; June 10/11 Breakfast</div>
+  <div class="topbar-stats">
+    <div class="tstat">Prospects <b id="ts1">0</b></div>
+    <div class="tstat">Active <b id="ts2">0</b></div>
+    <div class="tstat">Invited <b id="ts3">0</b></div>
+    <div class="tstat">Confirmed <b id="ts4">0</b></div>
+  </div>
+</header>
+
+<div class="app">
+  <nav class="sidebar">
+    <div class="nav-grp">Main</div>
+    <button class="nav-item active" onclick="nav('dash')"><span class="nav-dot"></span>Dashboard</button>
+    <button class="nav-item" onclick="nav('queue')"><span class="nav-dot"></span>Today's Queue</button>
+    <div class="nav-grp">Prospects</div>
+    <button class="nav-item" onclick="nav('contacts')"><span class="nav-dot"></span>All Prospects</button>
+    <button class="nav-item" onclick="nav('add')"><span class="nav-dot"></span>Add Prospect</button>
+    <div class="nav-grp">Outreach</div>
+    <button class="nav-item" onclick="nav('sequences')"><span class="nav-dot"></span>Sequences</button>
+    <button class="nav-item" onclick="nav('library')"><span class="nav-dot"></span>Copy Library</button>
+    <div class="nav-grp">Log</div>
+    <button class="nav-item" onclick="nav('activity')"><span class="nav-dot"></span>Activity Log</button>
+  </nav>
+
+  <main class="main">
+
+    <!-- DASHBOARD -->
+    <div id="pg-dash" class="pg show">
+      <div class="ph"><h1>Dashboard</h1><p>HER Dallas Sponsorship & Partnership Outreach — June 10/11 Breakfast Invites</p></div>
+      <div class="dash-grid">
+        <div class="stat-card"><div class="stat-n" id="d1">0</div><div class="stat-l">Total prospects</div></div>
+        <div class="stat-card t"><div class="stat-n" id="d2">0</div><div class="stat-l">Active outreach</div></div>
+        <div class="stat-card p"><div class="stat-n" id="d3">0</div><div class="stat-l">Invites sent</div></div>
+        <div class="stat-card g"><div class="stat-n" id="d4">0</div><div class="stat-l">Confirmed</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="card">
+          <div class="card-hdr">⚡ Due for outreach today</div>
+          <div id="d-queue"></div>
+        </div>
+        <div class="card">
+          <div class="card-hdr">📅 Invite timeline</div>
+          <div class="tl">
+            <div class="tl-step"><div class="tl-day">Day 0</div><div class="tl-lbl">LinkedIn warm-up</div></div>
+            <div class="tl-step"><div class="tl-day">Day 4</div><div class="tl-lbl">Intro email/DM</div></div>
+            <div class="tl-step"><div class="tl-day">Day 7</div><div class="tl-lbl">Value-add follow</div></div>
+            <div class="tl-step"><div class="tl-day">Day 14</div><div class="tl-lbl">Breakfast pitch</div></div>
+            <div class="tl-step"><div class="tl-day">Day 21</div><div class="tl-lbl">Formal invite</div></div>
+            <div class="tl-step"><div class="tl-day">Day 30</div><div class="tl-lbl">Breakup/nurture</div></div>
+          </div>
+          <div style="font-size:11px;color:var(--gr1);margin-top:8px;line-height:1.8">
+            <div>🔵 <b>Now → Apr 25</b> — Research decision makers</div>
+            <div>🟡 <b>Apr 21–25</b> — LinkedIn warm-up (Touch 1)</div>
+            <div>🟠 <b>Apr 25–28</b> — First outreach (Touch 2)</div>
+            <div>🔴 <b>Apr 28 → May 2</b> — Value-add follow (Touch 3)</div>
+            <div>🟣 <b>May 2–9</b> — Breakfast pitch (Touch 4)</div>
+            <div>✅ <b>May 9–16</b> — Formal invite (Touch 5)</div>
+          </div>
+        </div>
+      </div>
+      <div class="card mt">
+        <div class="card-hdr">📊 Recent activity</div>
+        <div id="d-act"></div>
+      </div>
+    </div>
+
+    <!-- QUEUE -->
+    <div id="pg-queue" class="pg">
+      <div class="ph"><h1>Today's Queue</h1><p>Prospects due for their next outreach touch</p></div>
+      <div id="queue-list"></div>
+    </div>
+
+    <!-- CONTACTS -->
+    <div id="pg-contacts" class="pg">
+      <div class="ph">
+        <div class="flex">
+          <div><h1>All Prospects</h1><p>Full sponsor prospect list with outreach status</p></div>
+          <div class="sp"></div>
+          <button class="btn btn-gld btn-sm" onclick="nav('add')">+ Add Prospect</button>
+        </div>
+      </div>
+      <div class="filters">
+        <span class="fl">Filter:</span>
+        <button class="fb active" onclick="filt('all',this)">All</button>
+        <button class="fb" onclick="filt('s0',this)">Not started</button>
+        <button class="fb" onclick="filt('active',this)">Active</button>
+        <button class="fb" onclick="filt('s6',this)">Invited</button>
+        <button class="fb" onclick="filt('s7',this)">Confirmed</button>
+        <div class="sp"></div>
+        <input type="text" id="csearch" placeholder="Search…" style="width:180px" oninput="renderContacts()">
+      </div>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr>
+            <th>#</th><th>Organization</th><th>Contact</th><th>Category</th>
+            <th>Status</th><th>Next Touch</th><th>Due</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="ctbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ADD -->
+    <div id="pg-add" class="pg">
+      <div class="ph"><h1>Add Prospect</h1><p>Add a new sponsor or partner prospect</p></div>
+      <div class="card">
+        <div class="fg">
+          <div><label>Organization *</label><input id="f-org" placeholder="e.g. Bank of America"></div>
+          <div><label>Category *</label>
+            <select id="f-cat">
+              <option value="">Select…</option>
+              <option value="bank">Banking & Financial Services</option>
+              <option value="ins">Insurance</option>
+              <option value="corp">Corporate</option>
+              <option value="health">Healthcare Systems</option>
+              <option value="civic">Civic & Government</option>
+              <option value="chamber">Chambers & Economic Dev</option>
+              <option value="edu">Higher Education</option>
+              <option value="media">Media & Publishing</option>
+              <option value="women">Women's Organizations</option>
+              <option value="supdiv">Supplier Diversity & MWBE</option>
+              <option value="np">Nonprofit & Community Impact</option>
+            </select>
+          </div>
+          <div><label>First Name</label><input id="f-fn" placeholder="First"></div>
+          <div><label>Last Name</label><input id="f-ln" placeholder="Last"></div>
+          <div><label>Title</label><input id="f-ttl" placeholder="VP Marketing"></div>
+          <div><label>Email</label><input id="f-email" type="email" placeholder="email@company.com"></div>
+          <div><label>LinkedIn URL</label><input id="f-li" placeholder="linkedin.com/in/…"></div>
+          <div><label>Warm Intro Via</label><input id="f-intro" placeholder="Name or leave blank"></div>
+          <div class="ff"><label>Search Title (for LinkedIn)</label><input id="f-srch" placeholder="VP Community Development Bank of America"></div>
+          <div class="ff"><label>Pitch Angle Notes</label><textarea id="f-pitch" placeholder="Why this org? What is the specific hook?"></textarea></div>
+          <div><label>Status</label>
+            <select id="f-stat">
+              <option value="s0">Not Started</option>
+              <option value="s1">Researching</option>
+              <option value="s2">Warm-Up</option>
+              <option value="s3">Outreach Sent</option>
+            </select>
+          </div>
+          <div><label>Touch 1 Date (if started)</label><input id="f-t1" type="date"></div>
+        </div>
+        <div class="fa">
+          <button class="btn btn-gld" onclick="addContact()">Save Prospect</button>
+          <button class="btn btn-out" onclick="nav('contacts')">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEQUENCES -->
+    <div id="pg-sequences" class="pg">
+      <div class="ph"><h1>Sequence Tracks</h1><p>6-touch outreach sequences by category — built on the HER Dallas Sponsor Playbook</p></div>
+      <div id="seq-list"></div>
+    </div>
+
+    <!-- COPY LIBRARY -->
+    <div id="pg-library" class="pg">
+      <div class="ph"><h1>Copy Library</h1><p>All outreach copy organized by category and touch — click any block to copy</p></div>
+      <div class="lib-layout">
+        <div class="lib-nav">
+          <div class="lib-nav-hdr">Categories</div>
+          <button class="lib-nav-btn active" onclick="libCat('bank',this)">Banking & Financial</button>
+          <button class="lib-nav-btn" onclick="libCat('ins',this)">Insurance</button>
+          <button class="lib-nav-btn" onclick="libCat('corp',this)">Corporate</button>
+          <button class="lib-nav-btn" onclick="libCat('health',this)">Healthcare</button>
+          <button class="lib-nav-btn" onclick="libCat('civic',this)">Civic & Government</button>
+          <button class="lib-nav-btn" onclick="libCat('chamber',this)">Chambers & Econ Dev</button>
+          <button class="lib-nav-btn" onclick="libCat('edu',this)">Higher Education</button>
+          <button class="lib-nav-btn" onclick="libCat('media',this)">Media & Publishing</button>
+          <button class="lib-nav-btn" onclick="libCat('women',this)">Women's Organizations</button>
+          <button class="lib-nav-btn" onclick="libCat('supdiv',this)">Supplier Diversity</button>
+          <button class="lib-nav-btn" onclick="libCat('np',this)">Nonprofit & Impact</button>
+        </div>
+        <div id="lib-content"></div>
+      </div>
+    </div>
+
+    <!-- ACTIVITY -->
+    <div id="pg-activity" class="pg">
+      <div class="ph"><h1>Activity Log</h1><p>All touchpoints logged by the team</p></div>
+      <div class="tbl-wrap" style="padding:16px"><div id="act-full"></div></div>
+    </div>
+
+  </main>
+</div>
+
+<!-- LOG TOUCH MODAL -->
+<div class="moverlay" id="m-log">
+  <div class="modal">
+    <button class="modal-close" onclick="closeM('m-log')">✕</button>
+    <h2>Log Outreach Touch</h2>
+    <input type="hidden" id="log-cid">
+    <div class="fg">
+      <div><label>Touch</label>
+        <select id="log-touch">
+          <option value="1">Touch 1 — LinkedIn Connect</option>
+          <option value="2">Touch 2 — Intro Email/DM</option>
+          <option value="3">Touch 3 — Value-Add Follow-Up</option>
+          <option value="4">Touch 4 — Breakfast Pitch</option>
+          <option value="5">Touch 5 — Formal Invite</option>
+          <option value="6">Touch 6 — Breakup/Nurture</option>
+        </select>
+      </div>
+      <div><label>Channel</label>
+        <select id="log-ch">
+          <option value="LinkedIn Connect">LinkedIn Connect</option>
+          <option value="LinkedIn DM">LinkedIn DM</option>
+          <option value="Email">Email</option>
+          <option value="Phone">Phone Call</option>
+          <option value="In Person">In Person</option>
+          <option value="Warm Intro">Warm Intro</option>
+        </select>
+      </div>
+      <div><label>New Status</label>
+        <select id="log-stat">
+          <option value="s1">Researching</option>
+          <option value="s2">Warm-Up</option>
+          <option value="s3">Outreach Sent</option>
+          <option value="s4">Response Received</option>
+          <option value="s5">Meeting Scheduled</option>
+          <option value="s6">Invited</option>
+          <option value="s7">Confirmed ✓</option>
+          <option value="s8">Declined</option>
+          <option value="s9">Future Cycle</option>
+        </select>
+      </div>
+      <div><label>Date</label><input type="date" id="log-date"></div>
+      <div class="ff"><label>Team Member</label><input id="log-who" placeholder="Your name"></div>
+      <div class="ff"><label>Notes</label><textarea id="log-notes" placeholder="What happened? Response? Key info?"></textarea></div>
+    </div>
+    <div class="fa">
+      <button class="btn btn-gld" onclick="saveTouch()">Log Touch</button>
+      <button class="btn btn-out" onclick="closeM('m-log')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW MODAL -->
+<div class="moverlay" id="m-view">
+  <div class="modal" style="max-width:720px">
+    <button class="modal-close" onclick="closeM('m-view')">✕</button>
+    <div id="m-view-body"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// STORAGE (shared via window.storage API)
+// ═══════════════════════════════════════════════
+const CKEY='hd_contacts', AKEY='hd_activity', IKEY='hd_init';
+
+async function loadC(){
+  try{const r=await window.storage.get(CKEY);return r?JSON.parse(r.value):null}
+  catch(e){return null}
+}
+async function saveC(d){
+  try{await window.storage.set(CKEY,JSON.stringify(d))}catch(e){}
+}
+async function loadA(){
+  try{const r=await window.storage.get(AKEY);return r?JSON.parse(r.value):[]}
+  catch(e){return[]}
+}
+async function saveA(d){
+  try{await window.storage.set(AKEY,JSON.stringify(d))}catch(e){}
+}
+async function checkInit(){
+  try{const r=await window.storage.get(IKEY);return !!r}
+  catch(e){return false}
+}
+async function markInit(){
+  try{await window.storage.set(IKEY,'1')}catch(e){}
+}
+
+let contacts=[], activity=[], currentFilter='all';
+
+// ═══════════════════════════════════════════════
+// SEED DATA — Pre-populated from research
+// ═══════════════════════════════════════════════
+const SEED=[
+  // BANKING & FINANCIAL
+  {id:1,org:'Comerica Bank',cat:'bank',fn:'Wendy',ln:'Bridges',ttl:'EVP & Executive Director, Corporate Affairs',email:'',li:'',intro:'',srch:'EVP Corporate Affairs Comerica Bank Dallas',pitch:'Comerica contributed $300K+ to women-owned business programs in 2025. Wendy Bridges leads all community affairs and women\'s business initiatives. Dallas HQ makes them a hometown partner. BankHER direct investment angle is their sweet spot.',stat:'s0',t1:null,touches:[],note:'Also: David Milton (Dallas Market President), Tiffanie Rice (Regional External Affairs Manager)'},
+  {id:2,org:'Bank of America Dallas',cat:'bank',fn:'Jennifer',ln:'Chandler',ttl:'President, Bank of America Dallas (2026 DRC Vice Chair)',email:'',li:'',intro:'Dallas Regional Chamber connection',srch:'Jennifer Chandler Bank of America Dallas President',pitch:'Jennifer Chandler is President of BofA Dallas AND the 2026 DRC Vice Chair, preparing to be 2027 DRC Chair. She is the most connected banker in Dallas. BofA is an active FIFA World Cup 2026 sponsor. Lead with the DRC connection first.',stat:'s0',t1:null,touches:[],note:'BofA is Official Bank of FIFA World Cup 2026 — use this angle. Jennifer Chandler was on the DRC CEO search committee.'},
+  {id:3,org:'Frost Bank',cat:'bank',fn:'Rod',ln:'Washington',ttl:'Dallas Region President',email:'',li:'',intro:'',srch:'Rod Washington Frost Bank Dallas Region President',pitch:'Rod Washington is Frost Dallas Region President — just announced Texas Rangers financial literacy partnership April 2026. Frost is a Texas institution committed to community banking. Lead with the Texas roots angle and women\'s economic independence.',stat:'s0',t1:null,touches:[],note:'Frost email format: first.last@frostbank.com. Also reach: Bill Day (SVP Corporate Communications)'},
+  {id:4,org:'Vista Bank',cat:'bank',fn:'',ln:'',ttl:'CEO / President (research needed)',email:'',li:'',intro:'',srch:'CEO President Vista Bank Dallas Texas',pitch:'Growing Texas community bank with appetite for community visibility. Smaller bank = faster decisions. Great first-date invite for a partnership conversation.',stat:'s1',t1:null,touches:[],note:''},
+  // INSURANCE
+  {id:5,org:'State Farm',cat:'ins',fn:'',ln:'',ttl:'Community Affairs Manager OR high-performing Dallas agent',email:'',li:'',intro:'',srch:'State Farm Dallas community affairs OR agency owner Dallas Texas women',pitch:'Reach BOTH the regional marketing team AND identify a high-performing Dallas agent who would see this as a business development opportunity. Agents have local budgets and move faster.',stat:'s1',t1:null,touches:[],note:''},
+  {id:6,org:'Allstate',cat:'ins',fn:'',ln:'',ttl:'VP Corporate Responsibility OR Director Multicultural Marketing',email:'',li:'',intro:'',srch:'Allstate VP Corporate Responsibility OR Director Multicultural Marketing',pitch:'Allstate has a strong women-in-business CSR track record. Their Good Hands Project focuses on economic empowerment — that is the angle.',stat:'s1',t1:null,touches:[],note:''},
+  {id:7,org:'USAA',cat:'ins',fn:'',ln:'',ttl:'Director Community Partnerships OR VP Corporate Social Responsibility',email:'',li:'',intro:'',srch:'USAA Director Community Partnerships OR VP Corporate Social Responsibility San Antonio',pitch:'USAA is San Antonio HQ but heavy Dallas presence. Mission around financial security aligns with BankHER. Note: pitch the member demographic overlap — their members ARE the HER Dallas audience.',stat:'s1',t1:null,touches:[],note:''},
+  // CORPORATE
+  {id:8,org:'AT&T',cat:'corp',fn:'',ln:'',ttl:'VP External Affairs Dallas OR Director Community Engagement',email:'',li:'',intro:'',srch:'AT&T VP External Affairs Dallas OR Director Community Engagement',pitch:'AT&T Dallas HQ (moving to Plano). FIFA AT&T Stadium connection. They have AT&T WOMEN internal initiative. Lead with hometown angle + FIFA cultural moment.',stat:'s1',t1:null,touches:[],note:'HQ moving from Whitacre Tower downtown to new Plano campus. Email format: first.last@att.com'},
+  {id:9,org:'Toyota North America',cat:'corp',fn:'',ln:'',ttl:'VP External Affairs OR Director Brand Partnerships OR Manager D&I Marketing',email:'',li:'',intro:'',srch:'Toyota North America VP External Affairs OR Director Brand Partnerships Plano',pitch:'Toyota NA HQ in Plano. Active FIFA-adjacent (Hyundai-Kia holds FIFA category but Toyota has DFW community presence). Lead with Plano/DFW community partnership and their women\'s programs.',stat:'s1',t1:null,touches:[],note:''},
+  {id:10,org:'Southwest Airlines',cat:'corp',fn:'',ln:'',ttl:'Manager Community Affairs Dallas OR Director Brand Partnerships',email:'',li:'',intro:'',srch:'Southwest Airlines Manager Community Affairs OR Director Brand Partnerships Dallas',pitch:'Love Field Dallas HQ. FIFA activations align with travel narrative. Their Heart of the Community program is the entry point.',stat:'s1',t1:null,touches:[],note:''},
+  {id:11,org:'McKesson',cat:'corp',fn:'',ln:'',ttl:'VP Corporate Responsibility OR Director DEI',email:'',li:'',intro:'',srch:'McKesson VP Corporate Responsibility OR Director Diversity Equity Inclusion Irving Dallas',pitch:'Relocated HQ to Irving/Las Colinas. Active in Dallas community investment. Lead with women\'s health + entrepreneurship intersection.',stat:'s1',t1:null,touches:[],note:''},
+  {id:12,org:'CBRE',cat:'corp',fn:'',ln:'',ttl:'Managing Director Dallas OR Women\'s Network Lead GROW',email:'',li:'',intro:'',srch:'CBRE Managing Director Dallas OR GROW Women\'s Network Dallas',pitch:'CBRE has active internal women\'s network (GROW). The real estate angle connects to HER Dallas members building businesses who need commercial space.',stat:'s1',t1:null,touches:[],note:''},
+  // HEALTHCARE
+  {id:13,org:'Blue Cross Blue Shield of Texas',cat:'health',fn:'Jim',ln:'Springfield',ttl:'President (outgoing) — approach successor or VP External Affairs',email:'',li:'',intro:'Dallas Regional Chamber',srch:'BCBSTX President VP External Affairs OR VP Community Affairs Dallas',pitch:'Jim Springfield was 2025 DRC Board Chair. BCBSTX Dallas HQ. Lead with women\'s health + financial health intersection. Their Healthy Communities initiative is the entry point.',stat:'s0',t1:null,touches:[],note:'Jim Springfield just stepped down as DRC Chair. Relationship with DRC is warm. New CEO/leadership contact to be confirmed.'},
+  {id:14,org:'Baylor Scott & White Health',cat:'health',fn:'',ln:'',ttl:'VP Community Benefit OR Chief Diversity Officer',email:'',li:'',intro:'',srch:'Baylor Scott White VP Community Benefit OR Chief Diversity Officer Dallas',pitch:'Largest not-for-profit health system in Texas. Community benefit mission + women\'s health entrepreneurship intersection. Many HER Dallas members work in health-adjacent fields.',stat:'s1',t1:null,touches:[],note:''},
+  {id:15,org:'UT Southwestern Medical Center',cat:'health',fn:'',ln:'',ttl:'VP External Affairs OR Chief Diversity & Inclusion Officer',email:'',li:'',intro:'',srch:'UT Southwestern VP External Affairs OR Chief Diversity Inclusion Officer',pitch:'UTSW is a research powerhouse with active women\'s leadership programs. Dallas community leadership angle — position HER Dallas as a peer institution for women\'s advancement.',stat:'s1',t1:null,touches:[],note:''},
+  {id:16,org:'Texas Health Resources',cat:'health',fn:'',ln:'',ttl:'VP Community Benefit OR Director Corporate Partnerships',email:'',li:'',intro:'',srch:'Texas Health Resources VP Community Benefit OR Director Corporate Partnerships',pitch:'THR serves 29 hospitals across North Texas. Community health + women\'s economic wellness pairing. Fort Worth-anchored but strong Dallas presence.',stat:'s1',t1:null,touches:[],note:''},
+  {id:17,org:"Children's Health",cat:'health',fn:'',ln:'',ttl:'VP Community Benefit OR Chief Diversity Officer',email:'',li:'',intro:'',srch:"Children's Health Dallas VP Community Benefit OR Chief Diversity Officer",pitch:'Dallas-based, deeply community-rooted. Investing in women founders creates stronger families and communities — that is their mission language.',stat:'s1',t1:null,touches:[],note:''},
+  // CIVIC & GOVERNMENT
+  {id:18,org:'City of Dallas',cat:'civic',fn:'',ln:'',ttl:'Director Office of Economic Development OR Director Office of Small Business',email:'',li:'',intro:'',srch:'City of Dallas Director Economic Development OR Director Small Business Development',pitch:'Active women\'s business development programs. Lead with economic development + FIFA World Cup economic impact story.',stat:'s1',t1:null,touches:[],note:''},
+  {id:19,org:'City of Forney',cat:'civic',fn:'',ln:'',ttl:'City Manager OR Mayor\'s Office',email:'',li:'',intro:'',srch:'City Manager Forney Texas OR Mayor Forney Texas 2025 2026',pitch:'Fast-growing Kaufman County city with active economic development. Participation signals regional reach beyond Dallas proper.',stat:'s1',t1:null,touches:[],note:''},
+  {id:20,org:'City of Plano',cat:'civic',fn:'',ln:'',ttl:'Director Economic Development OR City Manager',email:'',li:'',intro:'Toyota / AT&T Plano connection',srch:'City of Plano Director Economic Development Texas',pitch:'Plano is corporate HQ row for North Texas. Their economic development office courts women-owned businesses. Strong strategic partnership.',stat:'s1',t1:null,touches:[],note:''},
+  // CHAMBERS
+  {id:21,org:'Dallas Regional Chamber',cat:'chamber',fn:'Brad',ln:'Cheves',ttl:'President & CEO (new as of Jan 2026)',email:'',li:'',intro:'SMU connection (Cheves was SVP External Affairs at SMU)',srch:'Brad Cheves Dallas Regional Chamber President CEO',pitch:'Brad Cheves just joined as DRC CEO in January 2026, coming from SMU. New leader = opportunity for new partnerships. Lead with women\'s economic development and mutual member value. Jennifer Chandler (BofA) is DRC Vice Chair and is a warm intro.',stat:'s0',t1:null,touches:[],note:'Dana Jennings is EVP at DRC — also a key contact. Email format: flast@dallaschamber.org'},
+  {id:22,org:'North Texas Commission',cat:'chamber',fn:'',ln:'',ttl:'President/CEO OR VP Economic Development',email:'',li:'',intro:'',srch:'North Texas Commission President CEO OR VP Economic Development',pitch:'NTC represents 21 counties in North Texas. FIFA + women\'s business activation is exactly the kind of visibility they should support.',stat:'s1',t1:null,touches:[],note:''},
+  {id:23,org:'Plano Chamber of Commerce',cat:'chamber',fn:'',ln:'',ttl:'President/CEO OR VP Membership',email:'',li:'',intro:'',srch:'Plano Chamber of Commerce President CEO Texas',pitch:'Plano Chamber members include Toyota, Liberty Mutual, etc. Direct pipeline to Plano-anchored brands.',stat:'s1',t1:null,touches:[],note:''},
+  {id:24,org:'Dallas Economic Development Corporation',cat:'chamber',fn:'',ln:'',ttl:'President/CEO OR VP Strategic Initiatives',email:'',li:'',intro:'',srch:'Dallas Economic Development Corporation President CEO',pitch:'Women-founded businesses are a growing economic development priority. Position HER Dallas as a retention and growth tool.',stat:'s1',t1:null,touches:[],note:''},
+  // HIGHER EDUCATION
+  {id:25,org:'Southern Methodist University',cat:'edu',fn:'',ln:'',ttl:'VP External Affairs OR Dean Cox School of Business OR Director Women\'s Programs',email:'',li:'',intro:'DRC connection (Brad Cheves came from SMU)',srch:'SMU VP External Affairs OR Dean Cox School Business Dallas',pitch:'SMU Cox School women\'s programs and alumni network directly overlap with HER Dallas membership. Student-to-founder pipeline angle.',stat:'s0',t1:null,touches:[],note:'Brad Cheves (new DRC CEO) was SVP External Affairs at SMU — strong warm path.'},
+  {id:26,org:'University of Texas at Dallas',cat:'edu',fn:'',ln:'',ttl:'VP External Affairs OR Director Institute for Innovation & Entrepreneurship',email:'',li:'',intro:'',srch:'UT Dallas VP External Affairs OR Director Innovation Entrepreneurship',pitch:'Strong entrepreneurship program. Diverse student body. Research university angle = credibility for HER Texas brand.',stat:'s1',t1:null,touches:[],note:''},
+  {id:27,org:'Dallas College',cat:'edu',fn:'',ln:'',ttl:'Chancellor OR VP Workforce & Economic Development',email:'',li:'',intro:'',srch:'Dallas College Chancellor OR VP Workforce Economic Development',pitch:'80,000+ students across 7 campuses. Student population skews female and entrepreneurship-focused. Pipeline partner, not just sponsor.',stat:'s1',t1:null,touches:[],note:''},
+  // MEDIA
+  {id:28,org:'The Dallas Morning News',cat:'media',fn:'',ln:'',ttl:'VP Advertising & Marketing OR Publisher',email:'',li:'',intro:'',srch:'Dallas Morning News VP Advertising Marketing OR Publisher',pitch:'Most important media partner for legitimizing HER Dallas. Approach as editorial partnership (coverage for visibility) not a cash ask first.',stat:'s1',t1:null,touches:[],note:''},
+  {id:29,org:'D Magazine',cat:'media',fn:'',ln:'',ttl:'Publisher OR Director of Marketing & Partnerships',email:'',li:'',intro:'',srch:'D Magazine Dallas Publisher OR Director Marketing Partnerships',pitch:'D CEO property directly targets HER Dallas audience. Media partnership here gives editorial reach money cannot buy.',stat:'s1',t1:null,touches:[],note:''},
+  {id:30,org:'PaperCity Dallas',cat:'media',fn:'',ln:'',ttl:'Publisher OR Editor',email:'',li:'',intro:'',srch:'PaperCity Dallas Publisher OR Editor',pitch:'Luxury lifestyle magazine for affluent Dallas women — exactly the HER Dallas audience. Partnership reaches the women we want to invite, not just the sponsors.',stat:'s1',t1:null,touches:[],note:''},
+  {id:31,org:'Dallas Weekly',cat:'media',fn:'',ln:'',ttl:'Publisher OR Editor',email:'',li:'',intro:'',srch:'Dallas Weekly Publisher OR Editor',pitch:'Leading African American-focused media outlet in DFW. Critical for ensuring HER Dallas community reach reflects full diversity of Dallas women entrepreneurs.',stat:'s1',t1:null,touches:[],note:''},
+  // WOMEN'S ORGANIZATIONS
+  {id:32,org:"Texas Women's Foundation",cat:'women',fn:'Karen',ln:'Hughes White',ttl:'President & CEO',email:'',li:'',intro:'TWF is a peer partner, not just a sponsor',srch:'Karen Hughes White Texas Women\'s Foundation',pitch:'Karen Hughes White (CEO since May 2024) + Cris Zertuche Wong (Board Chair, former Goldman Sachs managing director). This is a shared mission peer partnership conversation, not a sponsorship ask. TWF\'s research on women in Texas IS your audience data.',stat:'s0',t1:null,touches:[],note:'Cris Wong is Board Chair. TXWF research on women\'s economic security = credibility for your pitch to every sponsor on this list. Use their data.'},
+  {id:33,org:'Women Presidents Organization — Dallas',cat:'women',fn:'',ln:'',ttl:'Chapter President OR Board Chair',email:'',li:'',intro:'',srch:'Women Presidents Organization Dallas chapter president board chair',pitch:'WPO Dallas members are CEOs and presidents with $2M+ revenue. This is Tier 1 VIP luncheon territory, not just sponsor territory. Approach as peer partnership.',stat:'s1',t1:null,touches:[],note:''},
+  // SUPPLIER DIVERSITY
+  {id:34,org:"Women's Business Council Southwest (WBCS/WBENC)",cat:'supdiv',fn:'',ln:'',ttl:'President/CEO WBCS OR Director Certification',email:'',li:'',intro:'Erika is in WBCS certification process — WARM',srch:'Women\'s Business Council Southwest President CEO OR Director Certification',pitch:'CRITICAL: Erika is in WBCS certification process. This is both sponsor AND strategic partner. WBCS has access to every corporate supplier diversity officer in DFW — that is your warm intro network to half this list. Approach as a peer.',stat:'s0',t1:null,touches:[],note:'WBCS is the warmest intro on the entire list. Call them before going cold anywhere else.'},
+  {id:35,org:'NMSDC',cat:'supdiv',fn:'',ln:'',ttl:'President/CEO OR VP Programs',email:'',li:'',intro:'',srch:'National Minority Supplier Development Council President CEO',pitch:'NMSDC certifies minority-owned businesses for corporate supplier diversity programs. Their membership overlaps directly with HER Dallas. Co-activation and referral partnership.',stat:'s1',t1:null,touches:[],note:''},
+  {id:36,org:'DFW Minority Supplier Development Council',cat:'supdiv',fn:'',ln:'',ttl:'President/CEO OR VP Programs',email:'',li:'',intro:'',srch:'Dallas Fort Worth Minority Supplier Development Council President CEO',pitch:'DFWMSDC has direct relationships with supplier diversity officers at every major DFW corporation. A partnership here gives warm introductions to many others on this list.',stat:'s1',t1:null,touches:[],note:''},
+  // NONPROFIT & COMMUNITY IMPACT
+  {id:37,org:'Dallas Social Venture Partners',cat:'np',fn:'Catherine',ln:'Cuellar',ttl:'CEO (incoming)',email:'',li:'',intro:'',srch:'Catherine Cuellar Social Venture Partners Dallas CEO',pitch:'Catherine Cuellar named new SVP Dallas CEO. She is a known Dallas arts and civic leader. This is a crossover community partnership — many SVP members are also ideal HER Dallas members.',stat:'s0',t1:null,touches:[],note:'Catherine Cuellar succeeds Tony Fleo as CEO.'},
+  {id:38,org:"Hispanic Women's Network of Texas",cat:'np',fn:'',ln:'',ttl:'President/CEO OR Board Chair',email:'',li:'',intro:'',srch:"Hispanic Women's Network of Texas President CEO Board Chair",pitch:'Direct peer organization with mission alignment. Co-activation and community partnership opportunity — both organizations serve overlapping audiences.',stat:'s1',t1:null,touches:[],note:''},
+  {id:39,org:'United Way of Metropolitan Dallas',cat:'np',fn:'',ln:'',ttl:'VP Corporate Partnerships OR Director Women United',email:'',li:'',intro:'',srch:'United Way Metropolitan Dallas VP Corporate Partnerships OR Director Women United',pitch:"United Way's Women United program focuses on women's economic mobility. Lead with alignment on women's economic independence and Dallas community impact.",stat:'s1',t1:null,touches:[],note:''},
+  {id:40,org:'Communities Foundation of Texas',cat:'np',fn:'',ln:'',ttl:'President/CEO OR VP Community Impact',email:'',li:'',intro:'Perot/Hunt family donors',srch:'Communities Foundation of Texas President CEO OR VP Community Impact',pitch:'CFT manages $2B+ in charitable assets. Their donor community includes Perot family, Hunt family, etc. Lead with community investment angle — opportunity to connect their donors with women founders.',stat:'s0',t1:null,touches:[],note:'Strong strategic partnership potential given VIP luncheon guest overlap.'},
+  {id:41,org:'Commit Partnership',cat:'np',fn:'',ln:'',ttl:'CEO OR VP Strategic Initiatives',email:'',li:'',intro:'Dallas College connection',srch:'Commit Partnership CEO Dallas Texas',pitch:'Commit drives education and economic opportunity in DFW. Women\'s workforce development focus. Peer partnership with shared mission.',stat:'s1',t1:null,touches:[],note:''},
+  {id:42,org:'Ebby Halliday Companies',cat:'np',fn:'',ln:'',ttl:'President/CEO OR VP Marketing',email:'',li:'',intro:'',srch:'Ebby Halliday Companies President CEO OR VP Marketing Dallas',pitch:'One of the most recognized women-founded brands in DFW real estate history. Community giving program + predominantly women employee base. Real estate to women founders is a business development angle.',stat:'s1',t1:null,touches:[],note:''},
+  {id:43,org:'New Friends New Life',cat:'np',fn:'',ln:'',ttl:'Executive Director OR Board Chair',email:'',li:'',intro:'',srch:'New Friends New Life Dallas Executive Director',pitch:'NFNL restores women from trafficking through education and employment. Bring them to the breakfast as a peer, not a recipient. Signals HER Dallas\'s commitment to the full spectrum of Dallas women.',stat:'s1',t1:null,touches:[],note:''},
+  {id:44,org:'ChildCareGroup',cat:'np',fn:'',ln:'',ttl:'President/CEO OR Director Development',email:'',li:'',intro:'',srch:'ChildCareGroup Dallas President CEO Director Development',pitch:'ChildCareGroup supports childcare access — directly enabling women to participate in the workforce. HER Dallas members are the women their work makes possible. Mission alignment story.',stat:'s1',t1:null,touches:[],note:''},
+];
+
+// ═══════════════════════════════════════════════
+// SEQUENCES — 6 touches × 11 categories
+// ═══════════════════════════════════════════════
+const SEQ={
+  bank:{label:'Banking & Financial Services',note:'Lead with CRA/community reinvestment obligations, BankHER direct investment, women\'s business lending pipeline. The decision maker is Market President, VP Community Development — NOT the Sponsorship title.',
+    touches:[
+      {day:'Day 0',name:'LinkedIn Connect',ch:'li',subj:'',
+       copy:`Hi [First Name] — I lead sponsorship for HER Dallas, the Dallas chapter of HER Texas (first statewide network for female founders in Texas). Your work on [Company]'s women's business initiatives is exactly aligned with what we're building. Would love to connect.\n\n— [Your Name] | HER Dallas Advisory Board`,
+       note:'Keep it short. No pitch in the connect request.'},
+      {day:'Day 4',name:'Intro Email',ch:'em',subj:'[Company] + HER Dallas — June 10 Breakfast for Dallas Women Founders',
+       copy:`Hi [First Name] —\n\nI lead sponsorship for HER Dallas, the Dallas chapter of HER Texas — the first statewide network for female founders in Texas.\n\nOn June 10, we're hosting an intimate "first date" breakfast for 25–30 Dallas women entrepreneurs, investors, and community leaders — building a sponsor community that reflects who actually invests in Dallas women.\n\n[Company]'s community reinvestment work and women's business programs are exactly what this room is built around. I'd love to explore what a partnership could look like.\n\nWorth a 20-minute call this week?\n\n— [Your Name] | HER Dallas Advisory Board | hertexas.co`,
+       note:'Subject alternatives: "[Company] + HER Dallas — a 20-minute conversation" or "25 Dallas women founders. June 10. Is [Company] interested?"'},
+      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',subj:'Re: [Company] + HER Dallas — one quick data point',
+       copy:`Hi [First Name] — quick follow-up on my note from earlier this week.\n\nTexas women-owned businesses now generate over $150B in annual revenue and employ more than 800,000 people statewide — yet access to capital remains the #1 barrier. That's exactly the gap HER Dallas's BankHER program addresses.\n\nStill happy to share more about the June 10 breakfast and what a partnership could look like for [Company]. 20 minutes anytime.\n\n— [Your Name]`,
+       note:'The value-add stat is relevant to any bank\'s CRA calculus. Swap in TWF research data for extra credibility.'},
+      {day:'Day 14',name:'Breakfast Pitch',ch:'li-dm',subj:'',
+       copy:`Hi [First Name] — following up on my email about the HER Dallas June 10 breakfast.\n\nQuick version: 25–30 Dallas women founders, investors, and community leaders. Intimate setting. Real conversations. The kind of room [Company] should be in.\n\nPartnership starts at [$X tier] — happy to walk you through it in 20 minutes. Worth a call?\n\n— [Your Name]`,
+       note:'By Day 14, have a specific dollar tier ready. If not finalized, use "a few thousand dollars" rather than leaving it open.'},
+      {day:'Day 21',name:'Formal Invite',ch:'em',subj:'Formal invitation: HER Dallas June 10 Breakfast — [Company] reserved seat',
+       copy:`Hi [First Name] —\n\nI'd like to formally invite [Company] to join us as a partner at the HER Dallas June 10 Breakfast.\n\n📅 June 10, 8–10 AM | [Venue], Dallas\n👥 25–30 women entrepreneurs, investors, and community leaders\n🤝 Intimate format — real conversations, real connections\n\nI've reserved [Company]'s category through May 9. After that, we'll open to other banks in the market.\n\nCan we confirm this week?\n\n— [Your Name] | hello@hertexas.co`,
+       note:'The exclusivity deadline is your most powerful tool at this stage. Make it real.'},
+      {day:'Day 30',name:'Breakup / Long-Cycle Nurture',ch:'em',subj:'Closing the loop — HER Dallas',
+       copy:`Hi [First Name] —\n\nI don't want to keep filling your inbox. If the June 10 timing doesn't work for [Company], I completely understand — just let me know and I'll follow up when we're closer to our July FIFA World Cup activation.\n\nEither way, I'd love to stay connected. HER Dallas is growing fast and [Company] belongs in that conversation.\n\n— [Your Name] | hertexas.co`,
+       note:'The breakup email often gets the fastest response. Keep it warm. Note the July FIFA activation as a future hook.'},
+    ]},
+  ins:{label:'Insurance',note:'Lead with women\'s financial security mission and CSR alignment. For State Farm, reach individual high-performing agents as well as regional marketing. For USAA, note the member demographic angle.',
+    touches:[
+      {day:'Day 0',name:'LinkedIn Connect',ch:'li',subj:'',
+       copy:`Hi [First Name] — I'm on the advisory board of HER Dallas, the Dallas chapter of HER Texas. We focus on women's economic independence across Texas. Your work at [Company] around [financial security / community impact] aligns closely with our mission. Would love to connect.\n\n— [Your Name]`,note:''},
+      {day:'Day 4',name:'Intro Email',ch:'em',subj:'[Company] + HER Dallas — women\'s financial security + June 10 Breakfast',
+       copy:`Hi [First Name] —\n\nI lead sponsorship for HER Dallas — the Dallas chapter of HER Texas, Texas's first statewide network for female founders.\n\nWe're hosting a breakfast for 25–30 Dallas women entrepreneurs on June 10. These are women building businesses, managing risk, and making purchasing decisions — exactly [Company]'s core audience.\n\n[Company]'s mission around financial security and community investment aligns directly with who we serve. I think there's a real partnership conversation here.\n\nWorth 20 minutes this week?\n\n— [Your Name] | HER Dallas | hertexas.co`,note:''},
+      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',subj:'Re: [Company] + HER Dallas — relevant data',
+       copy:`Hi [First Name] — one quick follow-up.\n\nWomen business owners are the fastest-growing demographic in US small business — yet are significantly underinsured compared to male counterparts. The HER Dallas community is exactly the room where that conversation belongs.\n\nStill interested in exploring what a June 10 partnership looks like for [Company]. 20 minutes anytime.\n\n— [Your Name]`,note:''},
+      {day:'Day 14',name:'Breakfast Pitch',ch:'li-dm',subj:'',
+       copy:`Hi [First Name] — following up on HER Dallas June 10.\n\nShort version: 25–30 women entrepreneurs who buy insurance, refer clients, and influence brand loyalty in their networks. Partnership tier starts at [$X].\n\nWorth a 20-minute call?`,note:''},
+      {day:'Day 21',name:'Formal Invite',ch:'em',subj:'HER Dallas June 10 Breakfast — formal invitation for [Company]',
+       copy:`Hi [First Name] —\n\nFormal invitation: join HER Dallas as a community partner at our June 10 Breakfast for Dallas women founders.\n\nDetails: June 10, 8–10 AM, [Venue]. 25–30 women entrepreneurs, investors, and community leaders.\n\nI've held [Company]'s category open through May 9. Would love to confirm your participation this week.\n\n— [Your Name] | hello@hertexas.co`,note:''},
+      {day:'Day 30',name:'Breakup / Nurture',ch:'em',subj:'Closing the loop — HER Dallas',
+       copy:`Hi [First Name] — not going to keep following up. If the June timing doesn't work, I completely understand.\n\nWe're also building toward a larger FIFA World Cup activation on July 12 in Dallas — that may be a better fit for [Company]. Happy to circle back when that's closer.\n\n— [Your Name]`,note:''},
+    ]},
+  corp:{label:'Corporate (AT&T, Toyota, Southwest, McKesson, CBRE)',note:'Local/regional decision maker moves faster than national. For AT&T: Dallas HQ hometown angle. Toyota: Plano HQ community angle. Southwest: Love Field Dallas connection. CBRE: internal women\'s network (GROW).',
+    touches:[
+      {day:'Day 0',name:'LinkedIn Connect',ch:'li',subj:'',copy:`Hi [First Name] — I lead sponsorship for HER Dallas, the Dallas chapter of HER Texas. [Company]'s work in the Dallas community and your [specific initiative] really resonates with what we're building. Would love to connect.\n\n— [Your Name] | HER Dallas Advisory Board`,note:'Personalize the bracketed reference for each company before sending.'},
+      {day:'Day 4',name:'Intro Email',ch:'em',subj:'[Company] + HER Dallas — June 10 women founders breakfast in Dallas',
+       copy:`Hi [First Name] —\n\nI'm on the advisory board of HER Dallas — the Dallas chapter of HER Texas, the first statewide network for female founders in Texas.\n\nOn June 10, we're hosting an intimate breakfast for 25–30 Dallas women entrepreneurs and investors. We're building a sponsor community that reflects who shows up for Dallas women — and [Company]'s commitment to [specific initiative] makes you a natural fit.\n\nThis is a direct relationship-building opportunity with high-income, high-influence women who make purchasing and vendor decisions every day.\n\nWorth a 20-minute conversation this week?\n\n— [Your Name] | HER Dallas | hertexas.co`,note:'Fill in [specific initiative] with real research: AT&T WOMEN program, Toyota D&I programs, Southwest Heart of the Community, etc.'},
+      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',subj:'Re: [Company] + HER Dallas — women\'s economic impact in Texas',
+       copy:`Hi [First Name] — brief follow-up on my email from earlier this week.\n\nTexas is home to 3.4 million women-owned businesses generating over $150B annually. These are your customers, your neighbors, and increasingly — your vendors and partners. The HER Dallas breakfast on June 10 puts [Company] in the room with 25–30 of the most active among them.\n\n20 minutes works anytime.\n\n— [Your Name]`,note:''},
+      {day:'Day 14',name:'Breakfast Pitch',ch:'li-dm',subj:'',copy:`Hi [First Name] — following up on HER Dallas June 10.\n\nWe're down to the last few partnership slots. [Company] is at the top of our list for [category] — but I want to make sure the timing works before we finalize the roster.\n\n20 minutes this week?\n\n— [Your Name]`,note:''},
+      {day:'Day 21',name:'Formal Invite',ch:'em',subj:'Formal invitation — HER Dallas June 10 + [Company] partnership',
+       copy:`Hi [First Name] —\n\nI'd like to formally extend an invitation for [Company] to join us as a partner at the HER Dallas June 10 Breakfast.\n\n📅 June 10, 8–10 AM | [Venue], Dallas\n👥 25–30 women entrepreneurs, investors, and leaders\n🤝 Intimate format — real connections\n\nPartnership investment starts at [$X tier]. [Company]'s category is held through May 9.\n\nCan we confirm this week?\n\n— [Your Name] | hello@hertexas.co | hertexas.co`,note:''},
+      {day:'Day 30',name:'Breakup / Nurture',ch:'em',subj:'Last note from HER Dallas',
+       copy:`Hi [First Name] — last one from me for now.\n\nIf the June timing doesn't work for [Company], I understand completely. I'd love to stay connected and circle back for our July FIFA World Cup activation — that may be the better moment.\n\nThank you for your time.\n\n— [Your Name]`,note:''},
+    ]},
+  health:{label:'Healthcare Systems',note:'Lead with community benefit mission and women\'s health + economic wellness intersection. These orgs have community benefit obligations. Position HER Dallas as a community investment, not just an event.',
+    touches:[
+      {day:'Day 0',name:'LinkedIn Connect',ch:'li',subj:'',copy:`Hi [First Name] — I'm on the advisory board of HER Dallas, the Dallas chapter of HER Texas. We focus on women's economic independence and business development across Texas. Your work at [Company] on community benefit and health equity really aligns with what we're doing. Would love to connect.\n\n— [Your Name]`,note:''},
+      {day:'Day 4',name:'Intro Email',ch:'em',subj:'[Company] + HER Dallas — community benefit + June 10 Breakfast',
+       copy:`Hi [First Name] —\n\nI lead sponsorship for HER Dallas — the Dallas chapter of HER Texas, the first statewide network for female founders in Texas.\n\nOn June 10, we're hosting a breakfast for 25–30 Dallas women entrepreneurs and community leaders. For [Company], this is a direct community benefit investment — women's economic health and physical health are deeply interconnected, and this room reflects the women your community programs are designed to serve.\n\nWorth a 20-minute conversation this week?\n\n— [Your Name] | HER Dallas | hertexas.co`,note:''},
+      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',subj:'Re: [Company] + HER Dallas — health + economic security',
+       copy:`Hi [First Name] — brief follow-up.\n\nWomen business owners report that financial stress is among their top health challenges. Economic security and health security aren't separate — they're the same conversation. HER Dallas is where both happen.\n\nStill happy to discuss what a June 10 partnership looks like for [Company].\n\n— [Your Name]`,note:''},
+      {day:'Day 14',name:'Breakfast Pitch',ch:'li-dm',subj:'',copy:`Hi [First Name] — following up on HER Dallas June 10.\n\n25–30 Dallas women founders and community leaders. [Company] belongs in this room. Partnership investment starts at [$X].\n\n20 minutes this week?\n\n— [Your Name]`,note:''},
+      {day:'Day 21',name:'Formal Invite',ch:'em',subj:'HER Dallas June 10 — formal invitation for [Company]',
+       copy:`Hi [First Name] —\n\nFormal invitation: join HER Dallas as a community partner at our June 10 Breakfast.\n\n📅 June 10, 8–10 AM | [Venue], Dallas\n👥 25–30 women entrepreneurs, investors, and community leaders\n\nPartnership investment from [$X]. Category held through May 9.\n\n— [Your Name] | hello@hertexas.co`,note:''},
+      {day:'Day 30',name:'Breakup / Nurture',ch:'em',subj:'Closing the loop — HER Dallas',
+       copy:`Hi [First Name] — closing the loop.\n\nIf June timing doesn't work, completely understood. I'd love to circle back for our July World Cup activation or our 2027 planning cycle.\n\nThank you for your time.\n\n— [Your Name]`,note:''},
+    ]},
+  civic:{label:'Civic & Government',note:'Lead with economic development and FIFA World Cup economic impact. City officials respond to community benefit language. The ask is often a partnership or endorsement, not necessarily a cash sponsorship.',
+    touches:[
+      {day:'Day 0',name:'LinkedIn Connect',ch:'li',subj:'',copy:`Hi [First Name] — I'm on the advisory board of HER Dallas, the Dallas chapter of HER Texas. We focus on women's economic development across the Dallas area. Your work at [Organization] on economic development aligns closely with our mission. Would love to connect.\n\n— [Your Name]`,note:''},
+      {day:'Day 4',name:'Intro Email',ch:'em',subj:'[Organization] + HER Dallas — women\'s economic development + June 10',
+       copy:`Hi [First Name] —\n\nI'm on the advisory board of HER Dallas — the Dallas chapter of HER Texas, the first statewide network for female founders in Texas.\n\nWith the FIFA World Cup bringing 1.5M+ visitors to DFW and $500M+ in projected economic impact, we're hosting a June 10 breakfast to activate that economic energy specifically for women entrepreneurs and business leaders.\n\nI'd love to discuss how [Organization] could be a partner in — or simply represented at — this gathering. The conversation connects directly to your women's business development priorities.\n\nWorth 20 minutes?\n\n— [Your Name] | HER Dallas | hertexas.co`,note:'For City contacts, the ask may be an endorsement or official support letter, not a cash partnership.'},
+      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',subj:'Re: HER Dallas June 10 — FIFA economic impact data',
+       copy:`Hi [First Name] — brief follow-up.\n\nFIFA's Dallas economic impact is projected at $500M+. Our June 10 breakfast is designed to ensure women-owned businesses capture a meaningful share of that opportunity — not just watch it pass by.\n\nStill happy to discuss how [Organization] could be involved.\n\n— [Your Name]`,note:''},
+      {day:'Day 14',name:'Partnership / Endorsement Ask',ch:'li-dm',subj:'',copy:`Hi [First Name] — following up on HER Dallas June 10.\n\nWould love to have [Organization]'s participation or endorsement for our women founders breakfast. Even a letter of support or official representation at the event signals that [City/Organization] is invested in women's economic leadership.\n\n20 minutes this week?\n\n— [Your Name]`,note:''},
+      {day:'Day 21',name:'Formal Invite',ch:'em',subj:'Formal invitation — HER Dallas June 10 Breakfast',
+       copy:`Hi [First Name] —\n\nFormal invitation to join us — or send a representative — at the HER Dallas June 10 Breakfast.\n\n📅 June 10, 8–10 AM | [Venue], Dallas\n👥 25–30 women entrepreneurs, investors, and community leaders from across Texas\n\nYour presence signals [Organization]'s commitment to women's economic leadership in our community.\n\n— [Your Name] | hello@hertexas.co`,note:''},
+      {day:'Day 30',name:'Breakup / Nurture',ch:'em',subj:'Closing the loop — HER Dallas',
+       copy:`Hi [First Name] — closing the loop.\n\nIf June 10 doesn't work, I completely understand. I'd love to stay connected for our July World Cup activation and for HER Dallas's ongoing programming.\n\nThank you for your time and your work for Dallas.\n\n— [Your Name]`,note:''},
+    ]},
+  chamber:{label:'Chambers & Economic Development',note:'Lead with membership value, regional visibility, and co-activation. These orgs have networks that multiply your reach. Approach as strategic partners, not just sponsors.',
+    touches:[
+      {day:'Day 0',name:'LinkedIn Connect',ch:'li',subj:'',copy:`Hi [First Name] — I'm on the advisory board of HER Dallas, the Dallas chapter of HER Texas. We're building the premier network for women founders in Texas and I'm eager to connect with [Organization] on our shared mission. Would love to be connected.\n\n— [Your Name]`,note:''},
+      {day:'Day 4',name:'Intro Email',ch:'em',subj:'HER Dallas + [Organization] — June 10 partnership conversation',
+       copy:`Hi [First Name] —\n\nI lead sponsorship for HER Dallas — the Dallas chapter of HER Texas, the first statewide network for female founders in Texas.\n\nWith FIFA World Cup in Dallas this summer, we're hosting a June 10 breakfast for 25–30 women entrepreneurs, investors, and business leaders. We're building our sponsor and partner roster now.\n\nGiven [Organization]'s membership and regional reach, I'd love to explore what a partnership could look like — whether that's a sponsor package, a co-marketing arrangement, or simply a seat at the table for your leadership.\n\nWorth 20 minutes?\n\n— [Your Name] | hertexas.co`,note:''},
+      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',subj:'Re: HER Dallas + [Organization] — mutual membership value',
+       copy:`Hi [First Name] — brief follow-up.\n\nHER Texas's statewide network reaches women founders across Dallas, Austin, Houston, and San Antonio — the same geographic footprint most [Organization] members serve. Our events tend to drive referrals, introductions, and new business for everyone in the room.\n\nHappy to discuss how this could work for [Organization].\n\n— [Your Name]`,note:''},
+      {day:'Day 14',name:'Partnership Pitch',ch:'li-dm',subj:'',copy:`Hi [First Name] — following up on HER Dallas June 10.\n\nA co-marketing or sponsor package for [Organization] starts at [$X]. It puts your brand in front of 25–30 women business leaders and includes [specific deliverable].\n\n20 minutes this week?\n\n— [Your Name]`,note:''},
+      {day:'Day 21',name:'Formal Invite',ch:'em',subj:'Formal invitation — HER Dallas June 10',
+       copy:`Hi [First Name] —\n\nFormal invitation for [Organization] to partner with us at the HER Dallas June 10 Breakfast.\n\n📅 June 10, 8–10 AM | [Venue], Dallas\n👥 25–30 women entrepreneurs, investors, and business leaders\n\nPartnership from [$X]. Category held through May 9.\n\n— [Your Name] | hello@hertexas.co`,note:''},
+      {day:'Day 30',name:'Breakup / Nurture',ch:'em',subj:'Closing the loop — HER Dallas',
+       copy:`Hi [First Name] — closing the loop.\n\nIf June timing doesn't work, I'd love to stay connected for our ongoing HER Dallas programming. We're building something real for women founders in Dallas and I'd love [Organization] to be part of it.\n\n— [Your Name]`,note:''},
+    ]},
+  edu:{label:'Higher Education',note:'Lead with student-to-founder pipeline and women\'s leadership programming. Research university angle = credibility for HER Texas. Ask for their women\'s program partnership, not a generic sponsorship.',
+    touches:[
+      {day:'Day 0',name:'LinkedIn Connect',ch:'li',subj:'',copy:`Hi [First Name] — I'm on the advisory board of HER Dallas, the Dallas chapter of HER Texas. We focus on women's entrepreneurship and economic leadership in Texas. I'd love to explore how [University]'s women's programs and our work connect. Would love to be in touch.\n\n— [Your Name]`,note:''},
+      {day:'Day 4',name:'Intro Email',ch:'em',subj:'[University] + HER Dallas — women\'s entrepreneurship pipeline',
+       copy:`Hi [First Name] —\n\nI lead sponsorship for HER Dallas, the Dallas chapter of HER Texas — the first statewide network for female founders in Texas.\n\nWe're hosting a June 10 breakfast for 25–30 Dallas women entrepreneurs and investors. For [University], this is both a sponsor opportunity and a pipeline connection — your women students and alumnae ARE our members and future members.\n\nI'd love to explore what a partnership could look like. Whether it's sponsorship, co-programming, or simply sending your women's leadership faculty and students, there's a real opportunity here.\n\nWorth 20 minutes?\n\n— [Your Name] | hertexas.co`,note:''},
+      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',subj:'Re: [University] + HER Dallas — women founder data',
+       copy:`Hi [First Name] — brief follow-up.\n\nWomen start businesses at 2x the national average rate but access significantly less capital and fewer networks. HER Dallas is specifically designed to close that gap — and [University]'s women graduates are exactly who we serve.\n\nHappy to discuss the June 10 breakfast and what a partnership could mean for your women's programs.\n\n— [Your Name]`,note:''},
+      {day:'Day 14',name:'Breakfast Pitch',ch:'li-dm',subj:'',copy:`Hi [First Name] — following up on HER Dallas June 10.\n\n25–30 Dallas women founders and investors. [University] belongs in this room — both as a partner and as a talent pipeline.\n\n20 minutes this week?\n\n— [Your Name]`,note:''},
+      {day:'Day 21',name:'Formal Invite',ch:'em',subj:'HER Dallas June 10 — formal invitation for [University]',
+       copy:`Hi [First Name] —\n\nFormal invitation to partner with HER Dallas at our June 10 Breakfast.\n\n📅 June 10, 8–10 AM | [Venue], Dallas | 25–30 women founders and investors\n\nPartnership from [$X], or we can discuss co-programming arrangements. Category held through May 9.\n\n— [Your Name] | hello@hertexas.co`,note:''},
+      {day:'Day 30',name:'Breakup / Nurture',ch:'em',subj:'Closing the loop — HER Dallas',
+       copy:`Hi [First Name] — last note for now.\n\nIf June timing doesn't work, I'd love to reconnect during fall semester planning. HER Dallas and [University]'s women's programs have a natural partnership — I'd like to find the right moment for it.\n\nThank you.\n\n— [Your Name]`,note:''},
+    ]},
+  media:{label:'Media & Publishing',note:'Approach as EDITORIAL PARTNERSHIP first, not a cash sponsorship. Coverage in exchange for visibility is often worth more than a sponsor fee. Lead with audience alignment, not media buy language.',
+    touches:[
+      {day:'Day 0',name:'LinkedIn Connect',ch:'li',subj:'',copy:`Hi [First Name] — I'm on the advisory board of HER Dallas, the Dallas chapter of HER Texas. We're building the story of women's economic leadership in Dallas and I think [Publication] and our work are very aligned. Would love to connect.\n\n— [Your Name]`,note:''},
+      {day:'Day 4',name:'Intro Email',ch:'em',subj:'HER Dallas + [Publication] — editorial partnership for June 10',
+       copy:`Hi [First Name] —\n\nI lead sponsorship and partnerships for HER Dallas, the Dallas chapter of HER Texas — the first statewide network for female founders in Texas.\n\nWe're hosting a June 10 breakfast for 25–30 Dallas women entrepreneurs and investors, timed to the FIFA World Cup's arrival in Dallas. The story writes itself: the most powerful room of women in Dallas, on the week the world comes to town.\n\nI'd love to explore an editorial partnership — whether that's coverage, co-branding, or simply having [Publication] represented at the table. This is the kind of story your readers come to [Publication] for.\n\nWorth 20 minutes?\n\n— [Your Name] | hertexas.co`,note:'Lead with the editorial angle. The cash sponsorship conversation comes later if at all.'},
+      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',subj:'Re: HER Dallas + [Publication] — the story angle',
+       copy:`Hi [First Name] — brief follow-up.\n\nHER Dallas sits at the intersection of three big Dallas stories right now: FIFA World Cup economic impact, women's entrepreneurship growth in Texas, and the changing face of business leadership in DFW.\n\nI think [Publication] readers would love this story. Happy to discuss what an editorial partnership could look like.\n\n— [Your Name]`,note:''},
+      {day:'Day 14',name:'Partnership Ask',ch:'li-dm',subj:'',copy:`Hi [First Name] — following up on HER Dallas June 10.\n\nAre there editorial opportunities we should discuss? We're also open to a formal media sponsorship if that's a better fit. Either way, [Publication] belongs in the room.\n\n20 minutes this week?\n\n— [Your Name]`,note:''},
+      {day:'Day 21',name:'Formal Invite',ch:'em',subj:'Formal invitation — HER Dallas June 10 + [Publication]',
+       copy:`Hi [First Name] —\n\nFormal invitation: join us at the HER Dallas June 10 Breakfast as a media partner.\n\n📅 June 10, 8–10 AM | [Venue], Dallas | 25–30 women founders and investors\n\nWe'd love to have a [Publication] journalist or editor in the room — and we're open to both editorial and sponsorship arrangements. The category is held through May 9.\n\n— [Your Name] | hello@hertexas.co`,note:''},
+      {day:'Day 30',name:'Breakup / Nurture',ch:'em',subj:'Closing the loop — HER Dallas',
+       copy:`Hi [First Name] — last note for now.\n\nIf June timing doesn't work, I'd love to stay in touch. HER Dallas is a growing story in Dallas and I think [Publication] and we have a lot to offer each other.\n\nThank you for your time.\n\n— [Your Name]`,note:''},
+    ]},
+  women:{label:"Women's Organizations",note:"These are PEER PARTNERSHIPS, not sponsorship asks. Approach as co-activation and mutual amplification. The ask is for their participation, endorsement, and shared promotion — not their checkbook.",
+    touches:[
+      {day:'Day 0',name:'LinkedIn Connect',ch:'li',subj:'',copy:`Hi [First Name] — I'm on the advisory board of HER Dallas, the Dallas chapter of HER Texas. I've long admired [Organization]'s work and think we're serving many of the same women in Dallas. Would love to connect and explore how we might amplify each other's work.\n\n— [Your Name]`,note:'Lead with genuine admiration for their work. This is a peer relationship.'},
+      {day:'Day 4',name:'Intro / Peer Partnership',ch:'em',subj:'HER Dallas + [Organization] — co-activation for June 10',
+       copy:`Hi [First Name] —\n\nI'm on the advisory board of HER Dallas, the Dallas chapter of HER Texas — the first statewide network for female founders in Texas.\n\nWe're hosting a June 10 breakfast for 25–30 Dallas women entrepreneurs and investors. I'd love to invite [Organization]'s leadership to join us — not as a sponsor, but as a peer. Our communities overlap almost entirely.\n\nI'm also curious about a co-promotion arrangement: we promote your work to our members, you share the breakfast with yours. Both organizations get in front of new women who should know about them.\n\nWorth a conversation?\n\n— [Your Name] | hertexas.co`,note:'The ask is participation and co-promotion, not money. Money can come later if the relationship develops.'},
+      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',subj:'Re: HER Dallas + [Organization] — shared mission',
+       copy:`Hi [First Name] — brief follow-up.\n\nI've been thinking about the overlap between our communities and I genuinely believe a partnership between HER Dallas and [Organization] would benefit both of our members significantly. The women you serve are the women we serve.\n\nI'd love to explore what that could look like — starting with June 10.\n\n— [Your Name]`,note:''},
+      {day:'Day 14',name:'Partnership Details',ch:'li-dm',subj:'',copy:`Hi [First Name] — following up on HER Dallas June 10.\n\nFor peer organizations like [Organization], we'd love your leadership's participation and your community's awareness. If a formal sponsorship package makes sense, we can discuss that too — but the relationship matters more to us than the transaction.\n\n20 minutes?\n\n— [Your Name]`,note:''},
+      {day:'Day 21',name:'Formal Invite',ch:'em',subj:'Formal invitation — HER Dallas June 10 + [Organization]',
+       copy:`Hi [First Name] —\n\nFormal invitation for [Organization]'s leadership to join us at the HER Dallas June 10 Breakfast.\n\n📅 June 10, 8–10 AM | [Venue], Dallas | 25–30 women founders and investors from across Texas\n\nWe'd love [Organization] represented at the table — and we'd love to explore what ongoing collaboration could look like beyond June.\n\n— [Your Name] | hello@hertexas.co`,note:''},
+      {day:'Day 30',name:'Breakup / Nurture',ch:'em',subj:'Closing the loop — HER Dallas',
+       copy:`Hi [First Name] — closing the loop.\n\nIf June doesn't work, I'd genuinely love to stay connected. [Organization] and HER Dallas belong in conversation — I'll find a better moment.\n\nThank you for your time.\n\n— [Your Name]`,note:''},
+    ]},
+  supdiv:{label:'Supplier Diversity & MWBE',note:'CRITICAL: WBCS/WBENC is the warmest intro on the entire list — Erika is in certification process. These organizations are partners AND multipliers. Their corporate member access is your warm intro network to half this list.',
+    touches:[
+      {day:'Day 0',name:'LinkedIn Connect',ch:'li',subj:'',copy:`Hi [First Name] — I'm on the advisory board of HER Dallas, the Dallas chapter of HER Texas. We're building the premier network for women founders in Texas. Your work at [Organization] supporting [women/minority]-owned businesses is deeply aligned with ours. Would love to connect.\n\n— [Your Name]`,note:'For WBCS: mention the certification process — it creates immediate context and credibility.'},
+      {day:'Day 4',name:'Intro / Partnership',ch:'em',subj:'HER Dallas + [Organization] — partnership for June 10',
+       copy:`Hi [First Name] —\n\nI'm on the advisory board of HER Dallas, the Dallas chapter of HER Texas.\n\n[For WBCS: I'm currently going through the WBCS certification process, which is how I came to understand the breadth of your network and corporate relationships. I'd love to discuss how HER Dallas and WBCS could amplify each other's work — starting with our June 10 breakfast.]\n\nWe're hosting a breakfast for 25–30 Dallas women entrepreneurs and investors on June 10. For [Organization], this is both a partnership opportunity and a community showcase.\n\nWorth 20 minutes?\n\n— [Your Name] | hertexas.co`,note:'For WBCS specifically: lead with the certification connection. For NMSDC and DFWMSDC: lead with corporate member access as the mutual value proposition.'},
+      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',subj:'Re: HER Dallas + [Organization] — the corporate access angle',
+       copy:`Hi [First Name] — brief follow-up.\n\n[Organization]'s corporate member relationships are exactly what HER Dallas women founders need — and HER Dallas's community is exactly what your corporate members are looking for when they need supplier diversity introductions.\n\nI think there's a genuine win-win here. Let's talk.\n\n— [Your Name]`,note:''},
+      {day:'Day 14',name:'Partnership Pitch',ch:'li-dm',subj:'',copy:`Hi [First Name] — following up on HER Dallas June 10.\n\nA co-promotion or partner package for [Organization] would put your brand in front of 25–30 women founders who are exactly your target audience. And we'd love access to your corporate member network.\n\n20 minutes?\n\n— [Your Name]`,note:''},
+      {day:'Day 21',name:'Formal Invite',ch:'em',subj:'HER Dallas June 10 — formal invitation for [Organization]',
+       copy:`Hi [First Name] —\n\nFormal invitation: join HER Dallas as a community partner at our June 10 Breakfast.\n\n📅 June 10, 8–10 AM | [Venue] | 25–30 women entrepreneurs, investors, and community leaders\n\nCo-marketing and partnership arrangements available. Category held through May 9.\n\n— [Your Name] | hello@hertexas.co`,note:''},
+      {day:'Day 30',name:'Breakup / Nurture',ch:'em',subj:'Closing the loop — HER Dallas',
+       copy:`Hi [First Name] — closing the loop for now.\n\nI'd love to stay connected for our ongoing HER Dallas programming. The relationship between HER Dallas and [Organization] is too natural not to build — I'll find the right moment.\n\n— [Your Name]`,note:''},
+    ]},
+  np:{label:'Nonprofit & Community Impact',note:'Approach as PEER PARTNERSHIPS. The ask is participation, co-promotion, and shared community activation — not a cash sponsorship. Lead with mission alignment, not ROI language.',
+    touches:[
+      {day:'Day 0',name:'LinkedIn Connect',ch:'li',subj:'',copy:`Hi [First Name] — I'm on the advisory board of HER Dallas, the Dallas chapter of HER Texas. Our missions feel very closely aligned and I'd love to connect and explore how we might support each other's work.\n\n— [Your Name]`,note:''},
+      {day:'Day 4',name:'Intro / Peer Partnership',ch:'em',subj:'HER Dallas + [Organization] — June 10 community partnership',
+       copy:`Hi [First Name] —\n\nI'm on the advisory board of HER Dallas, the Dallas chapter of HER Texas — the first statewide network for female founders in Texas.\n\nWe're hosting a June 10 breakfast for 25–30 Dallas women entrepreneurs and investors. I'd love to have [Organization] represented — either as a community partner, a featured organization, or simply as a peer at the table.\n\nOur communities overlap. The women you serve are the women we serve. I think showing up together makes both of us stronger.\n\nWorth a conversation?\n\n— [Your Name] | hertexas.co`,note:''},
+      {day:'Day 7',name:'Value-Add Follow-Up',ch:'em',subj:'Re: HER Dallas + [Organization] — community amplification',
+       copy:`Hi [First Name] — brief follow-up.\n\nHER Dallas is actively trying to build the room that represents the full breadth of Dallas women — and [Organization]'s community and mission belong in that room.\n\nI'd love to discuss what showing up together could look like.\n\n— [Your Name]`,note:''},
+      {day:'Day 14',name:'Partnership Details',ch:'li-dm',subj:'',copy:`Hi [First Name] — following up on HER Dallas June 10.\n\nFor peer organizations, we're looking for co-promotion, shared community presence, and a seat at the table. If a formal partnership package makes sense, we can discuss — but the relationship comes first.\n\n20 minutes?\n\n— [Your Name]`,note:''},
+      {day:'Day 21',name:'Formal Invite',ch:'em',subj:'HER Dallas June 10 — formal invitation for [Organization]',
+       copy:`Hi [First Name] —\n\nFormal invitation for [Organization]'s leadership to join us at the HER Dallas June 10 Breakfast.\n\n📅 June 10, 8–10 AM | [Venue], Dallas | 25–30 women founders and investors from across Texas\n\nWe'd love [Organization] in the room — as a partner, as a peer, or simply as a community presence that signals what HER Dallas stands for.\n\n— [Your Name] | hello@hertexas.co`,note:''},
+      {day:'Day 30',name:'Breakup / Nurture',ch:'em',subj:'Closing the loop — HER Dallas',
+       copy:`Hi [First Name] — closing the loop for now.\n\nIf June timing doesn't work, I genuinely hope we stay connected. [Organization] and HER Dallas belong in the same conversation — I'll find a better moment.\n\nThank you.\n\n— [Your Name]`,note:''},
+    ]},
+};
+
+const STATUS_LABELS={s0:'Not Started',s1:'Researching',s2:'Warm-Up',s3:'Outreach Sent',s4:'Response Received',s5:'Meeting Scheduled',s6:'Invited',s7:'Confirmed ✓',s8:'Declined',s9:'Future Cycle'};
+const CAT_LABELS={bank:'Banking & Financial',ins:'Insurance',corp:'Corporate',health:'Healthcare',civic:'Civic & Gov',chamber:'Chambers & Econ Dev',edu:'Higher Ed',media:'Media',women:"Women's Orgs",supdiv:'Supplier Diversity',np:'Nonprofit'};
+const CH_DAYS={1:0,2:4,3:7,4:14,5:21,6:30};
+
+// ═══════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════
+function nav(pg){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('show'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('pg-'+pg).classList.add('show');
+  document.querySelectorAll('.nav-item').forEach(n=>{
+    if(n.getAttribute('onclick')===`nav('${pg}')`)n.classList.add('active');
+  });
+  if(pg==='dash')renderDash();
+  else if(pg==='contacts')renderContacts();
+  else if(pg==='queue')renderQueue();
+  else if(pg==='sequences')renderSeq();
+  else if(pg==='library')libCat('bank',document.querySelector('.lib-nav-btn'));
+  else if(pg==='activity')renderActivity();
+}
+
+// ═══════════════════════════════════════════════
+// DATA FUNCTIONS
+// ═══════════════════════════════════════════════
+function getContacts(){return contacts;}
+function getActivity(){return activity;}
+
+function nextTouchNum(c){
+  if(!c.touches||c.touches.length===0)return 1;
+  const done=c.touches.map(t=>t.touch);
+  for(let i=1;i<=6;i++){if(!done.includes(i))return i;}
+  return null;
+}
+function nextTouchDue(c){
+  if(!c.t1)return null;
+  const nt=nextTouchNum(c);
+  if(!nt)return null;
+  const d=new Date(c.t1);
+  d.setDate(d.getDate()+CH_DAYS[nt]);
+  return d;
+}
+function isDue(c){
+  const d=nextTouchDue(c);
+  if(!d)return false;
+  const today=new Date();today.setHours(0,0,0,0);
+  return d<=today&&!['s7','s8','s9'].includes(c.stat);
+}
+function fmtDate(d){
+  if(!d)return'—';
+  const dt=new Date(d);
+  return dt.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+}
+function statBadge(s){return`<span class="st ${s}">${STATUS_LABELS[s]||s}</span>`}
+function catBadge(c){return`<span class="badge b-${c}">${CAT_LABELS[c]||c}</span>`}
+function chBadge(ch){
+  if(ch==='li')return`<span class="ch-badge ch-li">LinkedIn Connect</span>`;
+  if(ch==='li-dm')return`<span class="ch-badge ch-ldm">LinkedIn DM</span>`;
+  if(ch==='em')return`<span class="ch-badge ch-em">Email</span>`;
+  if(ch==='ph')return`<span class="ch-badge ch-ph">Phone</span>`;
+  return`<span class="ch-badge ch-li">${ch}</span>`;
+}
+
+// ═══════════════════════════════════════════════
+// RENDER DASHBOARD
+// ═══════════════════════════════════════════════
+function renderDash(){
+  const cs=getContacts();
+  const active=cs.filter(c=>!['s0','s7','s8','s9'].includes(c.stat)&&c.stat!=='s0').length;
+  const inv=cs.filter(c=>c.stat==='s6').length;
+  const conf=cs.filter(c=>c.stat==='s7').length;
+  ['d1','d2','d3','d4'].forEach((id,i)=>{
+    document.getElementById(id).textContent=[cs.length,active,inv,conf][i];
+  });
+  ['ts1','ts2','ts3','ts4'].forEach((id,i)=>{
+    document.getElementById(id).textContent=[cs.length,active,inv,conf][i];
+  });
+  // Queue preview
+  const due=cs.filter(isDue).slice(0,4);
+  const qel=document.getElementById('d-queue');
+  if(!due.length){qel.innerHTML='<div class="empty"><div class="empty-ico">✓</div><p>No touches due today</p></div>';return;}
+  qel.innerHTML=due.map(c=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--ln)">
+      <div>
+        <div style="font-weight:600;font-size:13px">${c.org}</div>
+        <div style="font-size:11px;color:var(--gr1)">Touch ${nextTouchNum(c)} due</div>
+      </div>
+      <button class="btn btn-gld btn-sm" onclick="openLog(${c.id})">Log</button>
+    </div>`).join('');
+  // Activity preview
+  const acts=getActivity().slice(0,5);
+  const ael=document.getElementById('d-act');
+  if(!acts.length){ael.innerHTML='<p style="font-size:12px;color:var(--gr1);font-style:italic">No activity yet.</p>';return;}
+  ael.innerHTML=acts.map(a=>`
+    <div class="act-item"><div class="act-dot"></div>
+    <div><div class="act-text">${a.text}</div><div class="act-time">${fmtDate(a.date)}${a.who?' · '+a.who:''}</div></div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════
+// RENDER QUEUE
+// ═══════════════════════════════════════════════
+function renderQueue(){
+  const cs=getContacts().filter(isDue);
+  const el=document.getElementById('queue-list');
+  if(!cs.length){el.innerHTML='<div class="empty"><div class="empty-ico">✓</div><p>No touches due. You\'re ahead of schedule!</p></div>';return;}
+  el.innerHTML=cs.map(c=>{
+    const nt=nextTouchNum(c);
+    const seq=SEQ[c.cat];
+    const touch=seq?seq.touches[nt-1]:null;
+    return`<div style="background:var(--wht);border-radius:var(--r2);box-shadow:var(--sh);padding:16px 18px;margin-bottom:12px;border-left:3px solid var(--gld);border:1px solid var(--ln)">
+      <div style="display:flex;align-items:flex-start;gap:14px">
+        <div style="flex:1">
+          <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700">${c.org}</div>
+          ${c.fn?`<div style="font-size:12px;color:var(--gr2)">${c.fn} ${c.ln} · ${c.ttl}</div>`:''}
+          <div style="margin-top:6px;display:flex;gap:8px;align-items:center">
+            ${catBadge(c.cat)}
+            <span style="font-size:11px;color:var(--gr1)">Touch ${nt}: ${touch?touch.name:''} ${touch?chBadge(touch.ch):''}</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <button class="btn btn-gld btn-sm" onclick="openLog(${c.id})">Log Touch</button>
+          <button class="btn-ghost btn-sm" onclick="viewContact(${c.id})">View</button>
+        </div>
+      </div>
+      ${touch&&touch.copy?`<div style="margin-top:12px;background:#fefef9;border:1px solid #f0ece4;border-radius:5px;padding:10px 12px;font-size:12px;line-height:1.6;color:var(--blk);white-space:pre-wrap;position:relative">
+        ${touch.copy.split('\n').slice(0,3).join('\n')}…
+        <button class="copy-btn" onclick="clip(\`${touch.copy.replace(/`/g,'\\`')}\`)">Copy</button>
+      </div>`:''}
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════
+// RENDER CONTACTS
+// ═══════════════════════════════════════════════
+let currentFilt='all';
+function filt(f,btn){
+  currentFilt=f;
+  document.querySelectorAll('.fb').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderContacts();
+}
+function renderContacts(){
+  const search=(document.getElementById('csearch')||{}).value||'';
+  let cs=getContacts();
+  if(currentFilt==='active')cs=cs.filter(c=>!['s0','s7','s8','s9'].includes(c.stat));
+  else if(currentFilt!=='all')cs=cs.filter(c=>c.stat===currentFilt);
+  if(search)cs=cs.filter(c=>(c.org+c.fn+c.ln+c.ttl).toLowerCase().includes(search.toLowerCase()));
+  const tb=document.getElementById('ctbody');
+  if(!cs.length){tb.innerHTML=`<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--gr1);font-style:italic">No prospects found.</td></tr>`;return;}
+  tb.innerHTML=cs.map((c,i)=>{
+    const nt=nextTouchNum(c);
+    const due=nextTouchDue(c);
+    const seq=SEQ[c.cat];
+    const touch=nt&&seq?seq.touches[nt-1]:null;
+    const dueStr=due?fmtDate(due):'—';
+    const isD=isDue(c);
+    return`<tr>
+      <td style="color:var(--gr1);font-size:12px">${i+1}</td>
+      <td><div class="org">${c.org}</div>${c.note?`<div style="font-size:10px;color:var(--tel);margin-top:2px">ℹ ${c.note.substring(0,60)}…</div>`:''}</td>
+      <td><div class="person">${c.fn?c.fn+' '+c.ln:'—'}</div><div style="font-size:11px;color:var(--gr1)">${c.ttl||''}</div></td>
+      <td>${catBadge(c.cat)}</td>
+      <td>${statBadge(c.stat)}</td>
+      <td><div style="font-size:12px;color:var(--blk)">${nt?`Touch ${nt}`:'Complete'}</div>${touch?`<div style="font-size:10px;color:var(--gr1)">${touch.name}</div>`:''}</td>
+      <td><span style="font-size:12px;color:${isD?'var(--gld)':'var(--gr2)';}"${isD?' font-weight:600':''}">${dueStr}</span></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          ${nt?`<button class="btn btn-gld btn-sm" onclick="openLog(${c.id})">Log</button>`:''}
+          <button class="btn btn-out btn-sm" onclick="viewContact(${c.id})">View</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════
+// RENDER SEQUENCES
+// ═══════════════════════════════════════════════
+function renderSeq(){
+  const el=document.getElementById('seq-list');
+  el.innerHTML=Object.entries(SEQ).map(([k,s])=>`
+    <div class="seq-card" id="seq-${k}">
+      <div class="seq-hdr" onclick="toggleSeq('${k}')">
+        ${catBadge(k)}
+        <div>
+          <div class="seq-title">${s.label}</div>
+          <div class="seq-sub">${s.note}</div>
+        </div>
+        <span class="seq-arr">▼</span>
+      </div>
+      <div class="seq-body">
+        ${s.touches.map(t=>`
+          <div class="tc">
+            <div class="tc-hdr">
+              <span class="tc-day">${t.day}</span>
+              <span class="tc-name">${t.name}</span>
+              ${chBadge(t.ch)}
+            </div>
+            <div class="tc-body">
+              ${t.subj?`<div class="tc-subj">Subject: ${t.subj}</div>`:''}
+              <div class="copy-wrap">
+                <div class="tc-copy">${t.copy}</div>
+                <button class="copy-btn" onclick="clip(\`${t.copy.replace(/`/g,'\\`')}\`)">Copy</button>
+              </div>
+              ${t.note?`<div class="tc-note">💡 ${t.note}</div>`:''}
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+function toggleSeq(k){
+  document.getElementById('seq-'+k).classList.toggle('open');
+}
+
+// ═══════════════════════════════════════════════
+// COPY LIBRARY
+// ═══════════════════════════════════════════════
+function libCat(k,btn){
+  document.querySelectorAll('.lib-nav-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  const s=SEQ[k];
+  if(!s)return;
+  document.getElementById('lib-content').innerHTML=`
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-hdr">Category notes</div>
+      <p style="font-size:12px;color:var(--gr2);line-height:1.6">${s.note}</p>
+    </div>
+    ${s.touches.map(t=>`
+      <div class="tc" style="margin-bottom:12px">
+        <div class="tc-hdr">
+          <span class="tc-day">${t.day}</span>
+          <span class="tc-name">${t.name}</span>
+          ${chBadge(t.ch)}
+        </div>
+        <div class="tc-body">
+          ${t.subj?`<div class="tc-subj">Subject: ${t.subj}</div>`:''}
+          <div class="copy-wrap">
+            <div class="tc-copy">${t.copy}</div>
+            <button class="copy-btn" onclick="clip(\`${t.copy.replace(/`/g,'\\`')}\`)">Copy</button>
+          </div>
+          ${t.note?`<div class="tc-note">💡 ${t.note}</div>`:''}
+        </div>
+      </div>`).join('')}`;
+}
+
+// ═══════════════════════════════════════════════
+// ACTIVITY LOG
+// ═══════════════════════════════════════════════
+function renderActivity(){
+  const acts=getActivity();
+  const el=document.getElementById('act-full');
+  if(!acts.length){el.innerHTML='<p style="font-size:13px;color:var(--gr1);font-style:italic;text-align:center;padding:24px">No activity logged yet. Log your first touch to get started.</p>';return;}
+  el.innerHTML=acts.map(a=>`
+    <div class="act-item"><div class="act-dot"></div>
+    <div style="flex:1"><div class="act-text">${a.text}</div><div class="act-time">${fmtDate(a.date)}${a.who?' · '+a.who:''}</div></div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════
+// ADD CONTACT
+// ═══════════════════════════════════════════════
+async function addContact(){
+  const org=document.getElementById('f-org').value.trim();
+  const cat=document.getElementById('f-cat').value;
+  if(!org||!cat){toast('Organization and category are required');return;}
+  const c={
+    id:Date.now(),
+    org,cat,
+    fn:document.getElementById('f-fn').value.trim(),
+    ln:document.getElementById('f-ln').value.trim(),
+    ttl:document.getElementById('f-ttl').value.trim(),
+    email:document.getElementById('f-email').value.trim(),
+    li:document.getElementById('f-li').value.trim(),
+    intro:document.getElementById('f-intro').value.trim(),
+    srch:document.getElementById('f-srch').value.trim(),
+    pitch:document.getElementById('f-pitch').value.trim(),
+    stat:document.getElementById('f-stat').value,
+    t1:document.getElementById('f-t1').value||null,
+    touches:[],note:''
+  };
+  contacts.push(c);
+  await saveC(contacts);
+  await logAct(`Added ${c.org}${c.fn?' ('+c.fn+' '+c.ln+')':''}`,new Date().toISOString(),'');
+  toast('Prospect added!');
+  ['f-org','f-fn','f-ln','f-ttl','f-email','f-li','f-intro','f-srch','f-pitch'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-cat').value='';
+  document.getElementById('f-stat').value='s0';
+  document.getElementById('f-t1').value='';
+  nav('contacts');
+}
+
+// ═══════════════════════════════════════════════
+// VIEW CONTACT
+// ═══════════════════════════════════════════════
+function viewContact(id){
+  const c=contacts.find(x=>x.id===id);
+  if(!c)return;
+  const seq=SEQ[c.cat];
+  const nt=nextTouchNum(c);
+  document.getElementById('m-view-body').innerHTML=`
+    <h2>${c.org}</h2>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+      ${catBadge(c.cat)} ${statBadge(c.stat)}
+      ${c.intro?`<span class="badge" style="background:var(--tel3);color:var(--tel2)">Warm intro: ${c.intro}</span>`:''}
+    </div>
+    ${c.fn?`<div class="vm-section"><div class="card-hdr">Contact</div>
+      <div class="vm-row"><span class="vm-lbl">Name</span><span>${c.fn} ${c.ln}</span></div>
+      ${c.ttl?`<div class="vm-row"><span class="vm-lbl">Title</span><span>${c.ttl}</span></div>`:''}
+      ${c.email?`<div class="vm-row"><span class="vm-lbl">Email</span><a href="mailto:${c.email}" style="color:var(--tel)">${c.email}</a></div>`:''}
+      ${c.li?`<div class="vm-row"><span class="vm-lbl">LinkedIn</span><a href="${c.li}" target="_blank" style="color:var(--tel)">${c.li}</a></div>`:''}
+    </div>`:''}
+    ${c.srch?`<div class="vm-section"><div class="card-hdr">LinkedIn Search</div><p style="font-size:12px;color:var(--tel);font-style:italic">${c.srch}</p></div>`:''}
+    ${c.pitch?`<div class="vm-section"><div class="card-hdr">Pitch angle</div><p style="font-size:12px;color:var(--gr2);line-height:1.6">${c.pitch}</p></div>`:''}
+    ${c.note?`<div class="vm-section"><div class="card-hdr" style="color:var(--gld4)">Notes / additional contacts</div><p style="font-size:12px;color:var(--gr2);line-height:1.6">${c.note}</p></div>`:''}
+    <div class="vm-section"><div class="card-hdr">Outreach history</div>
+      ${c.touches.length?c.touches.map(t=>`<div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--ln);font-size:12px">
+        <span>Touch ${t.touch} · ${t.channel}</span>
+        <span style="color:var(--gr1)">${fmtDate(t.date)}${t.who?' · '+t.who:''}</span>
+      </div>`).join(''):'<p style="font-size:12px;color:var(--gr1);font-style:italic">No touches logged yet.</p>'}
+    </div>
+    ${nt&&seq?`<div class="vm-section"><div class="card-hdr" style="color:var(--tel)">Next touch: ${seq.touches[nt-1].name}</div>
+      <div class="copy-wrap"><div class="tc-copy" style="font-size:12px">${seq.touches[nt-1].copy}</div>
+      <button class="copy-btn" onclick="clip(\`${seq.touches[nt-1].copy.replace(/`/g,'\\`')}\`)">Copy</button></div></div>`:''}
+    <div class="fa">
+      ${nt?`<button class="btn btn-gld" onclick="closeM('m-view');openLog(${c.id})">Log Touch ${nt}</button>`:''}
+      <button class="btn btn-out" onclick="closeM('m-view')">Close</button>
+    </div>`;
+  document.getElementById('m-view').classList.add('open');
+}
+
+// ═══════════════════════════════════════════════
+// LOG TOUCH
+// ═══════════════════════════════════════════════
+function openLog(id){
+  const c=contacts.find(x=>x.id===id);
+  if(!c)return;
+  document.getElementById('log-cid').value=id;
+  const nt=nextTouchNum(c)||1;
+  document.getElementById('log-touch').value=nt;
+  document.getElementById('log-date').value=new Date().toISOString().slice(0,10);
+  document.getElementById('log-notes').value='';
+  document.getElementById('log-who').value='';
+  // pre-fill status
+  const map={1:'s2',2:'s3',3:'s3',4:'s3',5:'s6',6:'s9'};
+  document.getElementById('log-stat').value=map[nt]||'s3';
+  document.getElementById('m-log').classList.add('open');
+}
+async function saveTouch(){
+  const id=parseInt(document.getElementById('log-cid').value);
+  const c=contacts.find(x=>x.id===id);
+  if(!c)return;
+  const touch=parseInt(document.getElementById('log-touch').value);
+  const ch=document.getElementById('log-ch').value;
+  const stat=document.getElementById('log-stat').value;
+  const date=document.getElementById('log-date').value;
+  const notes=document.getElementById('log-notes').value.trim();
+  const who=document.getElementById('log-who').value.trim();
+  if(!c.touches)c.touches=[];
+  c.touches.push({touch,channel:ch,date,notes,who});
+  c.stat=stat;
+  if(touch===1&&!c.t1)c.t1=date;
+  await saveC(contacts);
+  const actText=`Touch ${touch} logged for ${c.org}${who?' by '+who:''} — ${ch}${notes?' · '+notes.substring(0,60):''}`;
+  await logAct(actText,date,who);
+  toast('Touch logged!');
+  closeM('m-log');
+  renderDash();
+  renderContacts();
+}
+
+async function logAct(text,date,who){
+  const a=await loadA();
+  a.unshift({text,date,who,ts:Date.now()});
+  const trimmed=a.slice(0,200);
+  activity=trimmed;
+  await saveA(trimmed);
+}
+
+// ═══════════════════════════════════════════════
+// MODAL HELPERS
+// ═══════════════════════════════════════════════
+function closeM(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.moverlay').forEach(m=>{
+  m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');});
+});
+
+// ═══════════════════════════════════════════════
+// CLIPBOARD
+// ═══════════════════════════════════════════════
+function clip(txt){
+  navigator.clipboard.writeText(txt).then(()=>toast('Copied!'))
+  .catch(()=>{const ta=document.createElement('textarea');ta.value=txt;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast('Copied!');});
+}
+
+// ═══════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════
+function toast(msg){
+  document.querySelectorAll('.toast').forEach(t=>t.remove());
+  const el=document.createElement('div');el.className='toast';el.textContent=msg;
+  document.body.appendChild(el);setTimeout(()=>el.remove(),2400);
+}
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+async function init(){
+  const inited=await checkInit();
+  if(!inited){
+    contacts=[...SEED];
+    await saveC(contacts);
+    await markInit();
+  } else {
+    const stored=await loadC();
+    contacts=stored||[...SEED];
+  }
+  activity=await loadA();
+  renderDash();
+  renderSeq();
+  libCat('bank',document.querySelector('.lib-nav-btn'));
+}
+init();
+</script>
+</body>
+</html>
