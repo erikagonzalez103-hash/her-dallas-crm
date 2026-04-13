@@ -435,30 +435,17 @@ input[type=text]#csearch{padding:7px 12px;font-size:12px}
 
 <script>
 // ═══════════════════════════════════════════════
-// STORAGE — localStorage (works in any browser)
-// For shared team access: host on GitHub Pages and
-// point to a shared backend (Cloudflare KV).
+// STORAGE — localStorage (synchronous, any browser)
+// For shared team access: host on GitHub Pages.
 // ═══════════════════════════════════════════════
 const CKEY='hd_contacts', AKEY='hd_activity', IKEY='hd_init';
 
-async function loadC(){
-  try{const r=localStorage.getItem(CKEY);return r?JSON.parse(r):null}catch(e){return null}
-}
-async function saveC(d){
-  try{localStorage.setItem(CKEY,JSON.stringify(d))}catch(e){}
-}
-async function loadA(){
-  try{const r=localStorage.getItem(AKEY);return r?JSON.parse(r):[]}catch(e){return[]}
-}
-async function saveA(d){
-  try{localStorage.setItem(AKEY,JSON.stringify(d))}catch(e){}
-}
-async function checkInit(){
-  try{return !!localStorage.getItem(IKEY)}catch(e){return false}
-}
-async function markInit(){
-  try{localStorage.setItem(IKEY,'1')}catch(e){}
-}
+function loadC(){try{const r=localStorage.getItem(CKEY);return r?JSON.parse(r):null}catch(e){return null}}
+function saveC(d){try{localStorage.setItem(CKEY,JSON.stringify(d))}catch(e){}}
+function loadA(){try{const r=localStorage.getItem(AKEY);return r?JSON.parse(r):[]}catch(e){return[]}}
+function saveA(d){try{localStorage.setItem(AKEY,JSON.stringify(d))}catch(e){}}
+function checkInit(){try{return !!localStorage.getItem(IKEY)}catch(e){return false}}
+function markInit(){try{localStorage.setItem(IKEY,'1')}catch(e){}}
 function resetAll(){
   if(!confirm('Reset ALL data and reload seed contacts? This cannot be undone.'))return;
   localStorage.removeItem(CKEY);localStorage.removeItem(AKEY);localStorage.removeItem(IKEY);
@@ -1657,7 +1644,7 @@ function renderActivity(){
 // ═══════════════════════════════════════════════
 // ADD CONTACT
 // ═══════════════════════════════════════════════
-async function addContact(){
+function addContact(){
   const org=document.getElementById('f-org').value.trim();
   const cat=document.getElementById('f-cat').value;
   if(!org||!cat){toast('Organization and category are required');return;}
@@ -1677,8 +1664,8 @@ async function addContact(){
     touches:[],note:''
   };
   contacts.push(c);
-  await saveC(contacts);
-  await logAct(`Added ${c.org}${c.fn?' ('+c.fn+' '+c.ln+')':''}`,new Date().toISOString(),'');
+  saveC(contacts);
+  logAct(`Added ${c.org}${c.fn?' ('+c.fn+' '+c.ln+')':''}`,new Date().toISOString(),'');
   toast('Prospect added!');
   ['f-org','f-fn','f-ln','f-ttl','f-email','f-li','f-intro','f-srch','f-pitch'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('f-cat').value='';
@@ -1743,7 +1730,7 @@ function openLog(id){
   document.getElementById('log-stat').value=map[nt]||'s3';
   document.getElementById('m-log').classList.add('open');
 }
-async function saveTouch(){
+function saveTouch(){
   const id=parseInt(document.getElementById('log-cid').value);
   const c=contacts.find(x=>x.id===id);
   if(!c)return;
@@ -1757,21 +1744,21 @@ async function saveTouch(){
   c.touches.push({touch,channel:ch,date,notes,who});
   c.stat=stat;
   if(touch===1&&!c.t1)c.t1=date;
-  await saveC(contacts);
+  saveC(contacts);
   const actText=`Touch ${touch} logged for ${c.org}${who?' by '+who:''} — ${ch}${notes?' · '+notes.substring(0,60):''}`;
-  await logAct(actText,date,who);
+  logAct(actText,date,who);
   toast('Touch logged!');
   closeM('m-log');
   renderDash();
   renderContacts();
 }
 
-async function logAct(text,date,who){
-  const a=await loadA();
+function logAct(text,date,who){
+  const a=loadA();
   a.unshift({text,date,who,ts:Date.now()});
   const trimmed=a.slice(0,200);
   activity=trimmed;
-  await saveA(trimmed);
+  saveA(trimmed);
 }
 
 // ═══════════════════════════════════════════════
@@ -1802,22 +1789,22 @@ function toast(msg){
 // ═══════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════
-async function init(){
-  const inited=await checkInit();
+function init(){
+  const inited=checkInit();
   if(!inited){
     contacts=[...SEED];
-    await saveC(contacts);
-    await markInit();
+    saveC(contacts);
+    markInit();
   } else {
-    const stored=await loadC();
+    const stored=loadC();
     contacts=stored||[...SEED];
   }
-  activity=await loadA();
+  activity=loadA();
   renderDash();
   renderSeq();
   libCat('bank',document.querySelector('.lib-nav-btn'));
 }
-init();
+document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
