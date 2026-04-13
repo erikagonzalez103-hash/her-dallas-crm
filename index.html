@@ -189,6 +189,8 @@ input[type=text]#csearch{padding:7px 12px;font-size:12px}
   <div class="topbar-pipe">|</div>
   <div class="topbar-title">SPONSOR OUTREACH CRM</div>
   <button onclick="resetAll()" style="margin-left:12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:var(--gr1);font-family:'DM Sans',sans-serif;font-size:10px;padding:3px 10px;border-radius:4px;cursor:pointer;letter-spacing:.04em">↺ Reset</button>
+  <button onclick="exportData()" style="margin-left:6px;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);color:var(--gld);font-family:'DM Sans',sans-serif;font-size:10px;padding:3px 10px;border-radius:4px;cursor:pointer;letter-spacing:.04em">↓ Export</button>
+  <button onclick="importData()" style="margin-left:6px;background:rgba(0,150,138,.15);border:1px solid rgba(0,150,138,.3);color:var(--tel);font-family:'DM Sans',sans-serif;font-size:10px;padding:3px 10px;border-radius:4px;cursor:pointer;letter-spacing:.04em">↑ Import</button>
   <div class="topbar-stats">
     <div class="tstat">Prospects <b id="ts1">0</b></div>
     <div class="tstat">Active <b id="ts2">0</b></div>
@@ -435,21 +437,62 @@ input[type=text]#csearch{padding:7px 12px;font-size:12px}
 
 <script>
 // ═══════════════════════════════════════════════
-// STORAGE — localStorage (synchronous, any browser)
-// For shared team access: host on GitHub Pages.
+// STORAGE — in-memory (works from file://, no server needed)
+// Data lives in JS variables for the session.
+// Use Export to save your work as a JSON file.
+// Use Import to reload it next session.
 // ═══════════════════════════════════════════════
-const CKEY='hd_contacts', AKEY='hd_activity', IKEY='hd_init';
+let _store={contacts:null,activity:[],inited:false};
 
-function loadC(){try{const r=localStorage.getItem(CKEY);return r?JSON.parse(r):null}catch(e){return null}}
-function saveC(d){try{localStorage.setItem(CKEY,JSON.stringify(d))}catch(e){}}
-function loadA(){try{const r=localStorage.getItem(AKEY);return r?JSON.parse(r):[]}catch(e){return[]}}
-function saveA(d){try{localStorage.setItem(AKEY,JSON.stringify(d))}catch(e){}}
-function checkInit(){try{return !!localStorage.getItem(IKEY)}catch(e){return false}}
-function markInit(){try{localStorage.setItem(IKEY,'1')}catch(e){}}
+function loadC(){return _store.contacts}
+function saveC(d){_store.contacts=d}
+function loadA(){return _store.activity}
+function saveA(d){_store.activity=d}
+function checkInit(){return _store.inited}
+function markInit(){_store.inited=true}
+
+function exportData(){
+  const data=JSON.stringify({contacts,activity},null,2);
+  const blob=new Blob([data],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='HERDallas_CRM_'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+  toast('Data exported!');
+}
+
+function importData(){
+  const input=document.createElement('input');
+  input.type='file';input.accept='.json';
+  input.onchange=e=>{
+    const file=e.target.files[0];if(!file)return;
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      try{
+        const data=JSON.parse(ev.target.result);
+        if(data.contacts){
+          contacts=data.contacts;
+          saveC(contacts);
+        }
+        if(data.activity){
+          activity=data.activity;
+          saveA(activity);
+        }
+        renderDash();renderContacts();renderActivity();
+        toast('Data imported — '+contacts.length+' prospects loaded!');
+      }catch(err){toast('Import failed — check file format');}
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
 function resetAll(){
-  if(!confirm('Reset ALL data and reload seed contacts? This cannot be undone.'))return;
-  localStorage.removeItem(CKEY);localStorage.removeItem(AKEY);localStorage.removeItem(IKEY);
-  location.reload();
+  if(!confirm('Reset to seed contacts? Any changes this session will be lost.'))return;
+  contacts=[...SEED];activity=[];
+  saveC(contacts);saveA(activity);
+  renderDash();renderContacts();renderActivity();
+  toast('Reset to '+contacts.length+' seed contacts.');
 }
 
 let contacts=[], activity=[], currentFilter='all';
@@ -1754,11 +1797,8 @@ function saveTouch(){
 }
 
 function logAct(text,date,who){
-  const a=loadA();
-  a.unshift({text,date,who,ts:Date.now()});
-  const trimmed=a.slice(0,200);
-  activity=trimmed;
-  saveA(trimmed);
+  activity.unshift({text,date,who,ts:Date.now()});
+  if(activity.length>200)activity=activity.slice(0,200);
 }
 
 // ═══════════════════════════════════════════════
@@ -1790,16 +1830,10 @@ function toast(msg){
 // INIT
 // ═══════════════════════════════════════════════
 function init(){
-  const inited=checkInit();
-  if(!inited){
-    contacts=[...SEED];
-    saveC(contacts);
-    markInit();
-  } else {
-    const stored=loadC();
-    contacts=stored||[...SEED];
-  }
-  activity=loadA();
+  // Always seeds from SEED on page load (in-memory storage)
+  // Use Export to save work, Import to restore it next session
+  contacts=[...SEED.map(c=>({...c,touches:[...(c.touches||[])]}))];
+  activity=[];
   renderDash();
   renderSeq();
   libCat('bank',document.querySelector('.lib-nav-btn'));
