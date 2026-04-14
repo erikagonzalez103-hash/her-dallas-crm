@@ -190,7 +190,8 @@ input[type=text]#csearch{padding:7px 12px;font-size:12px}
   <div class="topbar-title">SPONSOR OUTREACH CRM</div>
   <button onclick="resetAll()" style="margin-left:12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);color:var(--gr1);font-family:'DM Sans',sans-serif;font-size:10px;padding:3px 10px;border-radius:4px;cursor:pointer;letter-spacing:.04em">↺ Reset</button>
   <button onclick="exportData()" style="margin-left:6px;background:rgba(201,168,76,.15);border:1px solid rgba(201,168,76,.3);color:var(--gld);font-family:'DM Sans',sans-serif;font-size:10px;padding:3px 10px;border-radius:4px;cursor:pointer;letter-spacing:.04em">↓ Export</button>
-  <button onclick="importData()" style="margin-left:6px;background:rgba(0,150,138,.15);border:1px solid rgba(0,150,138,.3);color:var(--tel);font-family:'DM Sans',sans-serif;font-size:10px;padding:3px 10px;border-radius:4px;cursor:pointer;letter-spacing:.04em">↑ Import</button>
+  <label for="import-file" style="margin-left:6px;background:rgba(0,150,138,.15);border:1px solid rgba(0,150,138,.3);color:var(--tel);font-family:'DM Sans',sans-serif;font-size:10px;padding:3px 10px;border-radius:4px;cursor:pointer;letter-spacing:.04em">↑ Import</label>
+  <input type="file" id="import-file" accept=".json,.csv" style="display:none" onchange="handleImport(this)">
   <div class="topbar-stats">
     <div class="tstat">Prospects <b id="ts1">0</b></div>
     <div class="tstat">Active <b id="ts2">0</b></div>
@@ -461,53 +462,70 @@ function exportData(){
   toast('Data exported!');
 }
 
-function importData(){
-  const input=document.createElement('input');
-  input.type='file';input.accept='.json,.csv';
-  input.onchange=e=>{
-    const file=e.target.files[0];if(!file)return;
-    const reader=new FileReader();
-    reader.onload=ev=>{
-      try{
-        const text=ev.target.result;
-        if(file.name.endsWith('.json')){
-          const data=JSON.parse(text);
-          if(data.contacts){contacts=data.contacts;}
-          if(data.activity){activity=data.activity;}
-        } else {
-          // CSV import — parse rows
-          const lines=text.split('\n').filter(l=>l.trim());
-          const headers=lines[0].split(',').map(h=>h.replace(/"/g,'').trim());
-          const rows=lines.slice(1).map(line=>{
-            const vals=[];let cur='',inQ=false;
-            for(const ch of line){
-              if(ch==='"'){inQ=!inQ;}
-              else if(ch===','&&!inQ){vals.push(cur);cur='';}
-              else{cur+=ch;}
-            }
-            vals.push(cur);
-            const obj={touches:[],t1:null};
-            headers.forEach((h,i)=>{obj[h]=(vals[i]||'').replace(/"/g,'').trim();});
-            obj.id=parseInt(obj.id)||Date.now();
-            return obj;
-          }).filter(r=>r.org);
-          contacts=rows;
-        }
-        renderDash();renderContacts();renderActivity();
-        toast('Loaded '+contacts.length+' prospects!');
-      }catch(err){toast('Import failed — check file format.');}
-    };
-    reader.readAsText(file);
+function handleImport(inputEl){
+  const file=inputEl.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const text=ev.target.result;
+      if(file.name.endsWith('.json')){
+        const data=JSON.parse(text);
+        if(data.contacts){contacts=data.contacts;}
+        if(data.activity){activity=data.activity;}
+      } else {
+        // Robust CSV parser — handles \r\n, quoted fields, commas inside quotes
+        const lines=text.replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n').filter(l=>l.trim());
+        const headers=parseCSVLine(lines[0]);
+        const rows=lines.slice(1).map(line=>{
+          const vals=parseCSVLine(line);
+          const obj={touches:[],t1:null};
+          headers.forEach((h,i)=>{obj[h]=(vals[i]||'').trim();});
+          obj.id=parseInt(obj.id)||Date.now()+Math.random();
+          return obj;
+        }).filter(r=>r.org&&r.org.length>0);
+        contacts=rows;
+      }
+      activity=[];
+      renderDash();
+      renderContacts();
+      nav('contacts');
+      toast('✓ Loaded '+contacts.length+' prospects!');
+    }catch(err){
+      toast('Import error: '+err.message);
+      console.error(err);
+    }
+    inputEl.value='';
   };
-  input.click();
+  reader.readAsText(file);
+}
+
+function parseCSVLine(line){
+  const vals=[];
+  let cur='',inQ=false;
+  for(let i=0;i<line.length;i++){
+    const ch=line[i];
+    if(ch==='"'){
+      if(inQ&&line[i+1]==='"'){cur+='"';i++;}
+      else{inQ=!inQ;}
+    } else if(ch===','&&!inQ){
+      vals.push(cur);cur='';
+    } else {
+      cur+=ch;
+    }
+  }
+  vals.push(cur);
+  return vals;
 }
 
 function resetAll(){
-  if(!confirm('Reset to seed contacts? Any changes this session will be lost.'))return;
-  contacts=[...SEED];activity=[];
-  saveC(contacts);saveA(activity);
-  renderDash();renderContacts();renderActivity();
-  toast('Reset to '+contacts.length+' seed contacts.');
+  if(!confirm('Reset to all 44 seed contacts? Any changes this session will be lost.'))return;
+  contacts=[...SEED.map(c=>({...c,touches:[...(c.touches||[])]}))];
+  activity=[];
+  renderDash();
+  renderContacts();
+  renderActivity();
+  try{renderSeq();}catch(e){}
+  toast('Reset — '+contacts.length+' contacts loaded.');
 }
 
 let contacts=[], activity=[], currentFilter='all';
