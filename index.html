@@ -172,7 +172,191 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);font-
 .copy-variant-tabs{display:flex;gap:6px;margin-bottom:10px}
 .copy-variant-tab{padding:4px 12px;border-radius:16px;font-size:11px;font-weight:500;cursor:pointer;border:.5px solid var(--bd);background:var(--bg);color:var(--mu);transition:all .1s}
 .copy-variant-tab.active{background:var(--nav);color:var(--ac);border-color:var(--nav)}
-@media(max-width:768px){.app{grid-template-columns:1fr}.nav{display:none}.metrics{grid-template-columns:1fr 1fr}}
+
+/* ── MOBILE LAYOUT (≤600px) ────────────────────────────── */
+@media(max-width:768px){.metrics{grid-template-columns:1fr 1fr}}
+
+@media(max-width:600px){
+
+  /* ── LAYOUT SHELL ── */
+  .app{display:flex;flex-direction:column;height:100dvh;overflow:hidden;
+       grid-template-columns:unset}
+  .nav{display:none}               /* sidebar gone */
+  .main{flex:1;overflow:hidden;display:flex;flex-direction:column;min-height:0}
+
+  /* ── TOPBAR ── */
+  .topbar{padding:10px 14px;gap:8px;flex-shrink:0}
+  .tb-title{font-size:15px}
+  .tb-sub{display:none}
+  .tba .btn:not(.btn-p){display:none}  /* hide secondary btns */
+  .tba .btn-p{padding:7px 12px;font-size:12px}
+
+  /* ── SCROLLABLE CONTENT ── */
+  .content{flex:1;overflow-y:auto;padding:12px;-webkit-overflow-scrolling:touch;
+           padding-bottom:80px}  /* room for tab bar */
+  .screen{display:none}
+  .screen.active{display:block}
+
+  /* ── METRICS ── */
+  .metrics{grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+  .metric{padding:10px 12px}
+  .mval{font-size:20px}
+
+  /* ── CONTACT CARDS (queue + contacts) ── */
+  .qcard{margin-bottom:8px;border-radius:12px}
+  .qcard-hd{padding:12px 14px;flex-wrap:nowrap;gap:10px}
+  .av{width:40px;height:40px;font-size:13px;flex-shrink:0}
+  .cn{font-size:14px}
+  .cm{font-size:11px}
+  .qcard-bd{padding:10px 14px}
+  .qacts{gap:6px}
+  .qacts .btn{padding:8px 12px;font-size:12px;border-radius:8px}
+
+  /* hide tier badges in list to save space */
+  .qcard-hd .bt1,.qcard-hd .bt2,.qcard-hd .bt3,.qcard-hd .bt4{display:none}
+
+  /* ── CONTACT TABLE → CARD LIST ── */
+  .ctbl thead{display:none}
+  .ctbl,.ctbl tbody,.ctbl tr,.ctbl td{display:block;width:100%}
+  .ctbl tr{background:var(--sf);border-radius:10px;margin-bottom:8px;
+           border:.5px solid var(--bd);padding:10px 12px;position:relative}
+  .ctbl tr:hover td{background:transparent}
+  .ctbl td{padding:2px 0;border:none;font-size:12px}
+  .ctbl td:first-child{font-weight:600;font-size:13px;color:var(--tx);margin-bottom:4px}
+  .ctbl td:nth-child(2){color:var(--mu);font-size:11px}
+  .ctbl td:nth-child(3),.ctbl td:nth-child(4){display:inline-block;margin-right:4px}
+  .ctbl td:last-child{position:absolute;top:10px;right:10px}
+
+  /* ── SECTION HEADERS ── */
+  .shdr{margin-bottom:10px;flex-wrap:wrap;gap:8px}
+  .stitle{font-size:14px}
+  .shdr .tba,.shdr>div:last-child{flex-wrap:wrap;gap:6px}
+  .shdr input[type=text]{font-size:13px;padding:8px 10px;border-radius:8px;
+                         width:100%;max-width:100%}
+  /* hide the checkbox select-all on mobile */
+  .shdr #sel-all, .shdr #sel-count{display:none}
+  .shdr .btn-sm{padding:8px 12px;font-size:12px}
+
+  /* ── PANELS ── */
+  .panel{padding:14px}
+  .frow{grid-template-columns:1fr;gap:10px}
+  .fi,.fsel{font-size:14px;padding:10px 12px;border-radius:8px}
+  .rbox{font-size:13px;padding:10px 12px;border-radius:8px}
+  .flbl{font-size:11px}
+
+  /* ── SEQUENCE BAR ── */
+  .seq-bar{flex-direction:column;align-items:flex-start;gap:10px;padding:12px 14px}
+  .seq-steps{gap:6px}
+  .seq-step{width:30px;height:30px;font-size:11px}
+
+  /* ── MODAL → BOTTOM SHEET ── */
+  .modal-ov{align-items:flex-end}
+  .modal-ov.open{display:flex}
+  .modal,.log-modal{
+    width:100% !important;
+    max-width:100% !important;
+    max-height:90dvh;
+    border-radius:20px 20px 0 0;
+    padding:0;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+  }
+  .modal::before,.log-modal::before{
+    content:'';display:block;width:36px;height:4px;
+    background:rgba(0,0,0,0.15);border-radius:2px;
+    margin:12px auto 0;flex-shrink:0;
+  }
+  .modal-title{
+    padding:14px 18px 10px;font-size:16px;margin-bottom:0;
+    border-bottom:.5px solid var(--bd);flex-shrink:0;
+  }
+  #mod-body,#log-body{
+    flex:1;overflow-y:auto;padding:14px 18px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .modal-acts{
+    padding:12px 18px 20px;margin-top:0;
+    border-top:.5px solid var(--bd);flex-shrink:0;
+    display:flex;flex-wrap:wrap;gap:8px;
+    /* safe area for bottom notch phones */
+    padding-bottom:calc(20px + env(safe-area-inset-bottom));
+  }
+  .modal-acts .btn{flex:1;min-width:100px;text-align:center;
+                   padding:11px;font-size:13px;border-radius:10px}
+
+  /* ── BOTTOM TAB BAR ── */
+  .mob-tabs{
+    display:flex;
+    position:fixed;bottom:0;left:0;right:0;
+    height:calc(56px + env(safe-area-inset-bottom));
+    background:var(--nav);
+    border-top:1px solid rgba(255,255,255,0.08);
+    z-index:100;
+    padding-bottom:env(safe-area-inset-bottom);
+  }
+  .mob-tab{
+    flex:1;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:3px;cursor:pointer;
+    color:rgba(255,255,255,0.35);font-size:10px;font-weight:500;
+    padding:6px 4px 4px;
+    transition:color .15s;
+    font-family:'DM Sans',sans-serif;
+    position:relative;
+  }
+  .mob-tab.active{color:var(--ac)}
+  .mob-tab.active svg{opacity:1}
+  .mob-tab svg{opacity:.35;transition:opacity .15s}
+  .mob-tab-badge{
+    position:absolute;top:5px;right:calc(50% - 16px);
+    background:var(--ac);color:var(--nav);
+    font-size:9px;font-weight:700;
+    padding:1px 5px;border-radius:8px;line-height:1.4;
+  }
+
+  /* ── TOAST ── */
+  .toast{bottom:70px}  /* above tab bar */
+
+  /* ── COPY BLOCKS ── */
+  .cblock{padding:10px}
+  .ctext{font-size:12px}
+  .cprev{font-size:11px}
+
+  /* ── LIB TABS ── */
+  .lib-tabs{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px;
+            scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .lib-tabs::-webkit-scrollbar{display:none}
+  .lib-tab{white-space:nowrap}
+
+  /* ── UPLOAD ZONE ── */
+  .uz{padding:20px}
+  .uz-lbl{font-size:12px}
+
+  /* ── BULK BAR ── */
+  .bulk-bar{font-size:11px;flex-wrap:wrap;gap:6px;padding:8px 12px}
+
+  /* ── EMPTY STATE ── */
+  .empty{padding:30px 16px}
+  .empty-icon{font-size:26px}
+}
+
+/* ── TAB BAR: hide on desktop ── */
+@media(min-width:601px){.mob-tabs{display:none}}
+
+
+@media(max-width:600px){
+  /* override inline styles on search inputs */
+  #csrch{width:100% !important;font-size:14px !important}
+  #cfilt{width:100% !important;font-size:14px !important}
+  /* contacts shdr layout: stack vertically */
+  #s-contacts .shdr{flex-direction:column;align-items:stretch}
+  #s-contacts .shdr>div{width:100%}
+  #s-contacts .shdr>div:first-child{display:none} /* hide checkbox row */
+  /* queue shdr */
+  #s-queue .shdr{flex-direction:column;align-items:stretch}
+  /* make filter row flex on mobile */
+  #s-contacts .shdr>div:last-child{display:flex;flex-direction:column;gap:8px}
+}
 </style>
 </head>
 <body>
@@ -628,54 +812,54 @@ const COPY={
 
 // ── PRE-SEEDED CONTACTS ──────────────────────────────────────────────────────
 const SEED_CONTACTS=[
-{id:'hd1',org:'Comerica Bank',cat:'bank',fn:'Wendy',ln:'Bridges',ttl:'EVP & Exec Director Corporate Affairs - NOTE: Comerica merged into Fifth Third Feb 2026',email:'wbridges@comerica.com',li:'',intro:'',notes:'Also: David Milton (Dallas Market President), Tiffanie Rice (Regional External Affairs Manager). Comerica contributed $300K+ to women-owned business programs in 2025.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd2',org:'Bank of America Dallas',cat:'bank',fn:'Jennifer',ln:'Chandler',ttl:'President, BofA Dallas; 2026 DRC Vice Chair; 2027 DRC Board Chair',email:'jennifer.chandler@bofa.com',li:'',intro:'Dallas Regional Chamber connection',notes:'Jennifer Chandler is President of BofA Dallas AND the 2026 DRC Vice Chair. BofA is Official Bank of FIFA WC 2026. Jennifer was on DRC CEO search committee.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd3',org:'Frost Bank',cat:'bank',fn:'Rod',ln:'Washington',ttl:'Dallas Region President',email:'rod.washington@frostbank.com',li:'',intro:'',notes:'Announced Texas Rangers financial literacy partnership April 2026. Email format: first.last@frostbank.com. Also: Bill Day (SVP Corporate Communications).',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd4',org:'Vista Bank',cat:'bank',fn:'John',ln:'Steinmetz',ttl:'President & CEO',email:'',li:'',intro:'',notes:'Growing Texas community bank. Smaller bank = faster decisions.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd5',org:'State Farm',cat:'ins',fn:'',ln:'',ttl:'Community Affairs Manager OR high-performing Dallas agent',email:'',li:'',intro:'',notes:'Reach BOTH regional marketing AND a high-performing Dallas agent. Agents have local budgets and move faster.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd6',org:'Allstate',cat:'ins',fn:'',ln:'',ttl:'VP Corporate Responsibility OR Director Multicultural Marketing',email:'',li:'',intro:'',notes:'Good Hands Project focuses on economic empowerment. Strong women-in-business CSR track record.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd7',org:'USAA',cat:'ins',fn:'',ln:'',ttl:'Director Community Partnerships OR VP Corporate Social Responsibility',email:'',li:'',intro:'',notes:'San Antonio HQ but heavy Dallas presence. USAA members ARE the HER Texas audience.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd8',org:'AT&T',cat:'corp',fn:'Nicole',ln:'Anderson',ttl:'President AT&T Foundation - DEPARTED for Virtualitics - role likely vacant',email:'nicole.anderson@att.com',li:'',intro:'',notes:'Dallas HQ moving to Plano. AT&T WOMEN internal initiative. Hometown angle + FIFA connection.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd9',org:'Toyota North America',cat:'corp',fn:'Tellis',ln:'Bethel',ttl:'Chief Diversity Officer & Group VP Social Innovation',email:'',li:'',intro:'',notes:'Toyota NA HQ in Plano. Active community investment. Lead with Plano/DFW community partnership.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd10',org:'Southwest Airlines',cat:'corp',fn:'Laura',ln:'Nieto',ttl:'Managing Director, Brand Partnerships & Community Engagement',email:'',li:'',intro:'',notes:'Love Field Dallas HQ. Heart of the Community program is the entry point.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd11',org:'McKesson',cat:'corp',fn:'Pete',ln:'Slone',ttl:'SVP, Corporate Public Affairs',email:'',li:'',intro:'',notes:'Relocated HQ to Irving/Las Colinas. Women\'s health + entrepreneurship intersection.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd12',org:'CBRE',cat:'corp',fn:'Patrick',ln:'McGown',ttl:'Executive Managing Director & Market Leader DFW',email:'',li:'',intro:'',notes:'Internal GROW women\'s network. Real estate angle connects to HER Dallas members building businesses.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd13',org:'Blue Cross Blue Shield of Texas',cat:'health',fn:'Patty',ln:'Escoe',ttl:'VP Texas Plan Operations & President, The Caring Foundation of TX',email:'patricia.escoe@bcbstx.com',li:'',intro:'Dallas Regional Chamber',notes:'Dallas HQ. Women\'s health + financial health intersection. Healthy Communities initiative is entry point. Jim Springfield just stepped down as DRC Chair.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd14',org:'Baylor Scott & White Health',cat:'health',fn:'Jessica',ln:'Olson',ttl:'SVP, Government Affairs & Community Investment',email:'',li:'',intro:'',notes:'Largest not-for-profit health system in Texas. Community benefit mission + women\'s health entrepreneurship.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd15',org:'UT Southwestern Medical Center',cat:'health',fn:'Amanda',ln:'Billings',ttl:'Vice President for Development',email:'',li:'',intro:'',notes:'Research powerhouse with active women\'s leadership programs.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd16',org:'Texas Health Resources',cat:'health',fn:'David',ln:'Tesmer',ttl:'Chief Community & Public Policy Officer',email:'',li:'',intro:'',notes:'29 hospitals across North Texas. Community health + women\'s economic wellness pairing.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd17',org:"Children's Health",cat:'health',fn:'Matt',ln:'Moore',ttl:'Chief External Relations Officer & Chief of Staff',email:'',li:'',intro:'',notes:'Dallas-based, deeply community-rooted. Investing in women founders creates stronger families — their mission language.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd18',org:'City of Dallas',cat:'civic',fn:'',ln:'',ttl:'Director Office of Economic Development OR Director Office of Small Business',email:'',li:'',intro:'',notes:'Active women\'s business development programs. FIFA World Cup economic impact story is the hook.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd19',org:'City of Forney',cat:'civic',fn:'',ln:'',ttl:'City Manager OR Mayor\'s Office',email:'',li:'',intro:'',notes:'Fast-growing Kaufman County city. Participation signals regional reach beyond Dallas proper.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd20',org:'City of Plano',cat:'civic',fn:'',ln:'',ttl:'Director Economic Development OR City Manager',email:'',li:'',intro:'Toyota / AT&T Plano connection',notes:'Corporate HQ row: Toyota, AT&T, Liberty Mutual. Women-owned businesses active economic dev priority.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd21',org:'Dallas Regional Chamber',cat:'chamber',fn:'Brad',ln:'Cheves',ttl:'President & CEO (new Jan 2026)',email:'BCheves@dallaschamber.org',li:'',intro:'SMU connection — Cheves came from SMU SVP External Affairs',notes:'Brad Cheves joined Jan 2026 from SMU. New leader = new partnership opportunities. Jennifer Chandler (BofA) is DRC Vice Chair — warm intro path. Dana Jennings is EVP. Email: flast@dallaschamber.org',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd22',org:'North Texas Commission',cat:'chamber',fn:'Chris',ln:'Wallace',ttl:'President & CEO',email:'cwallace@ntc-dfw.org',li:'',intro:'',notes:'Represents 21 counties. FIFA + women\'s business activation = regional visibility they should support.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd23',org:'Plano Chamber of Commerce',cat:'chamber',fn:'Kelle',ln:'Marsalis',ttl:'President & CEO',email:'kmarsalis@planochamber.org',li:'',intro:'',notes:'Members include Toyota, Liberty Mutual, etc. Direct pipeline to Plano-anchored brands.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd24',org:'Dallas Economic Development Corporation',cat:'chamber',fn:'Linda',ln:'McMahon',ttl:'CEO, Dallas EDC (first CEO, since July 2024)',email:'',li:'',intro:'',notes:'Position HER Texas as a women-founder retention and growth tool.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd25',org:'Southern Methodist University',cat:'edu',fn:'Todd',ln:'Milbourn',ttl:'Dean, Cox School of Business (named March 2025)',email:'',li:'',intro:'DRC connection — Brad Cheves came from SMU',notes:'SMU Cox women\'s programs and alumni network directly overlap with HER Texas membership. Brad Cheves (new DRC CEO) was SVP External Affairs at SMU — strong warm path.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd26',org:'University of Texas at Dallas',cat:'edu',fn:'Prabhas',ln:'Moghe',ttl:'President, UT Dallas (since August 2025)',email:'president@utdallas.edu',li:'',intro:'',notes:'Strong entrepreneurship program. Research university angle = credibility for HER Texas brand.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd27',org:'Dallas College',cat:'edu',fn:'Justin',ln:'Lonon',ttl:'Chancellor (since March 2022)',email:'jlonon@dallascollege.edu',li:'',intro:'',notes:'80,000+ students across 7 campuses. Student population skews female. Pipeline partner.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd28',org:'The Dallas Morning News',cat:'media',fn:'Grant',ln:'Moise',ttl:'President & CEO and Publisher',email:'',li:'',intro:'',notes:'Most important media partner for legitimizing HER Texas. Approach as editorial partnership first.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd29',org:'D Magazine',cat:'media',fn:'Gillea',ln:'Allison',ttl:'President, D Magazine Partners',email:'gillea.allison@dmagazine.com',li:'',intro:'',notes:'D CEO property targets HER Texas audience directly. Media partnership gives editorial reach money can\'t buy.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd30',org:'PaperCity Dallas',cat:'media',fn:'Billy',ln:'Fong',ttl:'Dallas & Fort Worth Editor-in-Chief',email:'bfong@papercitymag.com',li:'',intro:'',notes:'Luxury lifestyle magazine for affluent Dallas women. Exactly the HER Texas audience.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd31',org:'Dallas Weekly',cat:'media',fn:'Patrick',ln:'Washington',ttl:'Publisher (since January 2025)',email:'',li:'',intro:'',notes:'Leading African American-focused media outlet in DFW. Critical for full diversity of Dallas women entrepreneurs.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd32',org:"Texas Women's Foundation",cat:'women',fn:'Karen',ln:'Hughes White',ttl:'President & CEO',email:'kwhite@txwf.org',li:'',intro:'Peer partnership — not a sponsorship ask',notes:'Karen Hughes White (CEO since May 2024) + Cris Zertuche Wong (Board Chair, former Goldman Sachs MD). TWF research on women in Texas IS your audience data for every sponsor pitch. Peer partnership conversation.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd33',org:'Women Presidents Organization — Dallas',cat:'women',fn:'Camille',ln:'Burns',ttl:'CEO, Women Presidents Organization',email:'',li:'',intro:'',notes:'WPO Dallas members are CEOs with $2M+ revenue. Tier 1 VIP luncheon territory. Approach as peer.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd34',org:"Women's Business Council Southwest (WBCS)",cat:'supdiv',fn:'Bliss',ln:'Coulter',ttl:'President & CEO (since 2021)',email:'bcoulter@wbcsouthwest.org',li:'',intro:'WARMEST — advisory board member in WBCS certification process now',notes:'CRITICAL: Advisory board member is in WBCS certification. This is partner AND multiplier. WBCS has access to every corporate supplier diversity officer in DFW — warm intro to half this list. Call before going cold anywhere else.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd35',org:'NMSDC',cat:'supdiv',fn:'Donald',ln:'Cravins Jr.',ttl:'President and CEO, NMSDC',email:'',li:'',intro:'',notes:'Certifies minority-owned businesses. Membership overlaps directly with HER Texas. Co-activation and referral partnership.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd36',org:'DFW Business Council (formerly DFW MSDC)',cat:'supdiv',fn:'Margo',ln:'Posey',ttl:'President and CEO, DFW Business Council',email:'',li:'',intro:'',notes:'Direct relationships with supplier diversity officers at every major DFW corporation. Partnership = warm intros to half this list.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd37',org:'Dallas Social Venture Partners',cat:'np',fn:'Catherine',ln:'Cuellar',ttl:'CEO (incoming)',email:'',li:'',intro:'',notes:'Catherine Cuellar named new SVP Dallas CEO. Known Dallas civic leader. Crossover community partnership.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd38',org:"Hispanic Women's Network of Texas",cat:'np',fn:'Dr. Catherine',ln:'Olivarez',ttl:'Dallas Chapter Chair, HWNT (2025-2026)',email:'',li:'',intro:'',notes:'Direct peer organization. Co-activation and community partnership. Both serve overlapping audiences.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd39',org:'United Way of Metropolitan Dallas',cat:'np',fn:'Jennifer',ln:'Sampson',ttl:'President & CEO - DEPARTING Sept 30 2026 for Stephens Greth Foundation',email:'jsampson@unitedwaydallas.org',li:'',intro:'',notes:"United Way's Women United program focuses on women's economic mobility. Direct mission alignment.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd40',org:'Communities Foundation of Texas',cat:'np',fn:'Wayne',ln:'White',ttl:'President & CEO',email:'wwhite@cftexas.org',li:'',intro:'Perot/Hunt family donor connection',notes:'Manages $2B+ in charitable assets. Donor community includes Perot, Hunt families. Connect their donors with women founders.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd41',org:'Commit Partnership',cat:'np',fn:'Todd',ln:'Williams',ttl:'Founding Chairman & CEO',email:'twilliams@commitpartnership.org',li:'',intro:'Dallas College connection',notes:"Drives education and economic opportunity in DFW. Women's workforce development focus.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd42',org:'Ebby Halliday Companies',cat:'np',fn:'Betsy',ln:'Cameron',ttl:'President (named January 2025)',email:'bcameron@ebby.com',li:'',intro:'',notes:'Most recognized women-founded brand in DFW real estate history. Community giving + predominantly women employee base.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd43',org:'New Friends New Life',cat:'np',fn:'Bianca',ln:'Davis',ttl:'Chief Executive Officer',email:'bdavis@newfriendsnewlife.org',li:'',intro:'',notes:'Restores women from trafficking through education and employment. Invite as community peer, not recipient. Signals HER Texas\'s commitment to the full spectrum of Dallas women.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
-{id:'hd44',org:'ChildCareGroup',cat:'np',fn:'Tori',ln:'Mannes',ttl:'CEO & President (since 2011)',email:'tmannes@childcaregroup.org',li:'',intro:'',notes:'Childcare access directly enables women to participate in the workforce. HER Texas members are the women their work makes possible.',tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()}
+{id:'hd1',org:'Fifth Third Bank (formerly Comerica - merged Feb 2 2026)',cat:'bank',fn:'Wendy',ln:'Bridges',ttl:'EVP Corporate Affairs (Comerica/FITB integration - Brian Enzler is new NTX Region President)',email:'wbridges@comerica.com',li:'',intro:'',notes:"HOOK: Brand new chapter — just became Chief Community Impact Officer at Fifth Third after Comerica merger closed Feb 2 2026. LinkedIn: posted 'Here's to new beginnings — energized and curious about what's possible.' Nominated for Capital Access Champion of the Year at 2026 DEC Network State of Entrepreneurship. Key angles: women entrepreneurs, capital access, small biz inclusion. Boards: NOMI Network, Downtown Dallas Inc, Texas Women's Foundation Maura Award committee, Junior League of Dallas sustainer. Raised in TX, UT Austin journalism grad. Husband Brad, daughter Olivia.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd2',org:'Bank of America Dallas',cat:'bank',fn:'Jennifer',ln:'Chandler',ttl:'President, BofA Dallas; 2026 DRC Vice Chair; 2027 DRC Board Chair',email:'jennifer.chandler@bofa.com',li:'',intro:'Dallas Regional Chamber connection',notes:"HOOK: Bank of America is the OFFICIAL BANK OF FIFA WORLD CUP 2026 — massive direct alignment with event. LinkedIn: active philanthropy posts, DRC engagement, arts focus. Dallas native, mother of four, Longhorn. On Boards: Dallas Citizens Council, Junior League of Dallas, DMA. Confirmed 2027 DRC Board Chair (currently 2026 Vice Chair). Championed BofA community investment in North Texas. Loves arts and philanthropy. Entry angle: FIFA overlap + HER Dallas July 14 Semifinal event is exactly the kind of women-led Dallas moment BofA's World Cup platform should amplify.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd3',org:'Frost Bank',cat:'bank',fn:'Rod',ln:'Washington',ttl:'Dallas Region President',email:'rod.washington@frostbank.com',li:'',intro:'',notes:"HOOK: Dallas native, 35+ years banking, deeply passionate about Southern Dallas investment. LinkedIn 2026 posts: explicitly cited FIFA World Cup as 'spotlight moment for Dallas'; led Frost to $595M+ mortgage goal in 2025 (75% approval rate). April 1 2026: Frost just became Official Financial Literacy Partner of Texas Rangers — first ever MLB deal. 66 DFW financial centers. Runs Frost's Business Banking Series for Dallas entrepreneurs. Boards: Dallas Methodist Hospital Foundation, Real Estate Council Community Fund. Entry angle: he named FIFA himself as major 2026 opportunity — lead with that.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd4',org:'Vista Bank',cat:'bank',fn:'John',ln:'Steinmetz',ttl:'President & CEO',email:'JohnSteinmetz@vistabank.com',li:'',intro:'',notes:"HOOK: First non-family CEO in Vista Bank's 113-year history. Built bank from $58M rural West Texas to $2B+ asset powerhouse. 2024 EY Entrepreneur of the Year Southwest winner. DCEO Dallas 500 and Corporate Citizen award. LinkedIn: active on entrepreneurship, DFW growth, banking innovation. Fair Park connection: opened first Banking Center/Financial ecosystem in Fair Park in over 3 decades — direct tie to FIFA Fan Festival venue. On Cotton Bowl Board; past Dallas Citizens Council board. Fun fact: was motocross champion in his youth. Entry angle: Fair Park footprint + FIFA + women entrepreneurship story.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd5',org:'State Farm',cat:'ins',fn:'',ln:'',ttl:'Community Affairs Manager OR high-performing Dallas agent',email:'',li:'',intro:'',notes:"Reach BOTH regional marketing AND a high-performing Dallas agent. Agents have local budgets and move faster.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd6',org:'Allstate',cat:'ins',fn:'',ln:'',ttl:'VP Corporate Responsibility OR Director Multicultural Marketing',email:'',li:'',intro:'',notes:"Good Hands Project focuses on economic empowerment. Strong women-in-business CSR track record.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd7',org:'USAA',cat:'ins',fn:'',ln:'',ttl:'Director Community Partnerships OR VP Corporate Social Responsibility',email:'',li:'',intro:'',notes:"San Antonio HQ but heavy Dallas presence. USAA members ARE the HER Texas audience.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd8',org:'AT&T',cat:'corp',fn:'Mylayna',ln:'Albright',ttl:'VP Corporate Responsibility (successor to Nicole Anderson who departed for Virtualitics)',email:'mylayna.albright@att.com',li:'',intro:'',notes:"HOOK: VP Corporate Responsibility at AT&T, successor to Nicole Anderson. Focus: digital divide, Connected Learning Centers ($5B commitment to connect 25M people by 2030). Feb 2026 podcast appearance on 'digital dignity' for older adults. AT&T Conference Board 2025 Corporate Responsibility Award winner. Ohio State law grad. 64 CLCs across DFW and nationwide. Entry angle: AT&T's community investment is about empowerment — HER Dallas aligns on women's economic opportunity and access.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd9',org:'Toyota North America',cat:'corp',fn:'Tellis',ln:'Bethel',ttl:'Group VP & CFO Toyota Financial Services / CEO Toyota Financial Savings Bank',email:'tellis.bethel@toyota.com',li:'',intro:'',notes:"HOOK: Now Group VP and CFO of Toyota Financial Services AND CEO of Toyota Financial Savings Bank — dual role since Oct 2025. Came from being TMNA Chief Diversity Officer and Chief Social Innovation Officer — that DEI background is a powerful entry angle. Toyota HQ is in Plano; $150B+ in assets. Clark Atlanta University grad. Entry angle: Toyota is among the most invested DFW corporate citizens — HER Dallas aligns with their diversity and community investment mission.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd10',org:'Southwest Airlines',cat:'corp',fn:'Laura',ln:'Nieto',ttl:'Managing Director, Brand Partnerships & Community Engagement',email:'laura.nieto@wnco.com',li:'',intro:'',notes:"HOOK: Managing Director, Brand Partnerships and Community Engagement at Southwest Airlines (25+ year company veteran). LATINA Style magazine cover feature Nov 2025 — feature was about her leadership journey. Built Southwest first-ever Community Affairs function from scratch. LinkedIn: active on women in leadership, community partnerships, cultural events. Recent posts: San Diego Symphony partnership, President Award for culture. Quote: It was about people — showing up as a neighbor in the places where we lived and worked. Entry angle: Southwest is a Dallas institution — HER Dallas July 14 Semifinal event is a hometown women-led moment tailor-made for Southwest community investment.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd11',org:'McKesson',cat:'corp',fn:'Pete',ln:'Slone',ttl:'SVP Corporate Public Affairs - RETIRED - research McKesson Dallas community contact',email:'',li:'',intro:'',notes:"Relocated HQ to Irving/Las Colinas. Women's health + entrepreneurship intersection.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd12',org:'CBRE',cat:'corp',fn:'Jeremy',ln:'McGown',ttl:'Executive Managing Director & DFW Market Leader (replaced Patrick McGown 2025)',email:'jeremy.mcgown@cbre.com',li:'',intro:'',notes:"HOOK: DFW Market Leader at CBRE since 2025. Former US Navy officer who confronted pirates off Somalia — Naval Academy grad, connected to Dallas via Roger Staubach. CBRE posted record $40.6B revenue in 2025. Oversees 500+ DFW professionals. Partners with Paul Quinn College and UNT Dallas for real estate intern program. LinkedIn: active on DFW market outlook, capital deployment, talent. Entry angle: FIFA World Cup will drive historic commercial real estate activity in Dallas — HER Dallas sponsorship visibility during that period.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd13',org:'Blue Cross Blue Shield of Texas',cat:'health',fn:'Patty',ln:'Escoe',ttl:'VP Texas Plan Operations & President, The Caring Foundation of TX',email:'patricia.escoe@bcbstx.com',li:'',intro:'Dallas Regional Chamber',notes:"HOOK: VP Texas Plan Operations at BCBSTX. 2025-2026 Blue Impact grants include New Friends New Life — direct bridge to Bianca Davis hd43. Leads Caring Foundation of Texas for free preventive healthcare. Mentoring Monday regular. Entry angle: You are already investing in NFNL — HER Dallas is the next tier of that same mission.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd14',org:'Baylor Scott & White Health',cat:'health',fn:'Jessica',ln:'Olson',ttl:'SVP, Government Affairs & Community Investment',email:'jessica.olson@bswhealth.org',li:'',intro:'',notes:"HOOK: SVP Government Affairs and Community Investment at Baylor Scott and White Health. One of the largest faith-based health systems in the US. Entry angle: BSW women health mission overlaps with HER Dallas focus on economic security and health for Texas women.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd15',org:'UT Southwestern Medical Center',cat:'health',fn:'Amanda',ln:'Billings',ttl:'Vice President for Development',email:'amanda.billings@utsouthwestern.edu',li:'',intro:'',notes:"HOOK: VP for Development and Alumni Relations at UT Southwestern since 2014. Background: 13 years at American Red Cross. Quote: Make sure your voice is heard. Entry angle: Philanthropic partnership for event visibility with a top-ranked medical center audience.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd16',org:'Texas Health Resources',cat:'health',fn:'David',ln:'Tesmer',ttl:'Chief Community & Public Policy Officer',email:'DavidTesmer@texashealth.org',li:'',intro:'',notes:"HOOK: SVP Community Engagement and Advocacy at Texas Health Resources. 30+ years at THR. Past chair North Texas Commission and Greater Arlington Chamber. THR gives $2.5M+ annually in sponsorships. Entry angle: THR invests deeply in DFW nonprofits — HER Dallas aligns with their DEI and women health initiatives.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd17',org:"Children's Health",cat:'health',fn:'Matt',ln:'Moore',ttl:'Chief External Relations Officer & Chief of Staff',email:'mmoore@childrens.com',li:'',intro:'',notes:"HOOK: VP of Community Benefit at Children's Health Dallas, one of top pediatric hospitals nationally. Focus: healthy communities, children's wellbeing. Dallas-based. Children's Health is active in DFW sponsorships and women's leadership circles. Entry angle: investing in women leaders directly improves outcomes for families and children — natural alignment with Children's Health mission.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd18',org:'City of Dallas',cat:'civic',fn:'',ln:'',ttl:'Director Office of Economic Development OR Director Office of Small Business',email:'',li:'',intro:'',notes:"Active women's business development programs. FIFA World Cup economic impact story is the hook.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd19',org:'City of Forney',cat:'civic',fn:'',ln:'',ttl:'City Manager OR Mayor\'s Office',email:'',li:'',intro:'',notes:"Fast-growing Kaufman County city. Participation signals regional reach beyond Dallas proper.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd20',org:'City of Plano',cat:'civic',fn:'',ln:'',ttl:'Director Economic Development OR City Manager',email:'',li:'',intro:'Toyota / AT&T Plano connection',notes:"Corporate HQ row: Toyota, AT&T, Liberty Mutual. Women-owned businesses active economic dev priority.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd21',org:'Dallas Regional Chamber',cat:'chamber',fn:'Brad',ln:'Cheves',ttl:'President & CEO (new Jan 2026)',email:'BCheves@dallaschamber.org',li:'',intro:'SMU connection — Cheves came from SMU SVP External Affairs',notes:"HOOK: Brand new CEO of Dallas Regional Chamber (started Jan 5 2026). Currently building DRC's 2027-2029 strategic plan. Focus areas: education and workforce development. LinkedIn barely active in new role — still in honeymoon phase, eager to build relationships. Key boards: Broadway Dallas, New Friends New Life (direct HER Dallas mission overlap!), Texas Lyceum, Dallas Assembly, Dallas Council on Foreign Relations. Three sons all SMU Mustangs. Abilene Christian + Pepperdine JD. Former SMU VP for Development — led $1.65B campaign. Entry angle: New leader, new chapter — HER Dallas event is an early landmark partnership opportunity during his first year.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd22',org:'North Texas Commission',cat:'chamber',fn:'Chris',ln:'Wallace',ttl:'President & CEO',email:'cwallace@ntc-dfw.org',li:'',intro:'',notes:"HOOK: CEO of North Texas Commission — regional convening body for DFW governments and businesses. Focus on infrastructure, economic development, and workforce. Entry angle: FIFA World Cup is the defining regional event of 2026; HER Dallas represents the business community coming together around it.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd23',org:'Plano Chamber of Commerce',cat:'chamber',fn:'Kelle',ln:'Marsalis',ttl:'President & CEO',email:'kmarsalis@planochamber.org',li:'',intro:'',notes:"HOOK: President and CEO of Plano Chamber of Commerce, Dallas 500 honoree, 2025 chair of Texas Center for Chamber of Commerce Excellence. Big hook from Jan 2026: AT&T just announced move of its HQ to a 54-acre Plano campus — Kelle is front and center on that story, calling it a solidification of Plano as an economic engine. Entry angle: HER Dallas July 14 event brings together the broader DFW metro business community — Plano leadership belongs in that room.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd24',org:'Dallas Economic Development Corporation',cat:'chamber',fn:'Linda',ln:'McMahon',ttl:'CEO, Dallas EDC (first CEO, since July 2024)',email:'lmcmahon@dallas-ecodev.org',li:'',intro:'',notes:"HOOK: Inaugural CEO of Dallas EDC (started July 2024). April 9 2026 KERA interview on City Hall controversy — very much in the news. Passionate about Fair Park (calls it 'the jewel of the city') — FIFA Fan Festival IS at Fair Park. Raised in Lake Highlands, loves South Dallas neighborhoods. Former TREC CEO for 14 years. DCEO Civic Impact Award 2024. Entry angle: 'FIFA Fan Festival is in your territory — HER Dallas on July 14 is the business counterpart to that moment.'",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd25',org:'Southern Methodist University',cat:'edu',fn:'Todd',ln:'Milbourn',ttl:'Dean, Cox School of Business (named March 2025)',email:'tmilbourn@smu.edu',li:'',intro:'DRC connection — Brad Cheves came from SMU',notes:"HOOK: 10th Dean of SMU Cox, started June 1 2025 — new to Dallas. Former 25 years at WashU Olin. Passionate about entrepreneurship and DFW economic ecosystem. Active on LinkedIn on Parkland partnership and women in leadership. Entry angle: Cox has a warm HER Texas Advisory Board connection.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd26',org:'University of Texas at Dallas',cat:'edu',fn:'Prabhas',ln:'Moghe',ttl:'President, UT Dallas (since August 2025)',email:'president@utdallas.edu',li:'',intro:'',notes:"HOOK: President of UT Dallas. UTD is one of the fastest-growing research universities in Texas. Active in DFW economic development and workforce. Approach via institutional sponsorship — UTD has women's leadership programming. Generic entry via president@utdallas.edu.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd27',org:'Dallas College',cat:'edu',fn:'Justin',ln:'Lonon',ttl:'Chancellor (since March 2022)',email:'jlonon@dallascollege.edu',li:'',intro:'',notes:"HOOK: Chancellor of Dallas College, the chief barrier buster. Celebrating 60th anniversary in 2025. Advancing new downtown campus — spring 2026 developer selection. Bezos Academy childcare at two campuses. O Donnell Foundation $50M partnership with Commit. Quote: Our own structure was a barrier — I am in the barrier busting business. Boards: YMCA Dallas, North Texas Crime Commission. Grew up in rural Arkansas, came to Dallas for Mayor Ron Kirk administration. Entry angle: Childcare and workforce access are the barriers HER Dallas removes for women — perfect mission alignment.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd28',org:'The Dallas Morning News',cat:'media',fn:'Grant',ln:'Moise',ttl:'President & CEO and Publisher',email:'gmoise@dallasnews.com',li:'',intro:'',notes:"HOOK: President and CEO of Dallas Morning News (now Hearst-owned since 2025). Launched new 'This Is Home' brand campaign in March 2026 emphasizing community relevance, local journalists, rebuilding trust. Pulitzer Prize-winning executive editor Colleen McCain Nelson joined Aug 2025. LinkedIn: active posts on Hearst transition, 'Future of North Texas' journalism project. Dallas native family man (wife Katie, kids Macy, Lyle, Reid). Entry angle: 'This Is Home' is perfectly aligned with HER Dallas — this IS their home, these ARE their leaders, this IS a story worth telling.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd29',org:'D Magazine',cat:'media',fn:'Gillea',ln:'Allison',ttl:'President, D Magazine Partners',email:'gillea.allison@dmagazine.com',li:'',intro:'',notes:"HOOK: President of D Magazine Partners, daughter of founder Wick Allison. Responsible for advertising, partnerships, marketing for D brands. Board: Dwell with Dignity, Coalition for a New Dallas. D Magazine audience median HHI $340K, 83% top management. Entry angle: D Magazine audience is exactly the HER Dallas sponsor demographic.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd30',org:'PaperCity Dallas',cat:'media',fn:'Billy',ln:'Fong',ttl:'Dallas & Fort Worth Editor-in-Chief',email:'bfong@papercitymag.com',li:'',intro:'',notes:"HOOK: EIC of PaperCity Dallas and Fort Worth since 2021 — art history and museum background (Texas Association of Museums, Museum of Glass, High Museum of Art). Cover stories on Dallas society, charity events, luxury lifestyle. Recently published: April 1 2026 Culture piece. LinkedIn: mentions FWD>DFW initiative. PaperCity covers the social calendar for Dallas philanthropic circles. Entry angle: HER Dallas July 14 is a marquee women-led event in Dallas luxury/philanthropy space — exactly PaperCity territory.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd31',org:'Dallas Weekly',cat:'media',fn:'Patrick',ln:'Washington',ttl:'Chairman of the Board (former Publisher/CEO - wife Jess Washington now CEO)',email:'pwashington@dallasweekly.com',li:'',intro:'',notes:"HOOK: Patrick Washington is now Chairman of the Board at Dallas Weekly — his wife Jessica (Jess) Washington is now CEO and Director of Finance. Patrick is also Interim GM of Word In Black, a national Black journalism network. Strong Fair Park connection — worked with Fair Park Merchants Association. LinkedIn: active on Black media, community storytelling, cultural preservation. Entry angle: HER Dallas amplifies Black women leaders in the community — Dallas Weekly readership is a direct audience. Note: Direct outreach to Jess Washington as current CEO may also be appropriate.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd32',org:"Texas Women's Foundation",cat:'women',fn:'Karen',ln:'Hughes White',ttl:'President & CEO',email:'kwhite@txwf.org',li:'',intro:'Peer partnership — not a sponsorship ask',notes:"HOOK: CEO of Texas Women's Foundation (started May 2024, previous roles at Susan G. Komen, St. Jude, Tri Delta). Just launched Executive Leadership Accelerator program (Oct 2025 - May 2026) for senior women heading to C-suite — running RIGHT NOW. Key stat she actively cites: Women hold only 28% of top exec positions in Texas; TX ranks 49th in women's healthcare. 2025 Dallas 500. Maura Award honoree. Boards: TWF. Background: broadcast journalism, University of Georgia. Entry angle: ELA program and HER Dallas are pursuing identical outcomes — this is a natural partnership and cross-promotion moment.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd33',org:'Women Presidents Organization — Dallas',cat:'women',fn:'Camille',ln:'Burns',ttl:'CEO (New York-based; Dallas WPO chapter connection)',email:'cburns@womenpresidentsorg.com',li:'',intro:'',notes:"HOOK: CEO of Women Presidents Organization (NYC-based, but national reach). WPO serves women running $2M+ businesses. She has been at WPO since 2000, named CEO in 2019. Background: NYU, Baruch MBA, Harvard Business School nonprofit program. Quotes: 'Only 4% of women-owned businesses generate over $1M — we still have a long way to go.' DFW has active WPO chapter. Entry angle: HER Dallas event is a perfect WPO member pipeline — connect via DFW chapter.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd34',org:"Women's Business Council Southwest (WBCS)",cat:'supdiv',fn:'Bliss',ln:'Coulter',ttl:'President & CEO (since 2021)',email:'bcoulter@wbcsouthwest.org',li:'',intro:'WARMEST — advisory board member in WBCS certification process now',notes:"HOOK: WARMEST contact — Erika's WBE application goes through WBCS (submitted April 6 2026). Direct relationship. LinkedIn 2026: celebrating Trailblazers of the Southwest Gala, posted about DFW #2 nationally for women business owner growth, signed MOA with Fort Worth Hispanic Chamber to expand certification access. WBENC Board Member. Entry angle: 'As a WBE applicant going through your process, I'm also an Advisory Board member of HER Dallas — I'd love to bring you into this conversation.'",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd35',org:'NMSDC',cat:'supdiv',fn:'Donald',ln:'Cravins Jr.',ttl:'President and CEO, NMSDC',email:'dcravins@nmsdc.org',li:'',intro:'',notes:"HOOK: Permanent President & CEO of NMSDC (confirmed Nov 2025, previously Interim starting Aug 2025). Former Under Secretary of Commerce for MBDA under Biden. Louisiana native, saw his parents run a small business. Passionate about MBEs and economic empowerment. Annual Conference was Nov 2-5 2025 in Miami under theme 'Navigating Our New Economy.' Entry angle: HER Dallas event connects women-owned businesses to corporate decision-makers — natural NMSDC partnership.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd36',org:'DFW Business Council (formerly DFW MSDC)',cat:'supdiv',fn:'Margo',ln:'Posey',ttl:'President and CEO, DFW Business Council',email:'mposey@dfwmsdc.com',li:'',intro:'',notes:"HOOK: President & CEO of DFW Business Council (formerly DFW MSDC — rebranded to avoid anti-DEI federal scrutiny). At helm since 1992 — longest-tenured leader in CRM. Helped FOUND the Women's Business Council Southwest. LinkedIn: active on supplier diversity, construction, economic equity. Boards: Dallas County Small Business Advocacy Committee chair, City of Fort Worth Equity Board chair, Dallas ISD MWBE Trustee Advisory Board. Entry angle: 'You literally helped create the women's business certification infrastructure in DFW — HER Dallas is the leadership summit that organization has been building toward.'",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd37',org:'Dallas Social Venture Partners',cat:'np',fn:'Catherine',ln:'Cuellar',ttl:'CEO (since January 1 2026 - succeeded Tony Fleo after months-long search)',email:'ccuellar@svpdallas.org',li:'',intro:'',notes:"HOOK: CEO of SVP Dallas (confirmed Jan 1 2026 — brand new role). Multi-sector background: Dallas Arts District CEO (doubled revenues), Oncor communications, City of Dallas, RefillWise. DART board, Greater Dallas Planning Council, Texans for the Arts. Fellow at Dallas Assembly. Lives downtown with husband Paul Williams (music producer). LinkedIn: active, posting about SVP Dallas investees, bigBANG! 2025. Entry angle: New leader, new chapter — HER Dallas event is exactly the kind of multi-sector civic moment SVP was built for.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd38',org:"Hispanic Women's Network of Texas",cat:'np',fn:'Dr. Catherine',ln:'Olivarez',ttl:'Dallas Chapter Chair 2025-2026 - Associate VP Dallas College',email:'colivarez@dallascollege.edu',li:'',intro:'',notes:"HOOK: 2025-2026 HWNT Dallas Chapter Chair (confirmed current — she was Chair-Elect last year, now Chair). Associate VP Articulation, Transfer & Educational Policy at Dallas College. PhD Higher Education from UNT. 10 years of HWNT involvement. Passionate about women's educational attainment and Latina leadership. NCCHC Leadership Development Fellow. Entry angle: HER Dallas July 14 event is a natural HWNT Dallas chapter event — bring the whole chapter.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd39',org:'United Way of Metropolitan Dallas',cat:'np',fn:'Jennifer',ln:'Sampson',ttl:'President & CEO - DEPARTING Sept 30 2026 to lead Stephens Greth Foundation',email:'jsampson@unitedwaydallas.org',li:'',intro:'',notes:"HOOK: DEPARTING Sept 30 2026 to become inaugural CEO of Stephens Greth Foundation. LinkedIn active weekly as of April 2026 — still fully engaged. Tom & Karen Falk $5M gift just announced. $63.8M raised 2023-2025, touched 1.7M North Texans in 2025. Data-driven GPS for social impact (Community Vulnerability Compass) is her signature. Boards: Commit Partnership, City Year Dallas, Hockaday School, Dallas Federal Reserve Business Council, YPO Dallas, International Women Forum Dallas. Fun: yoga enthusiast, Baylor Bear, music lover. Entry angle: Before your chapter closes Sept 30 — HER Dallas July 14 is a perfect final major event to champion as UWMD CEO.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd40',org:'Communities Foundation of Texas',cat:'np',fn:'Wayne',ln:'White',ttl:'President & CEO',email:'wwhite@cftexas.org',li:'',intro:'Perot/Hunt family donor connection',notes:"HOOK: CEO of Communities Foundation of Texas since 2023. 2025 Class of the Dallas Assembly. On DRC Board and SMU Lyle School Engineering Advisory Board. CFT runs North Texas Giving Day (nation's largest regional online giving event — $63.9M raised 2023). Just announced $1.5M grant to Dallas EDC. New $50M housing impact fund launching. Big Brothers Big Sisters mentor history. LinkedIn: active on affordable housing, scholarships, community philanthropy. Entry angle: CFT is a potential fund vehicle for HER Dallas programming; North Texas Giving Day is a fundraising platform opportunity.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd41',org:'Commit Partnership',cat:'np',fn:'Todd',ln:'Williams',ttl:'Founding Chairman & CEO',email:'twilliams@commitpartnership.org',li:'',intro:'Dallas College connection',notes:"HOOK: CEO of Commit Partnership — data-driven education nonprofit. O Donnell Foundation just gave SECOND $50M grant to Commit + Dallas College. Dallas County Economic Mobility Summit organized by Commit in 2026. Texas college enrollment hit all-time high fall 2025 (1.6M students). LinkedIn: active posts on economic mobility, college completion, workforce pipeline. Entry angle: Women economic mobility is both HER Dallas and Commit mission — this is an aligned investment.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd42',org:'Ebby Halliday Companies',cat:'np',fn:'Betsy',ln:'Cameron',ttl:'President (named January 2025)',email:'bcameron@ebby.com',li:'',intro:'',notes:"HOOK: New President of Ebby Halliday Companies since early 2025 — succeeded Carolyn Rosson who retired. 2026 Swanepoel Power 200 (#186) — top 200 most powerful in residential real estate, nationally recognized. Fourth-generation Dallasite. Before real estate: Special Education teacher, then worked at Genesis Women Shelter in Dallas. Active Dallas CASA children advocate for 7+ years. Ebby Halliday founded 1945 by Ebby Halliday herself — woman-led for most of its 80-year history. Entry angle: Ebby Halliday brand was built by a woman and has championed women — HER Dallas is a natural brand alignment for sponsorship.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd43',org:'New Friends New Life',cat:'np',fn:'Bianca',ln:'Davis',ttl:'Chief Executive Officer',email:'bdavis@newfriendsnewlife.org',li:'',intro:'',notes:"HOOK: CEO of New Friends New Life — helping exploited and trafficked women rebuild their lives. BCBSTX Blue Impact grant recipient 2025-2026. Brad Cheves DRC CEO serves on NFNL board. Entry angle: HER Dallas is aligned with NFNL mission — potential co-programming or marquee nonprofit partner.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()},
+{id:'hd44',org:'ChildCareGroup',cat:'np',fn:'Tori',ln:'Mannes',ttl:'CEO & President (since 2011)',email:'tmannes@childcaregroup.org',li:'',intro:'',notes:"HOOK: CEO/President of ChildCareGroup — $42M nonprofit, 420 staff, 124-year legacy, 40,000+ children and families across 12 Texas counties. ChildCareGroup was her first job after college — deep personal connection. JPMorgan Chase philanthropy background. Dallas Morning News letter to editor advocating for accessible childcare for working mothers. DRC panelist on early childhood education. Dallas 500 honoree. Quote: Children do better as their parents do better; when families thrive, communities succeed. Entry angle: Childcare access is the hidden infrastructure of women workforce participation — HER Dallas platform amplifies that message and aligns with ChildCareGroup mission.",tier:'tier3',ts:[],ltd:null,dnc:false,responded:false,ca:new Date().toISOString()}
 ];
 
 // ── DATA LAYER ────────────────────────────────────────────────────────────────
-const DATA_VERSION='v3_20260413b';
+const DATA_VERSION='v3_20260414e';
 const gc=()=>{try{const ver=localStorage.getItem('hd_ver');const d=localStorage.getItem('hd_c');if(!d||ver!==DATA_VERSION){const s=SEED_CONTACTS.map(c=>({...c}));localStorage.setItem('hd_c',JSON.stringify(s));localStorage.setItem('hd_ver',DATA_VERSION);return s;}return JSON.parse(d);}catch(e){return SEED_CONTACTS.map(c=>({...c}));}};
 const sc=c=>localStorage.setItem('hd_c',JSON.stringify(c));
 const ga=()=>{try{return JSON.parse(localStorage.getItem('hd_a')||'[]')}catch(e){return[]}};
@@ -923,6 +1107,10 @@ function go(id){
   if(id==='responses')rpopsel();
   if(id==='import')updateLastImportInfo();
   if(id==='add'){const d=document.getElementById('a11');if(d)d.value=today();}
+  // sync mobile tab bar
+  document.querySelectorAll('.mob-tab').forEach(t=>t.classList.remove('active'));
+  const _mt=document.getElementById('mtab-'+id);if(_mt)_mt.classList.add('active');
+
 }
 function rcontacts(){
   const filt=document.getElementById('cfilt').value||'all';
@@ -1222,5 +1410,141 @@ rdash();
 rlib();
 updateSeqBadge();
 </script>
+
+<!-- MOBILE BOTTOM TAB BAR -->
+<div class="mob-tabs" id="mob-tabs">
+  <div class="mob-tab active" id="mtab-dashboard" onclick="mobGo('dashboard')">
+    <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+      <rect x="1" y="1" width="6" height="6" rx="1"/>
+      <rect x="9" y="1" width="6" height="6" rx="1"/>
+      <rect x="1" y="9" width="6" height="6" rx="1"/>
+      <rect x="9" y="9" width="6" height="6" rx="1"/>
+    </svg>
+    <span>Home</span>
+  </div>
+  <div class="mob-tab" id="mtab-contacts" onclick="mobGo('contacts')">
+    <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+      <circle cx="8" cy="5" r="3"/>
+      <path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6H2z"/>
+    </svg>
+    <span>Prospects</span>
+    <span class="mob-tab-badge" id="mtab-contacts-badge"></span>
+  </div>
+  <div class="mob-tab" id="mtab-queue" onclick="mobGo('queue')">
+    <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+      <circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M8 4v4l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+    </svg>
+    <span>Queue</span>
+    <span class="mob-tab-badge" id="mtab-queue-badge"></span>
+  </div>
+  <div class="mob-tab" id="mtab-sequences" onclick="mobGo('sequences')">
+    <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+      <path d="M2 4h12M2 8h9M2 12h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+    </svg>
+    <span>Sequences</span>
+  </div>
+  <div class="mob-tab" id="mtab-library" onclick="mobGo('library')">
+    <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
+      <rect x="2" y="2" width="12" height="3" rx="1"/>
+      <rect x="2" y="7" width="12" height="3" rx="1"/>
+      <rect x="2" y="12" width="7" height="2" rx="1"/>
+    </svg>
+    <span>Library</span>
+  </div>
+</div>
+
+<script>
+// ── MOBILE TAB BAR ─────────────────────────────────────
+function mobGo(id) {
+  go(id);
+  const content = document.querySelector('.content');
+  if (content) content.scrollTop = 0;
+}
+
+// Update queue badge
+function updateMobBadges() {
+  const contacts = gc ? gc() : [];
+  const queueCount = contacts.filter(c => {
+    if (!c.seq_id || !c.seq_active) return false;
+    const nt = seqNextTouch ? seqNextTouch(c) : null;
+    if (!nt) return false;
+    const due = seqTouchDueDate ? seqTouchDueDate(c, nt) : null;
+    if (!due) return false;
+    return new Date(due) <= new Date();
+  }).length;
+
+  const qb = document.getElementById('mtab-queue-badge');
+  if (qb) {
+    qb.textContent = queueCount > 0 ? queueCount : '';
+    qb.style.display = queueCount > 0 ? '' : 'none';
+  }
+  const cb = document.getElementById('mtab-contacts-badge');
+  if (cb) {
+    const total = contacts.filter(c => !c.dnc).length;
+    cb.textContent = total > 0 ? total : '';
+  }
+}
+
+// Run badge update after load and on storage changes
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(updateMobBadges, 500);
+});
+window.addEventListener('storage', updateMobBadges);
+</script>
+
+
+<script>
+// ── SWIPE DOWN TO CLOSE BOTTOM SHEETS ─────────────────────
+(function(){
+  function addSwipeClose(modalId) {
+    const ov = document.getElementById(modalId);
+    if (!ov) return;
+    const modal = ov.querySelector('.modal, .log-modal');
+    if (!modal) return;
+    
+    let startY = 0, currentY = 0, isDragging = false;
+    
+    modal.addEventListener('touchstart', e => {
+      // Only initiate if touch is near the top handle area (first 60px)
+      if (e.touches[0].clientY - modal.getBoundingClientRect().top > 60) return;
+      startY = e.touches[0].clientY;
+      isDragging = true;
+      modal.style.transition = 'none';
+    }, {passive: true});
+    
+    modal.addEventListener('touchmove', e => {
+      if (!isDragging) return;
+      currentY = e.touches[0].clientY;
+      const delta = Math.max(0, currentY - startY);
+      modal.style.transform = `translateY(${delta}px)`;
+    }, {passive: true});
+    
+    modal.addEventListener('touchend', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      modal.style.transition = 'transform 0.25s ease';
+      const delta = currentY - startY;
+      if (delta > 80) {
+        // Dismiss
+        modal.style.transform = 'translateY(100%)';
+        setTimeout(() => {
+          modal.style.transform = '';
+          if (modalId === 'cmodal') closeModal && closeModal();
+          else if (modalId === 'logmodal') closeLogModal && closeLogModal();
+        }, 250);
+      } else {
+        modal.style.transform = '';
+      }
+    });
+  }
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    addSwipeClose('cmodal');
+    addSwipeClose('logmodal');
+  });
+})();
+</script>
+
 </body>
 </html>
