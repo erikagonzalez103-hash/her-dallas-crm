@@ -1767,14 +1767,12 @@ window.addEventListener('storage', updateMobBadges);
 rdash();
 rlib();
 updateSeqBadge();
-</script>    ← end of your existing main script block
-
-<script>    ← 🟢 PASTE PATCH B STARTS HERE
+</script>   
 // ── COPY OVERRIDES PERSISTENCE ───────────────────────────────
 const COPY_OVERRIDE_KEY = 'hd_copy_overrides_v1';
      ...everything from copy_patch.html Patch B...
 window.resetCopyToDefaults = function() { ... };
-</script>   ← 🟢 PATCH B ENDS HERE
+</script>   
 
 <!-- MOBILE BOTTOM TAB BAR -->    ← your existing code continues
 <div class="mob-tabs" id="mob-tabs">
